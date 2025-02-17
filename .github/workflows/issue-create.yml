@@ -11,8 +11,14 @@ jobs:
       - name: Extract branch name
         id: branch-input
         run: |
-          # 이슈 본문에서 브랜치명 추출
-          BRANCH_NAME=$(jq -r '.inputs.branch' $GITHUB_EVENT_PATH)
+          # 이슈 본문에서 "🌳 브랜치명 (Branch)" 다음에 오는 값을 찾기
+          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | grep -oP '(?<=🌳 브랜치명 \(Branch\)\n).+' | head -n 1)
+
+          if [[ -z "$BRANCH_NAME" ]]; then
+            echo "브랜치명을 찾을 수 없습니다."
+            exit 1
+          fi
+
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
@@ -20,7 +26,7 @@ jobs:
 
       - name: Create branch
         run: |
-          gh issue develop ${{ github.event.issue.number }} \
-            --name "${{ steps.branch-input.outputs.branch }}"
+          git checkout -b "${{ steps.branch-input.outputs.branch }}"
+          git push origin "${{ steps.branch-input.outputs.branch }}"
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
