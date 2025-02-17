@@ -1,0 +1,43 @@
+name: Create Branch on Issue Creation
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Check if the issue has the required `branch` field in the body
+      - name: Extract branch name from issue
+        id: extract-branch
+        run: |
+          echo "Issue Body:"
+          echo "${{ github.event.issue.body }}"
+          
+          # Extract the branch name from the issue body
+          BRANCH_NAME=$(echo "${{ github.event.issue.body }}" | grep -oP '(?<=🌳 브랜치명 \(Branch\): ).*')
+          
+          if [ -z "$BRANCH_NAME" ]; then
+            echo "Branch name is missing in the issue body. Exiting."
+            exit 1
+          fi
+          
+          echo "Branch Name: $BRANCH_NAME"
+          echo "::set-output name=branch::$BRANCH_NAME"
+
+      # Create a new branch using the extracted branch name
+      - name: Create and push branch
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          
+          BRANCH_NAME="${{ steps.extract-branch.outputs.branch }}"
+          
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
