@@ -2,20 +2,25 @@ name: Create Branch on Issue Creation
 
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   create-branch:
+    name: Create Branch
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Extract branch name from issue form
-        id: extract-branch
+      - name: Parse issue for branch name
+        id: issue-parser
         run: |
-          # 이슈 본문에서 issue-form의 필드 데이터를 가져옵니다.
+          # Extract branch name from the issue body using jq
           BRANCH_NAME=$(jq -r '.body | fromjson | .branch' <<< "${{ github.event.issue.body }}")
           
           if [ -z "$BRANCH_NAME" ]; then
@@ -30,9 +35,9 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+          BRANCH_NAME="${{ steps.issue-parser.outputs.branch }}"
           
-          BRANCH_NAME="${{ steps.extract-branch.outputs.branch }}"
-          
-          # 브랜치를 생성하고 원격 저장소에 푸시합니다.
-          git checkout -B "$BRANCH_NAME"
+          # Create a new branch and push it to the remote repository
+          git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
