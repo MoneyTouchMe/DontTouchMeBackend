@@ -5,37 +5,23 @@ on:
     types: [closed]
 
 jobs:
-  delete-branch:
+  delete-branches:
     runs-on: ubuntu-latest
-
     steps:
-      # Extract branch name from the issue body
-      - name: Extract branch name from issue
-        id: extract-branch
+      - name: Get linked branches
+        id: get-branches
         run: |
-          echo "Issue Body:"
-          echo "${{ github.event.issue.body }}"
-          
-          # Extract the branch name from the issue body
-          BRANCH_NAME=$(echo "${{ github.event.issue.body }}" | grep -oP '(?<=🌳 브랜치명 \(Branch\): ).*')
-          
-          if [ -z "$BRANCH_NAME" ]; then
-            echo "Branch name is missing in the issue body. Exiting."
-            exit 1
-          fi
-          
-          echo "Branch Name: $BRANCH_NAME"
-          echo "::set-output name=branch::$BRANCH_NAME"
-
-      # Delete the branch using GitHub API
-      - name: Delete branch
+          branches=$(gh api /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/branches | jq -r '.[].name')
+          echo "branches=$branches" >> $GITHUB_OUTPUT
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete branches
+        if: ${{ steps.get-branches.outputs.branches != '' }}
         run: |
-          BRANCH_NAME="${{ steps.extract-branch.outputs.branch }}"
-          
-          # Call GitHub API to delete the branch
-          curl -X DELETE \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$BRANCH_NAME || echo "Branch already deleted or does not exist."
+          for branch in ${{ steps.get-branches.outputs.branches }}; do
+            gh api -X DELETE /repos/${{ github.repository }}/git/refs/heads/$branch
+            echo "Deleted branch: $branch"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

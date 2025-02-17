@@ -1,43 +1,19 @@
-name: Create Branch on Issue Creation
+name: Create Branch on Issue Open
 
 on:
   issues:
-    types:
-      - opened
-
-permissions:
-  contents: write
-  issues: write
+    types: [opened]
 
 jobs:
   create-branch:
-    name: Create Branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Parse issue for branch name
-        id: issue-parser
+      - name: Create linked branch
         run: |
-          # Extract branch name from the issue body using jq
-          BRANCH_NAME=$(jq -r '.body | fromjson | .branch' <<< "${{ github.event.issue.body }}")
-          
-          if [ -z "$BRANCH_NAME" ]; then
-            echo "브랜치명이 비어있습니다. 종료합니다."
-            exit 1
-          fi
+          gh issue develop ${{ github.event.issue.number }} --name "${{ github.event.inputs.branch }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          echo "추출된 브랜치명: $BRANCH_NAME"
-          echo "::set-output name=branch::$BRANCH_NAME"
-
-      - name: Create and Push Branch
-        run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
-          BRANCH_NAME="${{ steps.issue-parser.outputs.branch }}"
-          
-          # Create a new branch and push it to the remote repository
-          git checkout -b "$BRANCH_NAME"
-          git push origin "$BRANCH_NAME"
