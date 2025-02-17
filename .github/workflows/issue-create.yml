@@ -2,42 +2,39 @@ name: Create Branch on Issue Creation
 
 on:
   issues:
-    types: [opened]
+    types: [ opened ]
 
 jobs:
-  create-branch:
+  create_branch:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Check if the issue has the required `branch` field in the body
-      - name: Extract branch name from issue
-        id: extract-branch
+      - name: Extract branch name from issue body
+        id: extract_branch
         run: |
           echo "Issue Body:"
           echo "${{ github.event.issue.body }}"
-          
-          # Extract the branch name from the issue body
-          BRANCH_NAME=$(echo "${{ github.event.issue.body }}" | grep -oP '(?<=🌳 브랜치명 \(Branch\): ).*')
+          # 헤더 "🌳 브랜치명 (Branch)" 다음 줄에 있는 브랜치명을 추출합니다.
+          BRANCH_NAME=$(echo "${{ github.event.issue.body }}" | awk '/🌳 브랜치명 \(Branch\)/ {getline; print}' | xargs)
           
           if [ -z "$BRANCH_NAME" ]; then
-            echo "Branch name is missing in the issue body. Exiting."
+            echo "브랜치명이 이슈 본문에 없습니다. 종료합니다."
             exit 1
           fi
           
-          echo "Branch Name: $BRANCH_NAME"
+          echo "추출된 브랜치명: $BRANCH_NAME"
           echo "::set-output name=branch::$BRANCH_NAME"
 
-      # Create a new branch using the extracted branch name
-      - name: Create and push branch
+      - name: Create and Push Branch
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           
-          BRANCH_NAME="${{ steps.extract-branch.outputs.branch }}"
+          BRANCH_NAME="${{ steps.extract_branch.outputs.branch }}"
           
-          git checkout -b "$BRANCH_NAME"
+          # -B 옵션을 사용하면 해당 브랜치가 이미 존재할 경우에도 현재 커밋으로 재설정합니다.
+          git checkout -B "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
