@@ -4,6 +4,9 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  contents: write  # ✅ 이 설정이 없으면 GitHub Actions 봇이 push 권한을 가지지 못함
+
 jobs:
   create-custom-branch:
     runs-on: ubuntu-latest
@@ -17,12 +20,10 @@ jobs:
       - name: Extract branch name
         id: branch-input
         run: |
-          # "### 🌳 브랜치명 (Branch)"을 찾고, 빈 줄을 건너뛴 후 다음 줄을 가져오기
           BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | awk '
             /### 🌳 브랜치명 \(Branch\)/ { getline; getline; print }
           ')
 
-          # 브랜치명이 비어있으면 오류 출력 후 종료
           if [[ -z "$BRANCH_NAME" ]]; then
             echo "브랜치명을 찾을 수 없습니다."
             exit 1
@@ -39,4 +40,4 @@ jobs:
           git checkout -b "${{ steps.branch-input.outputs.branch }}"
           git push origin "${{ steps.branch-input.outputs.branch }}"
         env:
-          GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # ✅ 기본 GitHub 제공 토큰 사용
