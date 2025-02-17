@@ -2,29 +2,27 @@ name: Create Branch on Issue Creation
 
 on:
   issues:
-    types: [ opened ]
+    types: [opened]
 
 jobs:
-  create_branch:
+  create-branch:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Extract branch name from issue body
-        id: extract_branch
+      - name: Extract branch name from issue form
+        id: extract-branch
         run: |
-          echo "Issue Body:"
-          echo "${{ github.event.issue.body }}"
-          # 헤더 "🌳 브랜치명 (Branch)" 다음 줄에 있는 브랜치명을 추출합니다.
-          BRANCH_NAME=$(echo "${{ github.event.issue.body }}" | awk '/🌳 브랜치명 \(Branch\)/ {getline; print}' | xargs)
+          # 이슈 본문에서 issue-form의 필드 데이터를 가져옵니다.
+          BRANCH_NAME=$(jq -r '.body | fromjson | .branch' <<< "${{ github.event.issue.body }}")
           
           if [ -z "$BRANCH_NAME" ]; then
-            echo "브랜치명이 이슈 본문에 없습니다. 종료합니다."
+            echo "브랜치명이 비어있습니다. 종료합니다."
             exit 1
           fi
-          
+
           echo "추출된 브랜치명: $BRANCH_NAME"
           echo "::set-output name=branch::$BRANCH_NAME"
 
@@ -33,8 +31,8 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           
-          BRANCH_NAME="${{ steps.extract_branch.outputs.branch }}"
+          BRANCH_NAME="${{ steps.extract-branch.outputs.branch }}"
           
-          # -B 옵션을 사용하면 해당 브랜치가 이미 존재할 경우에도 현재 커밋으로 재설정합니다.
+          # 브랜치를 생성하고 원격 저장소에 푸시합니다.
           git checkout -B "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
