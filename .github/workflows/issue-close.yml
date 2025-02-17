@@ -1,27 +1,42 @@
-name: Delete Branch on Issue Close
+name: Delete Custom Branch on Issue Close
 
 on:
   issues:
     types: [closed]
 
+permissions:
+  contents: write  # ✅ 브랜치 삭제를 위해 필요
+
 jobs:
-  delete-branches:
+  delete-custom-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Get linked branches
-        id: get-branches
+      - name: Debug issue body
         run: |
-          branches=$(gh api /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/branches | jq -r '.[].name')
-          echo "branches=$branches" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          echo "### ISSUE BODY START ###"
+          cat $GITHUB_EVENT_PATH | jq -r '.issue.body'
+          echo "### ISSUE BODY END ###"
 
-      - name: Delete branches
-        if: ${{ steps.get-branches.outputs.branches != '' }}
+      - name: Extract branch name
+        id: branch-input
         run: |
-          for branch in ${{ steps.get-branches.outputs.branches }}; do
-            gh api -X DELETE /repos/${{ github.repository }}/git/refs/heads/$branch
-            echo "Deleted branch: $branch"
-          done
+          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | awk '
+            /### 🌳 브랜치명 \(Branch\)/ { getline; getline; print }
+          ')
+
+          if [[ -z "$BRANCH_NAME" ]]; then
+            echo "브랜치명을 찾을 수 없습니다."
+            exit 1
+          fi
+
+          echo "Extracted branch name: $BRANCH_NAME"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete branch
+        run: |
+          git push origin --delete "${{ steps.branch-input.outputs.branch }}"
         env:
-          GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # ✅ GitHub 인증을 위해 필요
