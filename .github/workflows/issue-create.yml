@@ -1,19 +1,26 @@
-name: Create Branch on Issue Open
+name: Create Custom Branch on Issue Open
 
 on:
   issues:
     types: [opened]
 
 jobs:
-  create-branch:
+  create-custom-branch:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract branch name
+        id: branch-input
+        run: |
+          # 이슈 본문에서 브랜치명 추출
+          BRANCH_NAME=$(jq -r '.inputs.branch' $GITHUB_EVENT_PATH)
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create linked branch
+      - name: Create branch
         run: |
-          gh issue develop ${{ github.event.issue.number }} --name "${{ github.event.inputs.branch }}"
+          gh issue develop ${{ github.event.issue.number }} \
+            --name "${{ steps.branch-input.outputs.branch }}"
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-
