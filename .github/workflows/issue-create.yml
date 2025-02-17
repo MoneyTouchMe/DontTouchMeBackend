@@ -17,8 +17,10 @@ jobs:
       - name: Extract branch name
         id: branch-input
         run: |
-          # 이슈 본문에서 "🌳 브랜치명 (Branch)" 다음 줄을 가져오기
-          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | awk -v RS="\n" '/🌳 브랜치명 \(Branch\)/ {getline; print}')
+          # "### 🌳 브랜치명 (Branch)"을 찾고, 빈 줄을 건너뛴 후 다음 줄을 가져오기
+          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | awk '
+            /### 🌳 브랜치명 \(Branch\)/ { getline; getline; print }
+          ')
 
           # 브랜치명이 비어있으면 오류 출력 후 종료
           if [[ -z "$BRANCH_NAME" ]]; then
@@ -26,6 +28,7 @@ jobs:
             exit 1
           fi
 
+          echo "Extracted branch name: $BRANCH_NAME"
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
