@@ -8,11 +8,13 @@ jobs:
   create-custom-branch:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug issue body
+        run: cat $GITHUB_EVENT_PATH | jq -r '.issue.body'
+
       - name: Extract branch name
         id: branch-input
         run: |
-          # 이슈 본문에서 "🌳 브랜치명 (Branch)" 다음에 오는 값을 찾기
-          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | grep -oP '(?<=🌳 브랜치명 \(Branch\)\n).+' | head -n 1)
+          BRANCH_NAME=$(jq -r '.issue.body' $GITHUB_EVENT_PATH | sed -n '/🌳 브랜치명 (Branch)/{n;p}')
 
           if [[ -z "$BRANCH_NAME" ]]; then
             echo "브랜치명을 찾을 수 없습니다."
