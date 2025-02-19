@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,14 +17,14 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @LastModifiedBy
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 
-    private LocalDateTime deleteTime;
+    private LocalDateTime deletedAt;
 
     private void delete(){
-        deleteTime = LocalDateTime.now();
+        deletedAt = LocalDateTime.now();
     }
 }
