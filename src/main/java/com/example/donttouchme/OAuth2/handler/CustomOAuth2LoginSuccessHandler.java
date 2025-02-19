@@ -4,7 +4,6 @@ import com.example.donttouchme.OAuth2.dto.CustomUser;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.entity.RefreshToken;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +28,6 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
     public void onAuthenticationSuccess(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final FilterChain chain,
             final Authentication authentication
     ) throws IOException, ServletException {
 
