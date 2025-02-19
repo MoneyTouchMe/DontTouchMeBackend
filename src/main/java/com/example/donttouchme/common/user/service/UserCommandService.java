@@ -1,9 +1,8 @@
 package com.example.donttouchme.common.user.service;
 
-import com.example.donttouchme.common.OAuth2.dto.UserDto;
 import com.example.donttouchme.common.user.domain.User;
 import com.example.donttouchme.common.user.repository.UserRepository;
-import jakarta.persistence.Table;
+import com.example.donttouchme.common.user.service.dto.UserSignUpDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandService {
     private final UserRepository userRepository;
 
-    public User createUser(final UserDto userDto) {
+    public User createUser(final UserSignUpDto userSignUpDto) {
         return userRepository.save(User.builder()
-                .email(userDto.email())
-                .name(userDto.name())
-                .username(userDto.username())
+                .email(userSignUpDto.email())
+                .name(userSignUpDto.name())
+                .username(userSignUpDto.username())
+                .role(userSignUpDto.role())
                 .build());
     }
 }

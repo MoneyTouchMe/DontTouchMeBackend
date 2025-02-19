@@ -2,6 +2,7 @@ package com.example.donttouchme.common.config.security;
 
 import com.example.donttouchme.common.OAuth2.handler.CustomSuccessHandler;
 import com.example.donttouchme.common.OAuth2.service.CustomOAuth2UserService;
+import com.example.donttouchme.common.jwt.JwtFilter;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -82,6 +84,8 @@ public class SecurityConfig {
                     }
                 }));
 
+        http
+                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

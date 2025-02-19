@@ -1,9 +1,8 @@
 package com.example.donttouchme.common.user.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.common.user.domain.value.ROLE;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +26,14 @@ public class User {
 
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private ROLE role;
+
     @Builder
-    public User(String username, String name, String email) {
+    public User(String username, String name, String email, ROLE role) {
         this.username = username;
         this.name = name;
         this.email = email;
+        this.role = role;
     }
 }

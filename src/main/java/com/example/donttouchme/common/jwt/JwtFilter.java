@@ -62,9 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(token);
 
         //userDTO를 생성하여 값 set
-        UserDto userDTO = new UserDto();
-        userDTO.setUsername(username);
-        userDTO.setRole(role);
+        UserDto userDTO = new UserDto(username, null, role, null);
 
         //UserDetails에 회원 정보 객체 담기
         CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDTO);

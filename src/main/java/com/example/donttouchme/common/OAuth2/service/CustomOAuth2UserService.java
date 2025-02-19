@@ -1,8 +1,10 @@
 package com.example.donttouchme.common.OAuth2.service;
 
 import com.example.donttouchme.common.OAuth2.dto.*;
+import com.example.donttouchme.common.user.domain.value.ROLE;
 import com.example.donttouchme.common.user.service.UserCommandService;
 import com.example.donttouchme.common.user.service.UserQueryService;
+import com.example.donttouchme.common.user.service.dto.UserSignUpDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -37,20 +39,27 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
 
-        UserDto userDto = new UserDto(
-                username,
-                oAuth2Response.getName(),
-                "USER",
-                oAuth2Response.getEmail()
-        );
+
 
         userQueryService.findByUsername(username).ifPresentOrElse(
                 user -> {
                     throw new IllegalArgumentException("이미 가입한 유저입니다.");
                 },
                 () ->{
-                    userCommandService.createUser(userDto);
+                    userCommandService.createUser(new UserSignUpDto(
+                            ROLE.USER,
+                            oAuth2Response.getName(),
+                            username,
+                            oAuth2Response.getEmail()
+                    ));
                 }
+        );
+
+        UserDto userDto = new UserDto(
+                username,
+                oAuth2Response.getName(),
+                "USER",
+                oAuth2Response.getEmail()
         );
 
         return new CustomOAuth2User(userDto);
