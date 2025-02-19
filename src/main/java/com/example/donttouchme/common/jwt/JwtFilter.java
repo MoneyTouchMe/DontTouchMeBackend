@@ -1,8 +1,7 @@
-package com.example.donttouchme.common.jwt.entity;
+package com.example.donttouchme.common.jwt;
 
 import com.example.donttouchme.OAuth2.dto.CustomUser;
 import com.example.donttouchme.OAuth2.dto.OAuth2MemberDto;
-import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.member.domain.value.ROLE;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -28,9 +27,9 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = request.getHeader("Authorization");
 
-        if(accessToken == null || !accessToken.startsWith("Bearer ")) {
+        if(accessToken == null) {
             filterChain.doFilter(request, response);
-            throw new IllegalArgumentException("토큰이 없거나 잘못된 토큰이빈다.");
+            return;
         }
 
         try {
