@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,6 +24,8 @@ import java.util.Iterator;
 public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    @Value("${spring.jwt.refresh.expireTime}")
+    private int expireTime;
 
     @Override
     public void onAuthenticationSuccess(
@@ -45,14 +48,14 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
 
         refreshTokenRepository.save(new RefreshToken(refreshToken, customOAuth2User.getMemberId()));
 
-        response.addCookie(createCookie("refresh", refreshToken));
+        response.addCookie(createCookie(refreshToken));
         response.sendRedirect("http://localhost:3000");
 
     }
 
-    private Cookie createCookie(final String key , final String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*60);
+    private Cookie createCookie(final String value) {
+        Cookie cookie = new Cookie("refresh", value);
+        cookie.setMaxAge(expireTime);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 

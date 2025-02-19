@@ -26,27 +26,27 @@ public class JwtUtil {
         this.accessTime = accessTime;
     }
 
-    private Claims getPayload(String token){
+    private Claims getPayload(final String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
     }
 
-    public String getMemberId(String token){
+    public String getMemberId(final String token){
         return getPayload(token).get("id", String.class);
     }
 
-    public String getRole(String token){
+    public String getRole(final String token){
         return getPayload(token).get("role", String.class);
     }
 
-    public String getCategory(String token){
+    public String getCategory(final String token){
         return getPayload(token).get("category", String.class);
     }
 
-    public Boolean isExpired(String token){
+    public Boolean isExpired(final String token){
         return getPayload(token).getExpiration().before(new Date());
     }
 
-    public String createAccessToken(Long MemberId, String role){
+    public String createAccessToken(final Long MemberId, final String role) {
         return Jwts.builder()
                 .claim("category", "access")
                 .claim("id", MemberId)
