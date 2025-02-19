@@ -21,25 +21,36 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        if(accessToken == null) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
+        if(bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        String accessToken = bearerToken.substring(7);  // "Bearer " 제거[1]
+
         try {
             jwtUtil.isExpired(accessToken);
         }catch (ExpiredJwtException e) {
-            throw new IllegalArgumentException("토큰이 만료 되었습니다.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("Access-Control-Expose-Headers", "Token-Expired");
+            response.setHeader("Token-Expired", "true");
+            return;
         }
 
         if (!jwtUtil.getCategory(accessToken).equals("access")) {
-            throw new IllegalArgumentException("잘못된 category의 토큰 입니다.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
 
         CustomUser customUser = new CustomUser(OAuth2MemberDto.builder()
@@ -51,5 +62,6 @@ public class JwtFilter extends OncePerRequestFilter {
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUser, null, customUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        filterChain.doFilter(request, response);
     }
 }
