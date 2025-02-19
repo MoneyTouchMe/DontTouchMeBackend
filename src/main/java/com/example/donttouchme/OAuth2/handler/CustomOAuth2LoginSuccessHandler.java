@@ -1,6 +1,6 @@
 package com.example.donttouchme.OAuth2.handler;
 
-import com.example.donttouchme.OAuth2.dto.CustomOAuth2User;
+import com.example.donttouchme.OAuth2.dto.CustomUser;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.entity.RefreshToken;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
@@ -33,7 +33,7 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
             final Authentication authentication
     ) throws IOException, ServletException {
 
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+        CustomUser customOAuth2User = (CustomUser) authentication.getPrincipal();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -47,8 +47,8 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
 
         refreshTokenRepository.save(new RefreshToken(refreshToken, customOAuth2User.getMemberId()));
 
-        response.addCookie(createCookie("Authorization", refreshToken));
-        response.sendRedirect("http://localhost:3000/");
+        response.addCookie(createCookie("refresh", refreshToken));
+        response.sendRedirect("http://localhost:3000");
 
     }
 

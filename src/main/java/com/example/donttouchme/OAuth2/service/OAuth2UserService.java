@@ -1,9 +1,6 @@
 package com.example.donttouchme.OAuth2.service;
 
-import com.example.donttouchme.OAuth2.dto.CustomOAuth2User;
-import com.example.donttouchme.OAuth2.dto.GoogleOAuthInfo;
-import com.example.donttouchme.OAuth2.dto.NaverOAuthInfo;
-import com.example.donttouchme.OAuth2.dto.OAuth2UserInfo;
+import com.example.donttouchme.OAuth2.dto.*;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.service.MemberCommandService;
 import com.example.donttouchme.member.service.MemberQueryService;
@@ -39,7 +36,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         CreateMemberDto createMemberDto = CreateMemberDto.from(oAuth2UserInfo);
         Member member = memberCommandService.createMember(createMemberDto);
 
-        return new CustomOAuth2User(member);
+        return new CustomUser(OAuth2MemberDto.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .loginProvider(member.getLoginProvider())
+                .name(member.getName())
+                .role(member.getRole())
+                .build());
     }
 
 }

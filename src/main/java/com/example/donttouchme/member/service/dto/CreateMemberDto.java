@@ -4,7 +4,7 @@ import com.example.donttouchme.OAuth2.dto.OAuth2UserInfo;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
 
-import static com.example.donttouchme.member.domain.value.ROLE.USER;
+import static com.example.donttouchme.member.domain.value.ROLE.user;
 
 public record CreateMemberDto(
         String name,
@@ -16,7 +16,7 @@ public record CreateMemberDto(
             return new CreateMemberDto(
                     oAuth2UserInfo.getName(),
                     oAuth2UserInfo.getEmail(),
-                    USER,
+                    user,
                     oAuth2UserInfo.getProvider()
             );
         }

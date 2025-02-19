@@ -1,8 +1,8 @@
 package com.example.donttouchme.OAuth2.dto;
 
-import com.example.donttouchme.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class CustomOAuth2User implements OAuth2User {
+public class CustomUser implements OAuth2User, UserDetails {
 
-    private final Member member;
+    private final OAuth2MemberDto member;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -30,6 +30,16 @@ public class CustomOAuth2User implements OAuth2User {
             }
         });
         return collection;
+    }
+
+    @Override
+    public String getPassword() {
+        return member.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return member.getEmail();
     }
 
     @Override

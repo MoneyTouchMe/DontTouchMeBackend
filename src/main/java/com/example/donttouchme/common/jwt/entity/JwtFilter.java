@@ -1,7 +1,9 @@
 package com.example.donttouchme.common.jwt.entity;
 
-import com.example.donttouchme.OAuth2.dto.CustomOAuth2User;
+import com.example.donttouchme.OAuth2.dto.CustomUser;
+import com.example.donttouchme.OAuth2.dto.OAuth2MemberDto;
 import com.example.donttouchme.common.jwt.JwtUtil;
+import com.example.donttouchme.member.domain.value.ROLE;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,13 +43,13 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new IllegalArgumentException("잘못된 category의 토큰 입니다.");
         }
 
-        // username, role 값을 획득
-        String username = jwtUtil.getMemberId(accessToken);
-        String role = jwtUtil.getRole(accessToken);
+        CustomUser customUser = new CustomUser(OAuth2MemberDto.builder()
+                .id(Long.parseLong(jwtUtil.getMemberId(accessToken)))
+                .role(ROLE.valueOf(jwtUtil.getRole(accessToken)))
+                .build()
+        );
 
-        new CustomOAuth2User()
-
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        Authentication authToken = new UsernamePasswordAuthenticationToken(customUser, null, customUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
     }
