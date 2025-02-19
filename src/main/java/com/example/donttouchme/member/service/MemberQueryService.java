@@ -1,10 +1,13 @@
 package com.example.donttouchme.member.service;
 
+import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +16,7 @@ public class MemberQueryService {
 
     private final MemberRepository memberRepository;
 
-    public boolean existsMemberByEmailAndProvider(final String email, final LoginProvider provider) {
-        return memberRepository.existsByEmailAndLoginProvider(email, provider);
+    public Optional<Member> findMemberByEmailAndProvider(final String email, final LoginProvider provider) {
+        return memberRepository.findByEmailAndLoginProvider(email, provider);
     }
 }

@@ -30,11 +30,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             default -> throw new IllegalArgumentException("잘못된 LoginProvider 입니다.");
         };
 
-        if (memberQueryService.existsMemberByEmailAndProvider(oAuth2UserInfo.getEmail(), oAuth2UserInfo.getProvider())) {
-            throw new IllegalArgumentException("이미 가입된 회원입니다.");
-        }
-        CreateMemberDto createMemberDto = CreateMemberDto.from(oAuth2UserInfo);
-        Member member = memberCommandService.createMember(createMemberDto);
+        Member member = memberQueryService.findMemberByEmailAndProvider(
+                oAuth2UserInfo.getEmail(),
+                oAuth2UserInfo.getProvider()
+        ).orElseGet(() -> memberCommandService.createMember(
+                CreateMemberDto.from(oAuth2UserInfo)
+        ));
+
 
         return new CustomUser(OAuth2MemberDto.builder()
                 .id(member.getId())

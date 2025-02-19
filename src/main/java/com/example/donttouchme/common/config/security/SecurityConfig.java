@@ -3,7 +3,7 @@ package com.example.donttouchme.common.config.security;
 import com.example.donttouchme.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
 import com.example.donttouchme.OAuth2.service.OAuth2UserService;
 import com.example.donttouchme.common.jwt.JwtUtil;
-import com.example.donttouchme.common.jwt.entity.JwtFilter;
+import com.example.donttouchme.common.jwt.JwtFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -71,7 +71,6 @@ public class SecurityConfig {
                         ))
                         .successHandler(customOAuth2LoginSuccessHandler)
                         .failureHandler(authenticationFailureHandler())
-                        .defaultSuccessUrl("http://localhost:3000", true)
                 );
 
         http
