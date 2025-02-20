@@ -3,8 +3,8 @@ package com.example.donttouchme.common.config.security;
 import com.example.donttouchme.common.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
 import com.example.donttouchme.common.OAuth2.service.OAuth2UserService;
 import com.example.donttouchme.common.jwt.CustomLogoutFilter;
-import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.JwtFilter;
+import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,11 +37,7 @@ public class SecurityConfig {
     private final OAuth2UserService oauth2UserService;
     private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Bean
