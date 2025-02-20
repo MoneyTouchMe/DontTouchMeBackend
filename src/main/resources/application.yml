@@ -42,3 +42,6 @@ spring:
       ddl-auto: update
     naming:
       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  jwt:
+    secret: ${JWT_SECRET_KEY}
