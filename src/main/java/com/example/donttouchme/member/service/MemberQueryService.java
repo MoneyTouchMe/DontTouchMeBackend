@@ -19,4 +19,8 @@ public class MemberQueryService {
     public Optional<Member> findMemberByEmailAndProvider(final String email, final LoginProvider provider) {
         return memberRepository.findByEmailAndLoginProvider(email, provider);
     }
+
+    public boolean checkDuplicateEmail(final String email) {
+        return memberRepository.existsByEmailAndLoginProvider(email, LoginProvider.original);
+    }
 }

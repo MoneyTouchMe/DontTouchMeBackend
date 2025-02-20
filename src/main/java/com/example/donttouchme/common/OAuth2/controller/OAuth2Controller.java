@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/oauth2-jwt-header")
+@RequestMapping("/api/v1/oauth2-jwt-header")
 @RequiredArgsConstructor
 public class OAuth2Controller {
 

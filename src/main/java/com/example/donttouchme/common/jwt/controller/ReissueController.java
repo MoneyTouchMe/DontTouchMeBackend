@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/reissue")
+@RequestMapping("/api/v1/reissue")
 @RequiredArgsConstructor
 public class ReissueController {
 
