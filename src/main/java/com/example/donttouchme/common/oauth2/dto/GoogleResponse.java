@@ -4,13 +4,15 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
+import static com.example.donttouchme.common.oauth2.enums.Provider.*;
+
 @RequiredArgsConstructor
 public class GoogleResponse implements OAuth2Response {
     private final Map<String, Object> attribute;
 
     @Override
     public String getProvider() {
-        return "google";
+        return google.toString();
     }
 
     @Override

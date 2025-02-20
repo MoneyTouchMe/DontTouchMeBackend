@@ -2,6 +2,8 @@ package com.example.donttouchme.common.oauth2.dto;
 
 import java.util.Map;
 
+import static com.example.donttouchme.common.oauth2.enums.Provider.*;
+
 
 public class NaverResponse implements OAuth2Response {
     private final Map<String, Object> attribute;
@@ -12,7 +14,7 @@ public class NaverResponse implements OAuth2Response {
 
     @Override
     public String getProvider() {
-        return "naver";
+        return naver.toString();
     }
 
     @Override
