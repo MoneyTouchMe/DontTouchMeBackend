@@ -1,4 +1,4 @@
-package com.example.donttouchme.OAuth2.dto;
+package com.example.donttouchme.common.OAuth2.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

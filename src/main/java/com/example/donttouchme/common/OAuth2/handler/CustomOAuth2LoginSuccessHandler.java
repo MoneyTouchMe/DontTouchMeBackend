@@ -1,6 +1,6 @@
-package com.example.donttouchme.OAuth2.handler;
+package com.example.donttouchme.common.OAuth2.handler;
 
-import com.example.donttouchme.OAuth2.dto.CustomUser;
+import com.example.donttouchme.common.OAuth2.dto.CustomUser;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.entity.RefreshToken;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
@@ -25,7 +25,9 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     @Value("${spring.jwt.refresh.expireTime}")
-    private int expireTime;
+    private int refreshExpireTime;
+    @Value("${spring.jwt.access.expireTime}")
+    private int accessExpireTime;
 
     @Override
     public void onAuthenticationSuccess(
@@ -46,15 +48,25 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
                 role
         );
 
+        String accessToken = jwtUtil.createAccessToken(
+                customOAuth2User.getMemberId(),
+                role
+        );
+
         refreshTokenRepository.save(new RefreshToken(refreshToken, customOAuth2User.getMemberId()));
 
-        response.addCookie(createCookie(refreshToken));
+        response.addCookie(createCookie("refresh", refreshToken,refreshExpireTime));
+        response.addCookie(createCookie("accessToken", accessToken,accessExpireTime));
         response.sendRedirect("http://localhost:3000");
 
     }
 
-    private Cookie createCookie(final String value) {
-        Cookie cookie = new Cookie("refresh", value);
+    private Cookie createCookie(
+            final String type,
+            final String value,
+            final int expireTime
+    ) {
+        Cookie cookie = new Cookie(type, value);
         cookie.setMaxAge(expireTime);
         cookie.setPath("/");
         cookie.setHttpOnly(true);

@@ -1,6 +1,6 @@
-package com.example.donttouchme.OAuth2.service;
+package com.example.donttouchme.common.OAuth2.service;
 
-import com.example.donttouchme.OAuth2.dto.*;
+import com.example.donttouchme.common.OAuth2.dto.*;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.service.MemberCommandService;
 import com.example.donttouchme.member.service.MemberQueryService;

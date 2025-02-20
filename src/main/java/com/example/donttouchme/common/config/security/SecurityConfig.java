@@ -1,7 +1,7 @@
 package com.example.donttouchme.common.config.security;
 
-import com.example.donttouchme.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
-import com.example.donttouchme.OAuth2.service.OAuth2UserService;
+import com.example.donttouchme.common.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
+import com.example.donttouchme.common.OAuth2.service.OAuth2UserService;
 import com.example.donttouchme.common.jwt.CustomLogoutFilter;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.JwtFilter;

@@ -1,6 +1,6 @@
 package com.example.donttouchme.member.service.dto;
 
-import com.example.donttouchme.OAuth2.dto.OAuth2UserInfo;
+import com.example.donttouchme.common.OAuth2.dto.OAuth2UserInfo;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
 

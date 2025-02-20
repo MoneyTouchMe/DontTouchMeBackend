@@ -1,4 +1,4 @@
-package com.example.donttouchme.OAuth2.dto;
+package com.example.donttouchme.common.OAuth2.dto;
 
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
