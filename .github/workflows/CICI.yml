@@ -34,18 +34,6 @@ jobs:
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/test/resources/application.yml
 
-      - name: Set Environment Variables
-        env:
-          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
-          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          LOCAL_DB_USERNAME: ${{ secrets.LOCAL_DB_USERNAME }}
-          LOCAL_DB_PASSWORD: ${{ secrets.LOCAL_DB_PASSWORD }}
-          LOCAL_DB_HOST: ${{ secrets.LOCAL_DB_HOST }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-        run: echo "Environment Variables Set"
-
       - name: Create firebase-service-account.json
         run: |
           mkdir -p src/main/resources/firebase
