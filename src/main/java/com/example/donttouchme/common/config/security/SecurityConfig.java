@@ -2,8 +2,10 @@ package com.example.donttouchme.common.config.security;
 
 import com.example.donttouchme.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
 import com.example.donttouchme.OAuth2.service.OAuth2UserService;
+import com.example.donttouchme.common.jwt.CustomLogoutFilter;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.JwtFilter;
+import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -33,6 +36,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final OAuth2UserService oauth2UserService;
     private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -73,11 +77,6 @@ public class SecurityConfig {
                         .failureHandler(authenticationFailureHandler())
                 );
 
-        http
-                .logout((auth) -> auth
-                        .logoutSuccessUrl("/")
-                        .permitAll());
-
 
         // cors
         http
@@ -99,7 +98,7 @@ public class SecurityConfig {
 
         // authorization
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/login/**", "/oauth2/**", "/join", "/logout", "/oauth2-jwt-header").permitAll()
+                .requestMatchers("/", "member/login/**", "/oauth2/**", "member/join", "member/logout", "/oauth2-jwt-header").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
 
@@ -110,6 +109,9 @@ public class SecurityConfig {
         // jwt filter
         http
                 .addFilterAfter(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
 
         return http.build();
     }
