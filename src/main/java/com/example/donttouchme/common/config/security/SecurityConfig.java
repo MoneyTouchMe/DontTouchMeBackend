@@ -5,13 +5,17 @@ import com.example.donttouchme.common.OAuth2.service.OAuth2UserService;
 import com.example.donttouchme.common.jwt.CustomLogoutFilter;
 import com.example.donttouchme.common.jwt.JwtFilter;
 import com.example.donttouchme.common.jwt.JwtUtil;
+import com.example.donttouchme.common.jwt.LoginFilter;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,6 +42,8 @@ public class SecurityConfig {
     private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ObjectMapper objectMapper;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
 
     @Bean
@@ -94,7 +100,7 @@ public class SecurityConfig {
 
         // authorization
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "member/login/**", "/oauth2/**", "member/join", "member/logout", "/oauth2-jwt-header").permitAll()
+                .requestMatchers("/", "api/v1/member/login/**", "/oauth2/**", "api/v1/member/sign-up", "member/logout", "/oauth2-jwt-header", "api/v1//member/check-email-duplicate").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
 
@@ -108,6 +114,14 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
+
+
+        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, objectMapper, jwtUtil, refreshTokenRepository);
+        loginFilter.setFilterProcessesUrl("/api/v1/member/login");
+
+        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

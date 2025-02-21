@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LoginProvider loginProvider;
 
-    @Builder(builderMethodName = "builderWithoutPassword")
+    @Builder(builderMethodName = "builderWithoutPassword", buildMethodName = "builderWithoutPassword")
     public Member(String name, String email, ROLE role, LoginProvider loginProvider) {
         this.name = name;
         this.email = email;
@@ -45,7 +45,7 @@ public class Member extends BaseEntity {
         this.loginProvider = loginProvider;
     }
 
-    @Builder(builderMethodName = "builderWithPassword")
+    @Builder(builderMethodName = "builderWithPassword", buildMethodName = "builderWithPassword")
     public Member(String name, String email, String password, ROLE role, LoginProvider loginProvider) {
         this.name = name;
         this.email = email;
