@@ -100,7 +100,11 @@ public class SecurityConfig {
 
         // authorization
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "api/v1/member/login/**", "/oauth2/**", "api/v1/member/sign-up", "member/logout", "/oauth2-jwt-header", "api/v1//member/check-email-duplicate").permitAll()
+                .requestMatchers(
+                        "/", "/api/v1/member/login/**", "/oauth2/**", "/api/v1/member/sign-up",
+                        "/api/v1/member/logout", "/api/v1/jwt/**", "/api/v1//member/check-email-duplicate",
+                        "/swagger-ui/**", "/v3/api-docs/**"
+                ).permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
 

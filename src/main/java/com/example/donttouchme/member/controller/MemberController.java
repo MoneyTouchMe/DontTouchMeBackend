@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberControllerSwagger{
 
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
 
+    @Override
     @GetMapping("/check-email-duplicate")
     public ResponseEntity<CheckDuplicateEmailResponse> checkDuplicateEmail(
             @RequestParam final String email
@@ -27,6 +28,7 @@ public class MemberController {
         ));
     }
 
+    @Override
     @PostMapping("/sign-up")
     public ResponseEntity<MemberSignUpResponse> signUp (
             @RequestBody @Validated final MemberSignUpRequest request
