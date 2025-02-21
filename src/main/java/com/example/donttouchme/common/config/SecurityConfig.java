@@ -1,6 +1,7 @@
 package com.example.donttouchme.common.config;
 
 import com.example.donttouchme.common.oauth2.handler.CustomSuccessHandler;
+import com.example.donttouchme.common.oauth2.jwt.JwtFilter;
 import com.example.donttouchme.common.oauth2.jwt.JwtUtil;
 import com.example.donttouchme.common.oauth2.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +35,10 @@ public class SecurityConfig {
         //HTTP Basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
+
+        //JwtFilter 추가
+        http
+                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //OAuth2 기본 설정
         http
