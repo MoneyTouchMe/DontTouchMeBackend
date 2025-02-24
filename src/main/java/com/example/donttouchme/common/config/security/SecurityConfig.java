@@ -2,8 +2,6 @@ package com.example.donttouchme.common.config.security;
 
 import com.example.donttouchme.common.OAuth2.handler.CustomOAuth2LoginSuccessHandler;
 import com.example.donttouchme.common.OAuth2.service.OAuth2UserService;
-import com.example.donttouchme.common.jwt.CustomLogoutFilter;
-import com.example.donttouchme.common.jwt.JwtFilter;
 import com.example.donttouchme.common.jwt.JwtUtil;
 import com.example.donttouchme.common.jwt.LoginFilter;
 import com.example.donttouchme.common.jwt.repository.RefreshTokenRepository;
@@ -24,8 +22,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -99,32 +95,37 @@ public class SecurityConfig {
                 }));
 
         // authorization
+//        http.authorizeHttpRequests((auth) -> auth
+//                .requestMatchers(
+//                        "/", "/api/v1/member/login/**", "/oauth2/**", "/api/v1/member/sign-up",
+//                        "/api/v1/member/logout", "/api/v1/jwt/**", "/api/v1//member/check-email-duplicate",
+//                        "/swagger-ui/**", "/v3/api-docs/**"
+//                ).permitAll()
+//                .requestMatchers("/admin").hasRole("ADMIN")
+//                .anyRequest().authenticated());
+
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers(
-                        "/", "/api/v1/member/login/**", "/oauth2/**", "/api/v1/member/sign-up",
-                        "/api/v1/member/logout", "/api/v1/jwt/**", "/api/v1//member/check-email-duplicate",
-                        "/swagger-ui/**", "/v3/api-docs/**"
-                ).permitAll()
-                .requestMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().authenticated());
+                .anyRequest().permitAll()
+        );
+
 
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // jwt filter
-        http
-                .addFilterAfter(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-        http
-                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
+//        http
+//                .addFilterAfter(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//
+//        http
+//                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
 
 
         AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
         LoginFilter loginFilter = new LoginFilter(authenticationManager, objectMapper, jwtUtil, refreshTokenRepository);
         loginFilter.setFilterProcessesUrl("/api/v1/member/login");
 
-        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
