@@ -12,6 +12,10 @@ public record MemberSignUpRequest(
 
         @NotBlank(message = "password는 필수 입니다.")
         @Min(value = 8, message = "password는 8자 이상입니다.")
-        String password
+        String password,
+
+        @NotBlank(message = "contact는 필수 입니다.")
+        String contact
+
 ) {
 }
