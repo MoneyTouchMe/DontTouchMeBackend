@@ -1,6 +1,7 @@
 package com.example.donttouchme.member.controller;
 
 import com.example.donttouchme.member.controller.dto.*;
+import com.example.donttouchme.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,14 @@ public interface MemberControllerSwagger {
     )
     ResponseEntity<TempPasswordIssueResponse> issueTempPassword(
             TempPasswordIssueRequest request
+    );
+
+    @Operation(
+            summary = "비밀 번호 변경 API",
+            description = "비밀 번호를 변경합니다."
+    )
+    ResponseEntity<ChangePasswordResponse> changePassword(
+            Member member,
+            ChangePasswordRequest request
     );
 }
