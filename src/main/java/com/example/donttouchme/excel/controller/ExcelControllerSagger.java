@@ -1,8 +1,13 @@
 package com.example.donttouchme.excel.controller;
 
+import com.example.donttouchme.excel.controller.dto.ImportExcelRequest;
+import com.example.donttouchme.excel.controller.dto.ImportExcelResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Tag(name = "excel 관련 API", description = "excel 관련 API 입니다.")
 public interface ExcelControllerSagger {
@@ -22,4 +27,13 @@ public interface ExcelControllerSagger {
     ResponseEntity<byte[]> exportEventToExcel(
             Long eventId
     );
+
+    @Operation(
+            summary = "엑셀로 import API",
+            description = "엑셀로 import 합니다."
+    )
+    ResponseEntity<ImportExcelResponse> importExcel(
+            ImportExcelRequest importExcelRequest,
+            MultipartFile file
+    ) throws IOException;
 }
