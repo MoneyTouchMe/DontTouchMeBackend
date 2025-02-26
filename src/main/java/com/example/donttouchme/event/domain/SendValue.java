@@ -3,6 +3,7 @@ package com.example.donttouchme.event.domain;
 import com.example.donttouchme.common.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -20,4 +21,9 @@ public class SendValue extends BaseEntity {
 
     @Column(nullable = false)
     private String value;
+
+    @Builder
+    public SendValue(String value) {
+        this.value = value;
+    }
 }

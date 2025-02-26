@@ -1,7 +1,7 @@
 package com.example.donttouchme.support;
 
 
-import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.domain.*;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.member.domain.Member;
@@ -56,6 +56,41 @@ public abstract class IntegrationTestSupport {
                                 .build()
                 )
                 .member(member)
+                .build();
+    }
+
+    protected EventDetail createTestEventDetail(
+            Event event,
+            Target target,
+            SendValue sendValue
+    ){
+        return EventDetail.builder()
+                .price(String.valueOf(1234))
+                .event(event)
+                .history("sdfsd")
+                .image("image")
+                .type("type")
+                .target(target)
+                .sendValue(sendValue)
+                .name("name")
+                .build();
+    }
+
+    protected Target createTestTarget(){
+        return Target.builder()
+                .value("target")
+                .build();
+    }
+    protected SendValue createTestSendValue(){
+        return SendValue.builder()
+                .value("sendValue")
+                .build();
+    }
+
+    protected Tag createTestTag(EventDetail eventDetail){
+        return Tag.builder()
+                .eventDetail(eventDetail)
+                .value("Tag")
                 .build();
     }
 

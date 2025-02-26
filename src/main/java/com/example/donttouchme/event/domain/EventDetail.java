@@ -3,6 +3,7 @@ package com.example.donttouchme.event.domain;
 import com.example.donttouchme.common.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -51,4 +52,16 @@ public class EventDetail extends BaseEntity {
 
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
     private final List<Tag> tags = new ArrayList<>();
+
+    @Builder
+    public EventDetail(String type, String history, String price, String name, String image, Event event, Target target, SendValue sendValue) {
+        this.type = type;
+        this.history = history;
+        this.price = price;
+        this.name = name;
+        this.image = image;
+        this.event = event;
+        this.target = target;
+        this.sendValue = sendValue;
+    }
 }
