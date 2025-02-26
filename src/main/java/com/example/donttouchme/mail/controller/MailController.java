@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/mail")
 @RequiredArgsConstructor
-public class MailController {
+public class MailController implements MailControllerSwagger{
     private final MailService mailService;
 
+    @Override
     @PostMapping("/send-verification")
     public ResponseEntity<EmailVerificationCodeResponse> sendVerificationEmail(
             @Validated @RequestBody final EmailVerificationCodeRequest request
@@ -26,6 +27,7 @@ public class MailController {
         return ResponseEntity.ok(mailService.sendVerificationEmail(request));
     }
 
+    @Override
     @PostMapping("/verify")
     public ResponseEntity<EmailVerificationResponse> verifyEmailByCode(
             @Validated @RequestBody final EmailVerificationRequest request
