@@ -2,6 +2,7 @@ package com.example.donttouchme.mail.service;
 
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeRequest;
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeResponse;
+import com.example.donttouchme.member.service.MemberQueryService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -30,12 +31,16 @@ public class MailService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+    private final MemberQueryService memberQueryService;
+
     @Value("${spring.data.redis.mailExTime}")
     private long CODE_EXPIRATION;
 
     public EmailVerificationCodeResponse sendVerificationEmail(
             final EmailVerificationCodeRequest request
     ) {
+        emailDuplicateCheck(request.email());
+
         String verificationCode = createVerificationCode();
 
         redisTemplate.opsForValue().set(request.email() ,verificationCode, CODE_EXPIRATION, TimeUnit.MINUTES);
@@ -86,6 +91,12 @@ public class MailService {
                 throw new IllegalStateException("비동기 메일 전송 실패: " + email, e);
             }
         });
+    }
+
+    private void emailDuplicateCheck(final String email) {
+        if(memberQueryService.checkDuplicateEmail(email)) {
+            throw new IllegalArgumentException("이미 가입한 Email 입니다.");
+        }
     }
 
 }
