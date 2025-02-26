@@ -43,6 +43,7 @@ public class MemberCommandService {
                 .name(request.name())
                 .role(ROLE.user)
                 .loginProvider(LoginProvider.original)
+                .contact(request.contact())
                 .builderWithPassword();
         log.info("encoded password: {}",bCryptPasswordEncoder.encode(request.password()));
         log.info("password : {}", member.getPassword());

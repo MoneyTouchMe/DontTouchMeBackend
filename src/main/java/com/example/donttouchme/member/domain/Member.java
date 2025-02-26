@@ -1,6 +1,7 @@
 package com.example.donttouchme.member.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
 import jakarta.persistence.*;
@@ -10,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +41,12 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LoginProvider loginProvider;
 
+    @Column
+    private String contact;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private final List<Event> events = new ArrayList<>();
+
     @Builder(builderMethodName = "builderWithoutPassword", buildMethodName = "builderWithoutPassword")
     public Member(String name, String email, ROLE role, LoginProvider loginProvider) {
         this.name = name;
@@ -46,11 +56,12 @@ public class Member extends BaseEntity {
     }
 
     @Builder(builderMethodName = "builderWithPassword", buildMethodName = "builderWithPassword")
-    public Member(String name, String email, String password, ROLE role, LoginProvider loginProvider) {
+    public Member(String name, String email, String password, ROLE role, LoginProvider loginProvider, String contact) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
         this.loginProvider = loginProvider;
+        this.contact = contact;
     }
 }
