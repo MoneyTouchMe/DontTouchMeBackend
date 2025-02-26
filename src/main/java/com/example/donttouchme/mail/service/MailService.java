@@ -2,6 +2,8 @@ package com.example.donttouchme.mail.service;
 
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeRequest;
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeResponse;
+import com.example.donttouchme.mail.controller.dto.EmailVerificationRequest;
+import com.example.donttouchme.mail.controller.dto.EmailVerificationResponse;
 import com.example.donttouchme.member.service.MemberQueryService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -53,6 +55,18 @@ public class MailService {
         );
     }
 
+    public EmailVerificationResponse verifyEmailByCode(
+            final EmailVerificationRequest request
+    ) {
+        if (verifyCode(request.email(), request.verificationCode())) {
+            return new EmailVerificationResponse(
+                    request.email(),
+                    "인증이 완료 되었습니다."
+            );
+        }
+        throw new IllegalArgumentException("인증에 싪패 했습니다.");
+    }
+
     private String createVerificationCode() {
         return UUID.randomUUID()
                 .toString().substring(0, 6)
@@ -67,6 +81,30 @@ public class MailService {
         context.setVariable("recipientName", email != null ? email : "고객님");
         context.setVariable("verificationCode", verificationCode);
         return templateEngine.process("emailVerification", context);
+    }
+
+    private void emailDuplicateCheck(final String email) {
+        if(memberQueryService.checkDuplicateEmail(email)) {
+            throw new IllegalArgumentException("이미 가입한 Email 입니다.");
+        }
+    }
+
+    private boolean verifyCode(
+            final String email,
+            final String verificationCode
+    ) {
+        String storedCode = redisTemplate.opsForValue().get(email);
+
+        if(storedCode == null) {
+            return false;
+        }
+
+        if(verificationCode.equals(storedCode)) {
+            redisTemplate.delete(email);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -91,12 +129,6 @@ public class MailService {
                 throw new IllegalStateException("비동기 메일 전송 실패: " + email, e);
             }
         });
-    }
-
-    private void emailDuplicateCheck(final String email) {
-        if(memberQueryService.checkDuplicateEmail(email)) {
-            throw new IllegalArgumentException("이미 가입한 Email 입니다.");
-        }
     }
 
 }

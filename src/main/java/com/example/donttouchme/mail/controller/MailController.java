@@ -2,6 +2,8 @@ package com.example.donttouchme.mail.controller;
 
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeRequest;
 import com.example.donttouchme.mail.controller.dto.EmailVerificationCodeResponse;
+import com.example.donttouchme.mail.controller.dto.EmailVerificationRequest;
+import com.example.donttouchme.mail.controller.dto.EmailVerificationResponse;
 import com.example.donttouchme.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +25,13 @@ public class MailController {
     ) {
         return ResponseEntity.ok(mailService.sendVerificationEmail(request));
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<EmailVerificationResponse> verifyEmailByCode(
+            @Validated @RequestBody final EmailVerificationRequest request
+    ) {
+        return ResponseEntity.ok(mailService.verifyEmailByCode(request));
+    }
+
+
 }
