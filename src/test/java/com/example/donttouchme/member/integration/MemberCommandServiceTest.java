@@ -25,6 +25,8 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("OAuth2 member 정상 생성")
     void OAuth2memberCreateSuccess() {
+
+        //given
         CreateMemberDto createMemberDto = new CreateMemberDto(
                 "test",
                 "test@test.com",
@@ -32,14 +34,18 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
                 LoginProvider.original
         );
 
+        //when
         Member member = memberCommandService.createMember(createMemberDto);
 
+        //then
         assertThat(member).isNotNull();
     }
 
     @Test
     @DisplayName("OAuth2 member 생성 실패")
     void OAuth2memberCreateFail() {
+
+        //given
         CreateMemberDto createMemberDto = new CreateMemberDto(
                 null,
                 "test@test.com",
@@ -47,6 +53,8 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
                 LoginProvider.google
         );
 
+        //when
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             memberCommandService.createMember(createMemberDto);
         });
@@ -55,6 +63,8 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("original member 생성 성공")
     void originalMemberCreateSuccess() {
+
+        //given
         MemberSignUpRequest memberSignUpRequest = new MemberSignUpRequest(
                 "test",
                 "test@Test.com",
@@ -62,15 +72,18 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
                 "test"
         );
 
-
+        //when
         Member member = memberCommandService.signUp(memberSignUpRequest);
 
+        //then
         assertThat(member).isNotNull();
     }
 
     @Test
     @DisplayName("original member 생성 실패")
     void originalMemberCreateFail() {
+
+        //given
         MemberSignUpRequest memberSignUpRequest = new MemberSignUpRequest(
                 null,
                 "test@Test.com",
@@ -79,6 +92,8 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
         );
 
 
+        //when
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             memberCommandService.signUp(memberSignUpRequest);
         });
@@ -87,6 +102,8 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("이메일 중복 검사 실패로 member 생성실패")
     void memberCreateFailedByDuplicate() {
+
+        //given
         MemberSignUpRequest memberSignUpRequest = new MemberSignUpRequest(
                 "test",
                 "test@Test.com",
@@ -95,6 +112,9 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
         );
         Member member = memberCommandService.signUp(memberSignUpRequest);
 
+
+        //when
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             memberCommandService.signUp(memberSignUpRequest);
         });
