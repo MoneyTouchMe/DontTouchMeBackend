@@ -3,6 +3,7 @@ package com.example.donttouchme.event.domain.value;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,27 @@ public class EventInfo {
 
     @Column(nullable = false)
     private boolean isSend;
+
+    @Builder
+    public EventInfo(
+            final boolean isType,
+            final boolean isHistory,
+            final boolean isPrice,
+            final boolean isName,
+            final boolean isTag,
+            final boolean isImage,
+            final boolean isSide,
+            final boolean isSend
+    ) {
+        this.isType = isType;
+        this.isHistory = isHistory;
+        this.isPrice = isPrice;
+        this.isName = isName;
+        this.isTag = isTag;
+        this.isImage = isImage;
+        this.isSide = isSide;
+        this.isSend = isSend;
+    }
 
     public List<String> toCellValues() {
         List<String> cellValues = new ArrayList<>();
