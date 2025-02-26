@@ -17,6 +17,10 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
 
     steps:
       - uses: actions/checkout@v3
