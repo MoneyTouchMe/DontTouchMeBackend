@@ -27,14 +27,29 @@ public class ExcelController implements ExcelControllerSagger {
     ){
         byte[] excelByte = excelQueryService.exportSampleExcel(eventId);
 
-        String fileName = "event_form.xlsx";
+        HttpHeaders headers = setHeader("event_form.xlsx");
 
+        return ResponseEntity.ok().headers(headers).body(excelByte);
+    }
+
+    @Override
+    @GetMapping()
+    public ResponseEntity<byte[]> exportEventToExcel(
+            @RequestParam final Long eventId) {
+        byte[] excelByte = excelQueryService.exportEventToExcel(eventId);
+
+        HttpHeaders headers = setHeader("event.xlsx");
+
+        return ResponseEntity.ok().headers(headers).body(excelByte);
+    }
+
+    private HttpHeaders setHeader(final String fileName) {
         HttpHeaders headers = new HttpHeaders();
-        // 파일 이름 인코딩 처리
+
         String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replace("+", "%20");
         headers.add("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
-        return ResponseEntity.ok().headers(headers).body(excelByte);
+        return headers;
     }
 }

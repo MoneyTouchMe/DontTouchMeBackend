@@ -14,4 +14,12 @@ public interface ExcelControllerSagger {
     ResponseEntity<byte[]> exportSampleExcel(
             Long eventId
     );
+
+    @Operation(
+            summary = "이벤트 엑셀 추출 API",
+            description = "이벤트를 엑셀로 추출해줌"
+    )
+    ResponseEntity<byte[]> exportEventToExcel(
+            Long eventId
+    );
 }

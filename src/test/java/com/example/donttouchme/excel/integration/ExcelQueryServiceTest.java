@@ -6,12 +6,14 @@ import com.example.donttouchme.excel.service.ExcelQueryService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 class ExcelQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
