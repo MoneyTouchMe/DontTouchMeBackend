@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class MemberCommandService {
 
-    public final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final MemberQueryService memberQueryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member createMember(final CreateMemberDto createMemberDto) {
@@ -47,6 +48,10 @@ public class MemberCommandService {
                 .builderWithPassword();
         log.info("encoded password: {}",bCryptPasswordEncoder.encode(request.password()));
         log.info("password : {}", member.getPassword());
+
+        if(memberQueryService.checkDuplicateEmail(member.getEmail())) {
+            throw new IllegalArgumentException("이미 가입한 이메일 입니다.");
+        }
 
         try {
             return memberRepository.save(
