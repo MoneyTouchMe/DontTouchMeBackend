@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Email Verification</title>
+</head>
+<body>
+<h3>이메일 인증 코드</h3>
+<p>안녕하세요, <span th:text="${recipientName}">고객님</span>!</p>
+<p>아래 인증 코드를 입력하여 이메일 인증을 완료해주세요:</p>
+<h2 style="color: #2e6c80;" th:text="${verificationCode}">123456</h2>
+<p>이 코드는 발송 시점부터 5분간 유효합니다.</p>
+<p>감사합니다!<br/>don Touch ME Team</p>
+</body>
+</html>

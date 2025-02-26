@@ -1,8 +1,7 @@
 package com.example.donttouchme.member.controller;
 
-import com.example.donttouchme.member.controller.dto.CheckDuplicateEmailResponse;
-import com.example.donttouchme.member.controller.dto.MemberSignUpRequest;
-import com.example.donttouchme.member.controller.dto.MemberSignUpResponse;
+import com.example.donttouchme.mail.service.MailService;
+import com.example.donttouchme.member.controller.dto.*;
 import com.example.donttouchme.member.service.MemberCommandService;
 import com.example.donttouchme.member.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ public class MemberController implements MemberControllerSwagger{
 
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
+    private final MailService mailService;
 
     @Override
     @GetMapping("/check-email-duplicate")
@@ -38,4 +38,11 @@ public class MemberController implements MemberControllerSwagger{
         );
     }
 
+    @Override
+    @PostMapping("/issue-temp-password")
+    public ResponseEntity<TempPasswordIssueResponse> issueTempPassword(TempPasswordIssueRequest request) {
+        return ResponseEntity.ok(
+                mailService.issueTempPassword(request)
+        );
+    }
 }
