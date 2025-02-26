@@ -1,7 +1,6 @@
 package com.example.donttouchme.event.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
-import com.example.donttouchme.event.domain.value.SendType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,9 +37,6 @@ public class EventDetail extends BaseEntity {
     @Column
     private String image;
 
-    @Column
-    private SendType sendType;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
@@ -48,6 +44,10 @@ public class EventDetail extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "target_id")
     private Target target;
+
+    @OneToOne
+    @JoinColumn(name = "send_value_id")
+    private SendValue sendValue;
 
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
     private final List<Tag> tags = new ArrayList<>();

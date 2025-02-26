@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.member.domain.Member;
 import jakarta.persistence.*;
@@ -36,6 +37,9 @@ public class Event extends BaseEntity {
 
     @Embedded
     private Location location;
+
+    @Embedded
+    private EventInfo eventInfo;
 
     @Column
     private Integer participants;
