@@ -73,8 +73,12 @@ public class MemberCommandService {
         member.changePassword(
                 bCryptPasswordEncoder.encode(request.newPassword())
         );
+        try {
+            memberRepository.save(member);
+        }catch (Exception e) {
+            throw new IllegalArgumentException("member 저장실패");
+        }
 
-        memberRepository.save(member);
 
         return ChangePasswordResponse.addMessage("비빌번호 변경 성공");
     }

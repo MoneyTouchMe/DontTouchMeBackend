@@ -1,9 +1,11 @@
 package com.example.donttouchme.member.integration;
 
+import com.example.donttouchme.member.controller.dto.ChangePasswordRequest;
 import com.example.donttouchme.member.controller.dto.MemberSignUpRequest;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
+import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.member.service.MemberCommandService;
 import com.example.donttouchme.member.service.dto.CreateMemberDto;
 import com.example.donttouchme.support.IntegrationTestSupport;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberCommandServiceTest extends IntegrationTestSupport {
     @Autowired
     MemberCommandService memberCommandService;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Test
     @DisplayName("OAuth2 member 정상 생성")
@@ -117,6 +124,40 @@ class MemberCommandServiceTest extends IntegrationTestSupport {
         //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             memberCommandService.signUp(memberSignUpRequest);
+        });
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 성공")
+    void changePasswordSuccess() {
+        // given
+        Member testMember = createTestMember();
+        Member save = memberRepository.save(testMember);
+        String originalPassword = save.getPassword();
+        // when
+        memberCommandService.changePassword(
+                save,
+                new ChangePasswordRequest("zzzzz")
+        );
+
+        // then
+        assertThat(save.getPassword()).isNotEqualTo(originalPassword);
+    }
+
+    @Test
+    @DisplayName("비빌번호 변경 예외")
+    void changePasswordFail() {
+        //given
+        Member testMember = createTestMember();
+        Member save = memberRepository.save(testMember);
+
+        //when
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            memberCommandService.changePassword(
+                    save,
+                    new ChangePasswordRequest(null)
+            );
         });
     }
 
