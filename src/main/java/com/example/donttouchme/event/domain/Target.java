@@ -23,6 +23,10 @@ public class Target extends BaseEntity {
     @Column(nullable = false)
     private String value;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Event event;
+
     @Builder
     public Target(String value) {
         this.value = value;
