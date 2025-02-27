@@ -9,34 +9,27 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class Tag extends BaseEntity { //태그
-
+public class TagEventDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String value; //태그 값
-
-
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
-    private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_detail_id")
+    private EventDetail eventDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
     @Builder
-    public Tag(String value, Event event) {
-        this.value = value;
-        this.event = event;
+    public TagEventDetail(EventDetail eventDetail, Tag tag) {
+        this.eventDetail = eventDetail;
+        this.tag = tag;
     }
 }

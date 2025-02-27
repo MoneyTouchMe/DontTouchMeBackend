@@ -52,6 +52,12 @@ public class Event extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private final List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+    private final List<Target> targets = new ArrayList<>();
+
     @Builder
     public Event(String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, Member member) {
         this.eventName = eventName;

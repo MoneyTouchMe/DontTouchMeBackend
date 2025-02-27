@@ -51,7 +51,8 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private SendValue sendValue;
 
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
-    private final List<Tag> tags = new ArrayList<>();
+    private final List<TagEventDetail> tags = new ArrayList<>();
+
 
     @Builder
     public EventDetail(String type, String history, String price, String name, String image, Event event, Target target, SendValue sendValue) {
