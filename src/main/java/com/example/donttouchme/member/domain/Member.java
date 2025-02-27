@@ -64,4 +64,8 @@ public class Member extends BaseEntity {
         this.loginProvider = loginProvider;
         this.contact = contact;
     }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

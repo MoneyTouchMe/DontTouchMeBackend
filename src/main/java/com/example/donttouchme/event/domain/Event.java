@@ -6,6 +6,7 @@ import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -50,4 +51,15 @@ public class Event extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Event(String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, Member member) {
+        this.eventName = eventName;
+        this.eventType = eventType;
+        this.eventDate = eventDate;
+        this.location = location;
+        this.eventInfo = eventInfo;
+        this.participants = participants;
+        this.member = member;
+    }
 }

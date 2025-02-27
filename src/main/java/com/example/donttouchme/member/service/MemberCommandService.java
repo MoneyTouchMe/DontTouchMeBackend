@@ -1,5 +1,7 @@
 package com.example.donttouchme.member.service;
 
+import com.example.donttouchme.member.controller.dto.ChangePasswordRequest;
+import com.example.donttouchme.member.controller.dto.ChangePasswordResponse;
 import com.example.donttouchme.member.controller.dto.MemberSignUpRequest;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
@@ -62,5 +64,22 @@ public class MemberCommandService {
             throw new IllegalArgumentException("회원 생성 실패");
         }
 
+    }
+
+    public ChangePasswordResponse changePassword(
+            final Member member,
+            final ChangePasswordRequest request
+    ) {
+        member.changePassword(
+                bCryptPasswordEncoder.encode(request.newPassword())
+        );
+        try {
+            memberRepository.save(member);
+        }catch (Exception e) {
+            throw new IllegalArgumentException("member 저장실패");
+        }
+
+
+        return ChangePasswordResponse.addMessage("비빌번호 변경 성공");
     }
 }

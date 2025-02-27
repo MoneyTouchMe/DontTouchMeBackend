@@ -3,6 +3,7 @@ package com.example.donttouchme.event.domain.value;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,11 @@ public class Location {
 
     @Column(nullable = false)
     private String address;
+
+    @Builder
+    public Location(BigDecimal latitude, BigDecimal longitude, String address) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+    }
 }

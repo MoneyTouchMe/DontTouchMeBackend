@@ -3,6 +3,7 @@ package com.example.donttouchme.event.domain;
 import com.example.donttouchme.common.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -25,4 +26,10 @@ public class Tag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_detail_id")
     private EventDetail eventDetail;
+
+    @Builder
+    public Tag(String value, EventDetail eventDetail) {
+        this.value = value;
+        this.eventDetail = eventDetail;
+    }
 }

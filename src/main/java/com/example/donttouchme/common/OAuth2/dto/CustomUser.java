@@ -50,4 +50,7 @@ public class CustomUser implements OAuth2User, UserDetails {
     public Long getMemberId() {
         return member.getId();
     }
+    public String getEmail() {
+        return member.getEmail();
+    }
 }
