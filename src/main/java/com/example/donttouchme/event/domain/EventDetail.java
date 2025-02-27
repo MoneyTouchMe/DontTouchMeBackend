@@ -36,7 +36,7 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private String name; //입출금자명
 
     @Column
-    private String image; //첨부한 사진
+    private String image; //첨부한 입출금 이미지 파일 경로
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
