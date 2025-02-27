@@ -14,14 +14,14 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class Tag extends BaseEntity {
+public class Tag extends BaseEntity { //태그
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String value;
+    private String value; //태그 값
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_detail_id")

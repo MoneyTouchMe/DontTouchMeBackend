@@ -25,25 +25,25 @@ public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //고유번호 PK
 
     @Column(nullable = false)
-    private String eventName;
+    private String eventName; //이벤트명
 
     @Column(nullable = false)
-    private String eventType;
+    private String eventType; //이벤트 유형
 
     @Column(nullable = false)
-    private LocalDate eventDate;
+    private LocalDate eventDate; //이벤트 일정
 
     @Embedded
-    private Location location;
+    private Location location; //이벤트 장소
 
     @Embedded
-    private EventInfo eventInfo;
+    private EventInfo eventInfo; //ON/OFF 토글 항목
 
     @Column
-    private Integer participants;
+    private Integer participants; //예상 인원
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<EventDetail> eventDetails = new ArrayList<>();

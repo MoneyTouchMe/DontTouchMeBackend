@@ -14,7 +14,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class Target extends BaseEntity {
+public class Target extends BaseEntity { //입금 대상 (태그 형태)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,31 +13,31 @@ import java.util.List;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class EventInfo {
+public class EventInfo { //이벤트 ON/OFF 토글 항목
 
     @Column(nullable = false)
-    private boolean isType;
+    private boolean isType; //입출금 분류 여부
 
     @Column(nullable = false)
-    private boolean isHistory;
+    private boolean isHistory; //입출금 내역명 표시 여부
 
     @Column(nullable = false)
-    private boolean isPrice;
+    private boolean isPrice; //금액 태그 사용 여부
 
     @Column(nullable = false)
-    private boolean isName;
+    private boolean isName; //입출금 대상 이름 표시 여부
 
     @Column(nullable = false)
-    private boolean isTag;
+    private boolean isTag; //카테고리 설정 여부
 
     @Column(nullable = false)
-    private boolean isImage;
+    private boolean isImage; //사진 첨부 여부
 
     @Column(nullable = false)
-    private boolean isSide;
+    private boolean isSide; //입금 대상 지정 여부
 
     @Column(nullable = false)
-    private boolean isSend;
+    private boolean isSend; //감사장 전송 기능 여부
 
     @Builder
     public EventInfo(

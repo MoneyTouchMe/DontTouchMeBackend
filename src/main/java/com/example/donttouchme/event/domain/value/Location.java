@@ -12,16 +12,16 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class Location {
+public class Location { //이벤트 장소
 
     @Column(nullable = false)
-    private BigDecimal latitude;
+    private BigDecimal latitude; //위도
 
     @Column(nullable = false)
-    private BigDecimal longitude;
+    private BigDecimal longitude; //경도
 
     @Column(nullable = false)
-    private String address;
+    private String address; //주소
 
     @Builder
     public Location(BigDecimal latitude, BigDecimal longitude, String address) {
