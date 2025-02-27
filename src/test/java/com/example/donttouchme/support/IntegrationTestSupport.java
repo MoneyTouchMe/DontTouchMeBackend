@@ -89,7 +89,6 @@ public abstract class IntegrationTestSupport {
 
     protected Tag createTestTag(EventDetail eventDetail){
         return Tag.builder()
-                .eventDetail(eventDetail)
                 .value("Tag")
                 .build();
     }
