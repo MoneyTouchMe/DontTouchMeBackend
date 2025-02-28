@@ -24,7 +24,7 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @Builder
