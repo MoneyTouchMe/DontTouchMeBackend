@@ -39,3 +39,4 @@ out/
 /test.mv.db
 /src/test/resources/application.yml
 /src/test/resources/application-test.yml
+/src/main/resources/CD.yml
