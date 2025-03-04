@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
     private final EventService eventService;
 
-    @PostMapping("/")
+    @PostMapping("/") //이벤트 생성
     public ResponseEntity<CreateEventResponse> createEvent(
             @RequestBody @Validated final CreateEventRequest request
     ) {
         return null;
     }
-
 }

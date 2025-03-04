@@ -28,7 +28,7 @@ public class Event extends BaseEntity {
     private Long id; //고유번호 PK
 
     @Column
-    private String thumbnail; //썸네일 이미지 파일 경로
+    private String thumbnailUrl; //썸네일 이미지 파일 경로
 
     @Column(nullable = false)
     private String eventName; //이벤트명
