@@ -8,6 +8,7 @@ import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,12 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @AfterEach
+    void clear() {
+        memberRepository.deleteAll();
+        eventRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("Tag, Side가 없는 경우의 Event 생성 성공")
