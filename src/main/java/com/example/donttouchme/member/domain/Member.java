@@ -47,6 +47,18 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private final List<Event> events = new ArrayList<>();
 
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void setEvents(List<Event> events) { //양방향 관계 설정
+        this.events.clear();
+        if (events != null) {
+            this.events.addAll(events);
+            events.forEach(event -> event.setMember(this));
+        }
+    }
+
     @Builder(builderMethodName = "builderWithoutPassword", buildMethodName = "builderWithoutPassword")
     public Member(String name, String email, ROLE role, LoginProvider loginProvider) {
         this.name = name;
@@ -63,9 +75,5 @@ public class Member extends BaseEntity {
         this.role = role;
         this.loginProvider = loginProvider;
         this.contact = contact;
-    }
-
-    public void changePassword(String newPassword) {
-        this.password = newPassword;
     }
 }

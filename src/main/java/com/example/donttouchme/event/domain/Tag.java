@@ -17,14 +17,14 @@ import java.util.List;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class Tag extends BaseEntity {
+public class Tag extends BaseEntity { //태그
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String value;
+    private String value; //태그 값
 
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
@@ -33,6 +33,10 @@ public class Tag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
     @Builder
     public Tag(String value, Event event) {

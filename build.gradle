@@ -68,6 +68,9 @@ dependencies {
     //poi
     implementation 'org.apache.poi:poi:5.2.5'
     implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
+    //AWS
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.123' // AWS SDK for S3
 }
 
 tasks.named('test') {

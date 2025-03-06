@@ -17,26 +17,26 @@ import java.util.List;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class EventDetail extends BaseEntity {
+public class EventDetail extends BaseEntity { //입출금 내역
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //고유번호
 
     @Column
-    private String type;
+    private String type; //입출금 분류 ex(입금, 출금, NULL)
 
     @Column
-    private String history;
+    private String history; //입출금 내역명
 
     @Column
-    private String price;
+    private String price; //금액
 
     @Column
-    private String name;
+    private String name; //입출금자명
 
     @Column
-    private String image;
+    private String image; //첨부한 입출금 이미지 파일 경로
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
@@ -53,6 +53,9 @@ public class EventDetail extends BaseEntity {
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
     private final List<TagEventDetail> tags = new ArrayList<>();
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
     @Builder
     public EventDetail(String type, String history, String price, String name, String image, Event event, Target target, SendValue sendValue) {

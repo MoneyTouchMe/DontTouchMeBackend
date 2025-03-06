@@ -14,7 +14,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
-public class Target extends BaseEntity {
+public class Target extends BaseEntity { //입금 대상 (태그 형태)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,16 @@ public class Target extends BaseEntity {
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "event_id")
     private Event event;
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @Builder
-    public Target(String value) {
+    public Target(String value, Event event) {
         this.value = value;
+        this.event = event;
     }
 }

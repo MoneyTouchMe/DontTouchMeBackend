@@ -7,24 +7,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class Location {
+public class Location { //이벤트 장소
 
     @Column(nullable = false)
-    private BigDecimal latitude;
+    private double latitude; //위도
 
     @Column(nullable = false)
-    private BigDecimal longitude;
+    private double longitude; //경도
 
     @Column(nullable = false)
-    private String address;
+    private String address; //주소
 
     @Builder
-    public Location(BigDecimal latitude, BigDecimal longitude, String address) {
+    public Location(double latitude, double longitude, String address) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
