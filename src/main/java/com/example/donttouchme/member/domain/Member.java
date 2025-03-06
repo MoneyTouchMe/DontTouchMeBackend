@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @SQLRestriction("deleted_at IS NULL")
-@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE member SET deleted_at = NOW() WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     @Id

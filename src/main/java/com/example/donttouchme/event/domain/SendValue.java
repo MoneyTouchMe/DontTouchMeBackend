@@ -13,7 +13,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE sendValue SET deleted_at = NOW() WHERE id = ?")
 public class SendValue extends BaseEntity { //연락처
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE tag SET deleted_at = NOW() WHERE id = ?")
 public class Tag extends BaseEntity { //태그
 
     @Id
