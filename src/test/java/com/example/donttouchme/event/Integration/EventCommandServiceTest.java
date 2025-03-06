@@ -65,8 +65,9 @@ class EventCommandServiceTest extends IntegrationTestSupport {
         Event createdEvent = eventCommandService.createEvent(request);
 
         //then
+        log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
         Assertions.assertThat(createdEvent).isNotNull();
-
+        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
 
     @Test
@@ -99,12 +100,11 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //when
         Event createdEvent = eventCommandService.createEvent(request);
-        List<Event> newEvents = savedMember.getEvents();
-        newEvents.add(createdEvent);
-        savedMember.setEvents(newEvents);
 
         //then
+        log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
         Assertions.assertThat(createdEvent).isNotNull();
+        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
 
     }
 
@@ -138,14 +138,13 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //when
         Event createdEvent = eventCommandService.createEvent(request);
-        List<Event> newEvents = savedMember.getEvents();
-        newEvents.add(createdEvent);
-        savedMember.setEvents(newEvents);
 
         //then
+        log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
         Assertions.assertThat(createdEvent).isNotNull();
-
+        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
+
     @Test
     @DisplayName("Tag, Target 모두 있는 경우 Event 생성 성공")
     void createEventSuccess() {
@@ -156,7 +155,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
         CreateEventRequest request = new CreateEventRequest(
                 savedMember.getId(),
                 null,
-                "testEvent",
+                "testEvent2",
                 "결혼식",
                 LocalDate.now(),
                 "경기도 안양시",
@@ -178,6 +177,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
         Event createdEvent = eventCommandService.createEvent(request);
 
         //then
+        log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
         Assertions.assertThat(createdEvent).isNotNull();
         Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
