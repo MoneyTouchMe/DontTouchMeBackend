@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Tag(name = "excel 관련 API", description = "excel 관련 API 입니다.")
-public interface ExcelControllerSagger {
+public interface ExcelControllerSwagger {
 
     @Operation(
             summary = "엑셀 양식 다운로드 API",
