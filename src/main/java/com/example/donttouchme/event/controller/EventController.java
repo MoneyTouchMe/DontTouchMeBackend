@@ -6,22 +6,27 @@ import com.example.donttouchme.event.service.EventCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
-public class EventController {
+public class EventController implements EventControllerSwagger {
     private final EventCommandService eventService;
 
-    @PostMapping("/") //이벤트 생성
+    @PostMapping("/")
     public ResponseEntity<Long> createEvent(
             @RequestBody @Validated final CreateEventRequest request
     ) {
         Event createdEvent = eventService.createEvent(request);
         return ResponseEntity.ok(createdEvent.getId());
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Void> deleteEvent(
+            @PathVariable final Long eventId
+    ) {
+        eventService.deleteEvent(eventId);
+        return ResponseEntity.noContent().build(); //성공 시 204 No Content 응답
     }
 }
