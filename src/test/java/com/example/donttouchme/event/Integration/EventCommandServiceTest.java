@@ -8,16 +8,18 @@ import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -66,8 +68,8 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //then
         log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
-        Assertions.assertThat(createdEvent).isNotNull();
-        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
+        assertThat(createdEvent).isNotNull();
+        assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
 
     @Test
@@ -103,8 +105,8 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //then
         log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
-        Assertions.assertThat(createdEvent).isNotNull();
-        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
+        assertThat(createdEvent).isNotNull();
+        assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
 
     }
 
@@ -141,8 +143,8 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //then
         log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
-        Assertions.assertThat(createdEvent).isNotNull();
-        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
+        assertThat(createdEvent).isNotNull();
+        assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
 
     @Test
@@ -178,7 +180,24 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //then
         log.info("savedMember.getEvents() : {}", savedMember.getEvents().get(0).getId());
-        Assertions.assertThat(createdEvent).isNotNull();
-        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
+        assertThat(createdEvent).isNotNull();
+        assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
+
+    @Test
+    @DisplayName("이벤트 삭제 성공")
+    @Commit
+    void deleteEvent() {
+        //given
+        Member savedMember = memberRepository.save(createTestMember());
+        Event savedEvent = eventRepository.save(createTestEvent(savedMember));
+        assertThat(eventRepository.existsById(savedEvent.getId())).isTrue();
+
+        //when
+        eventCommandService.deleteEvent(savedEvent.getId());
+
+        //then
+        assertThat(eventRepository.existsById(savedEvent.getId())).isFalse();
+    }
+
 }
