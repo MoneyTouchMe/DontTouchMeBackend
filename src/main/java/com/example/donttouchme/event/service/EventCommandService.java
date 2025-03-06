@@ -85,4 +85,11 @@ public class EventCommandService {
 
         return eventRepository.save(event);
     }
+
+    public void deleteEvent(Long eventId) { //논리 삭제
+        Event findEvent = eventRepository.findById(eventId).orElseThrow(
+                () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다. eventId: " + eventId)
+        );
+        eventRepository.delete(findEvent);
+    }
 }

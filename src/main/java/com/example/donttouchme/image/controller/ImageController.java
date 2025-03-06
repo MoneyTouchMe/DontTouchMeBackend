@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/image")
 @RequiredArgsConstructor
-public class ImageController {
+public class ImageController implements ImageControllerSwagger {
     private final ImageService imageService;
 
-    //이미지 업로드용 presignedUrl 요청
     @GetMapping("/upload")
     public UploadImageResponse getPresignedUrl(
             @RequestParam final String fileName

@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/api/v1/excel")
 @RequiredArgsConstructor
-public class ExcelController implements ExcelControllerSagger {
+public class ExcelController implements ExcelControllerSwagger {
 
     private final ExcelQueryService excelQueryService;
     private final ExcelCommandService excelCommandService;
