@@ -71,7 +71,6 @@ dependencies {
 
     //AWS
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.123' // AWS SDK for S3
-    implementation 'software.amazon.awssdk:auth'       // AWS 인증 관련 의존성
 }
 
 tasks.named('test') {
