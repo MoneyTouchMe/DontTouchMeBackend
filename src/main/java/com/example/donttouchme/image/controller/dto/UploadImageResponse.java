@@ -1,8 +1,7 @@
 package com.example.donttouchme.image.controller.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-
 public record UploadImageResponse(
-        String fileUrl
+        String presignedUrl, //업로드용 presignedUrl
+        String fileUrl //최종 저장되는 URL
 ) {
 }

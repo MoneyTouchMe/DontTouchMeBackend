@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 @AutoConfigureMockMvc(addFilters = false)
 public abstract class IntegrationTestSupport {
 
-    protected Member createTestMember(){
+    protected Member createTestMember() {
         return Member.builderWithPassword()
                 .name("test")
                 .email("test@test.com")
@@ -30,17 +29,17 @@ public abstract class IntegrationTestSupport {
                 .builderWithPassword();
     }
 
-    protected Event createTestEvent(Member member){
+    protected Event createTestEvent(Member member) {
         return Event.builder()
                 .eventInfo(
                         EventInfo.builder()
                                 .isType(true)
-                                .isTag(true)
-                                .isSide(true)
                                 .isHistory(true)
-                                .isImage(true)
-                                .isName(true)
                                 .isPrice(true)
+                                .isName(true)
+                                .isTag(true)
+                                .isImage(true)
+                                .isSide(true)
                                 .isSend(true)
                                 .build()
                 )
@@ -51,19 +50,20 @@ public abstract class IntegrationTestSupport {
                 .location(
                         Location.builder()
                                 .address("test")
-                                .latitude(new BigDecimal(123))
-                                .longitude(new BigDecimal(456))
+                                .latitude(123.123)
+                                .longitude(456.456)
                                 .build()
                 )
                 .member(member)
                 .build();
     }
 
+
     protected EventDetail createTestEventDetail(
             Event event,
             Target target,
             SendValue sendValue
-    ){
+    ) {
         return EventDetail.builder()
                 .price(String.valueOf(1234))
                 .event(event)
@@ -76,18 +76,19 @@ public abstract class IntegrationTestSupport {
                 .build();
     }
 
-    protected Target createTestTarget(){
+    protected Target createTestTarget() {
         return Target.builder()
                 .value("target")
                 .build();
     }
-    protected SendValue createTestSendValue(){
+
+    protected SendValue createTestSendValue() {
         return SendValue.builder()
                 .value("sendValue")
                 .build();
     }
 
-    protected Tag createTestTag(EventDetail eventDetail){
+    protected Tag createTestTag(EventDetail eventDetail) {
         return Tag.builder()
                 .value("Tag")
                 .build();
