@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @SpringBootTest
 @Slf4j
+@Transactional
 class EventCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -174,12 +176,9 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
         //when
         Event createdEvent = eventCommandService.createEvent(request);
-        List<Event> newEvents = savedMember.getEvents();
-        newEvents.add(createdEvent);
-        savedMember.setEvents(newEvents);
 
         //then
         Assertions.assertThat(createdEvent).isNotNull();
-
+        Assertions.assertThat(savedMember.getEvents().get(0).getId()).isEqualTo(createdEvent.getId());
     }
 }
