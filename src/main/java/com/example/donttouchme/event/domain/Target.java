@@ -27,8 +27,13 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     @JoinColumn(name = "event_id")
     private Event event;
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @Builder
-    public Target(String value) {
+    public Target(String value, Event event) {
         this.value = value;
+        this.event = event;
     }
 }

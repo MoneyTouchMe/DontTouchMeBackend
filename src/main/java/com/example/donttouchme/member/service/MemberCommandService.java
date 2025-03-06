@@ -33,7 +33,7 @@ public class MemberCommandService {
                     .role(createMemberDto.role())
                     .builderWithoutPassword()
             );
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("회원 생성 실패");
         }
 
@@ -48,10 +48,10 @@ public class MemberCommandService {
                 .loginProvider(LoginProvider.original)
                 .contact(request.contact())
                 .builderWithPassword();
-        log.info("encoded password: {}",bCryptPasswordEncoder.encode(request.password()));
+        log.info("encoded password: {}", bCryptPasswordEncoder.encode(request.password()));
         log.info("password : {}", member.getPassword());
 
-        if(memberQueryService.checkDuplicateEmail(member.getEmail())) {
+        if (memberQueryService.checkDuplicateEmail(member.getEmail())) {
             throw new IllegalArgumentException("이미 가입한 이메일 입니다.");
         }
 
@@ -59,7 +59,7 @@ public class MemberCommandService {
             return memberRepository.save(
                     member
             );
-        }catch (Exception e) {
+        } catch (Exception e) {
 
             throw new IllegalArgumentException("회원 생성 실패");
         }
@@ -75,7 +75,7 @@ public class MemberCommandService {
         );
         try {
             memberRepository.save(member);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("member 저장실패");
         }
 

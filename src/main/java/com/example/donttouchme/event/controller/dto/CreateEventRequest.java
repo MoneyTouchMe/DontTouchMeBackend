@@ -5,9 +5,12 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record CreateEventRequest(
-        String fileUrl, //이미지 URL
+        @NotBlank(message = "회원 고유번호는 필수입니다.")
+        long memberId, //회원 고유번호
+        String thumbnailUrl, //이미지 URL
 
         @NotBlank(message = "이벤트명은 필수입니다.")
         String eventName,
@@ -21,6 +24,12 @@ public record CreateEventRequest(
         @NotBlank(message = "이벤트 장소는 필수입니다.")
         String address,
 
+        @NotBlank(message = "이벤트 장소 위도 정보는 필수입니다.")
+        double latitude,
+
+        @NotBlank(message = "이벤트 장소 경도 정보는 필수입니다.")
+        double longitude,
+
         Integer participants,
 
         boolean isType, //입출금 분류 여부
@@ -31,11 +40,11 @@ public record CreateEventRequest(
 
         boolean isName, //이름 입력 여부
 
-        boolean isTag, //태그 사용 여부
+        List<String> tags, //태그 (토글이 OFF일 때 null)
 
         boolean isImage, //사진 첨부 여부
 
-        boolean isSide, //입금 대상 입력 여부
+        List<String> targets, //입금 대상 (토글이 OFF일 때 null)
 
         boolean isSend, //감사장 여부
 
@@ -49,5 +58,4 @@ public record CreateEventRequest(
         }
         return true;
     }
-
 }

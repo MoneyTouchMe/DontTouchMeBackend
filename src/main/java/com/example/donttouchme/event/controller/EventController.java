@@ -1,8 +1,8 @@
 package com.example.donttouchme.event.controller;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
-import com.example.donttouchme.event.controller.dto.CreateEventResponse;
-import com.example.donttouchme.event.service.EventService;
+import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.service.EventCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
 public class EventController {
-    private final EventService eventService;
+    private final EventCommandService eventService;
 
     @PostMapping("/") //이벤트 생성
-    public ResponseEntity<CreateEventResponse> createEvent(
+    public ResponseEntity<Long> createEvent(
             @RequestBody @Validated final CreateEventRequest request
     ) {
-        return null;
+        Event createdEvent = eventService.createEvent(request);
+        return ResponseEntity.ok(createdEvent.getId());
     }
 }

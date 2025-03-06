@@ -34,6 +34,10 @@ public class Tag extends BaseEntity { //태그
     @JoinColumn(name = "event_id")
     private Event event;
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @Builder
     public Tag(String value, Event event) {
         this.value = value;

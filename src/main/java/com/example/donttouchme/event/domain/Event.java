@@ -48,21 +48,61 @@ public class Event extends BaseEntity {
     @Column
     private Integer participants; //예상 인원
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final List<EventDetail> eventDetails = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private final List<EventDetail> eventDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<Target> targets = new ArrayList<>();
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setEventDetails(List<EventDetail> eventDetails) { //양방향 관계 설정
+        this.eventDetails.clear();
+        if (eventDetails != null) {
+            this.eventDetails.addAll(eventDetails);
+            eventDetails.forEach(eventDetail -> eventDetail.setEvent(this));
+        }
+    }
+
+    public void setTags(List<Tag> tags) { //양방향 관계 설정
+        this.tags.clear();
+        if (tags != null) {
+            this.tags.addAll(tags);
+            tags.forEach(tag -> tag.setEvent(this));
+        }
+    }
+
+    public void setTargets(List<Target> targets) { //양방향 관계 설정
+        this.targets.clear();
+        if (targets != null) {
+            this.targets.addAll(targets);
+            targets.forEach(target -> target.setEvent(this));
+        }
+    }
 
     @Builder
     public Event(String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, Member member) {
+        this.eventName = eventName;
+        this.eventType = eventType;
+        this.eventDate = eventDate;
+        this.location = location;
+        this.eventInfo = eventInfo;
+        this.participants = participants;
+        this.member = member;
+    }
+
+    @Builder(builderMethodName = "builderWithoutTagAndTarget", buildMethodName = "builderWithoutTagAndTarget")
+    public Event(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, Member member) {
+        this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDate = eventDate;
