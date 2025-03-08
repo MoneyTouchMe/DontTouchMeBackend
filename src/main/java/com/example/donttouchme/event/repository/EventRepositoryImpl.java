@@ -23,7 +23,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         QEvent event = QEvent.event;
 
         return queryFactory
-                .select(Projections.fields(FindEventListResponse.class,
+                .select(Projections.constructor(FindEventListResponse.class,
                         event.id.as("eventId"),
                         event.eventName,
                         event.eventDate,
