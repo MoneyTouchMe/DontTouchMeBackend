@@ -120,7 +120,7 @@ public class ExcelCommandService {
                                     .build();
                         })
                         .toList();
-                detail.getTags().addAll(tagEventDetails);
+                detail.getTagEventDetails().addAll(tagEventDetails);
             }
         }
 

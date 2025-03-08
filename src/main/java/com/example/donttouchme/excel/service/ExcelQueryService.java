@@ -74,7 +74,7 @@ public class ExcelQueryService {
                     row.createCell(colNum++).setCellValue(detail.getName() != null ? detail.getName() : "");
                 }
                 if (eventInfo.isTag()) {
-                    String tagValues = detail.getTags().stream()
+                    String tagValues = detail.getTagEventDetails().stream()
                             .map(TagEventDetail::getTag)
                             .map(Tag::getValue)
                             .filter(value -> value != null && !value.isEmpty())
