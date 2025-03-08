@@ -1,13 +1,9 @@
 package com.example.donttouchme.event.controller.dto;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public record FindEventListResponse(
-        long eventId,
-        String eventName,
-        LocalDate eventDate,
-        String thumbnailUrl,
-        String eventType,
-        String address
+        List<EventListDto> events, //이벤트 목록
+        Long lastEventId //다음 요청을 위한 마지막 ID
 ) {
 }
