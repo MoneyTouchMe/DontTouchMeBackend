@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -51,10 +52,19 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private SendValue sendValue;
 
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
-    private final List<TagEventDetail> tags = new ArrayList<>();
+    private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public void setTagEventDetails(Collection<TagEventDetail> tagEventDetails) {
+        for (TagEventDetail tagEventDetail : tagEventDetails) {
+            if (!this.tagEventDetails.contains(tagEventDetail)) {
+                this.tagEventDetails.add(tagEventDetail);
+                tagEventDetail.setEventDetail(this);
+            }
+        }
     }
 
     @Builder

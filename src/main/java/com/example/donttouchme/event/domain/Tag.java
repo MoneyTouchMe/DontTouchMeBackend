@@ -10,7 +10,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -38,9 +40,31 @@ public class Tag extends BaseEntity { //태그
         this.event = event;
     }
 
+    public void setTagEventDetails(Collection<TagEventDetail> tagEventDetails) {
+        for (TagEventDetail tagEventDetail : tagEventDetails) {
+            if (!this.tagEventDetails.contains(tagEventDetail)) {
+                this.tagEventDetails.add(tagEventDetail);
+                tagEventDetail.setTag(this);
+            }
+        }
+    }
+
     @Builder
     public Tag(String value, Event event) {
         this.value = value;
         this.event = event;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag = (Tag) o;
+        return Objects.equals(value, tag.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
