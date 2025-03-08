@@ -1,7 +1,9 @@
 package com.example.donttouchme.event.controller;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @Tag(name = "Event 관련 API", description = "Event 관련 API")
 public interface EventControllerSwagger {
@@ -44,4 +48,11 @@ public interface EventControllerSwagger {
             @Validated @RequestBody UpdateEventRequest request
     );
 
+    @Operation(
+            summary = "이벤트 목록 조회 API",
+            description = "No Offset 방식으로 이벤트 목록을 조회합니다."
+    )
+    public List<FindEventListResponse> findEventList(
+            @RequestBody @Validated final FindEventListRequest request
+    );
 }
