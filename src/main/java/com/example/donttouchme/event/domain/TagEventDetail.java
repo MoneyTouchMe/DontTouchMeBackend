@@ -27,6 +27,14 @@ public class TagEventDetail extends BaseEntity {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    public void setEventDetail(EventDetail eventDetail) {
+        this.eventDetail = eventDetail;
+    }
+
     @Builder
     public TagEventDetail(EventDetail eventDetail, Tag tag) {
         this.eventDetail = eventDetail;

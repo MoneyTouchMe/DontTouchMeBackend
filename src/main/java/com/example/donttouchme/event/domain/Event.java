@@ -13,8 +13,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -56,37 +55,42 @@ public class Event extends BaseEntity {
     private final List<EventDetail> eventDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final List<Tag> tags = new ArrayList<>();
+    private final Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final List<Target> targets = new ArrayList<>();
+    private final Set<Target> targets = new HashSet<>();
+
+    public void updateEvent(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants) {
+        this.thumbnailUrl = thumbnailUrl;
+        this.eventName = eventName;
+        this.eventType = eventType;
+        this.eventDate = eventDate;
+        this.location = location;
+        this.eventInfo = eventInfo;
+        this.participants = participants;
+    }
 
     public void setMember(Member member) {
         this.member = member;
     }
 
-    public void setEventDetails(List<EventDetail> eventDetails) { //양방향 관계 설정
-        this.eventDetails.clear();
-        if (eventDetails != null) {
-            this.eventDetails.addAll(eventDetails);
-            eventDetails.forEach(eventDetail -> eventDetail.setEvent(this));
+    public void setEventDetails(Collection<EventDetail> eventDetails) { //양방향 관계 설정
+        for (EventDetail eventDetail : eventDetails) {
+            if (!this.eventDetails.contains(eventDetail)) {
+                this.eventDetails.add(eventDetail);
+                eventDetail.setEvent(this);
+            }
         }
     }
 
-    public void setTags(List<Tag> tags) { //양방향 관계 설정
-        this.tags.clear();
-        if (tags != null) {
-            this.tags.addAll(tags);
-            tags.forEach(tag -> tag.setEvent(this));
-        }
+    public void setTags(Collection<Tag> tags) { //양방향 관계 설정
+        this.tags.addAll(tags);
+        tags.forEach(tag -> tag.setEvent(this));
     }
 
-    public void setTargets(List<Target> targets) { //양방향 관계 설정
-        this.targets.clear();
-        if (targets != null) {
-            this.targets.addAll(targets);
-            targets.forEach(target -> target.setEvent(this));
-        }
+    public void setTargets(Collection<Target> targets) { //양방향 관계 설정
+        this.targets.addAll(targets);
+        targets.forEach(target -> target.setEvent(this));
     }
 
     @Builder

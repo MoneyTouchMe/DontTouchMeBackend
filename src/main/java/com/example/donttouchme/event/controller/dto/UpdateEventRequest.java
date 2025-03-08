@@ -7,10 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateEventRequest(
-        @NotBlank(message = "회원 고유번호는 필수입니다.")
-        long memberId, //회원 고유번호
-
+public record UpdateEventRequest(
         String thumbnailUrl, //이미지 URL
 
         @NotBlank(message = "이벤트명은 필수입니다.")
@@ -60,3 +57,4 @@ public record CreateEventRequest(
         return true;
     }
 }
+

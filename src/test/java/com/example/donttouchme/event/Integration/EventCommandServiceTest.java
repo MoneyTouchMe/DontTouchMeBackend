@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.Integration;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.event.service.EventCommandService;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -138,7 +139,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 false,
                 false,
                 false,
-                Arrays.asList("결혼식, 서울"),
+                List.of("결혼식, 서울"),
                 false,
                 null,
                 false,
@@ -193,7 +194,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("이벤트 삭제 성공")
-    @Commit
+    @Rollback(value = false)
     void deleteEvent() {
         //given
         Member savedMember = memberRepository.save(createTestMember());
@@ -207,4 +208,68 @@ class EventCommandServiceTest extends IntegrationTestSupport {
         assertThat(eventRepository.existsById(savedEvent.getId())).isFalse();
     }
 
+    @Test
+    @DisplayName("이벤트 수정 성공")
+    @Rollback(value = false)
+    void updateEvent() {
+        //given
+        Member testMember = createTestMember();
+        Member savedMember = memberRepository.save(testMember);
+
+        CreateEventRequest request = new CreateEventRequest(
+                savedMember.getId(),
+                null,
+                "testEvent2",
+                "결혼식",
+                LocalDate.now(),
+                "경기도 안양시",
+                11.1111,
+                22.2222,
+                null,
+                false,
+                false,
+                false,
+                false,
+                List.of("결혼식, 서울"),
+                false,
+                List.of("신부측, 신랑측, 신부아버지측"),
+                false,
+                null
+        );
+
+        Event createdEvent = eventCommandService.createEvent(request);
+        assertThat(createdEvent.getEventName()).isEqualTo("testEvent2");
+        List<String> tagList = List.of("결혼식, 서울, 친구");
+
+        UpdateEventRequest updateRequest = new UpdateEventRequest(
+                null,
+                "testEvent3",
+                "결혼식",
+                LocalDate.now(),
+                "경기도 안양시",
+                11.1111,
+                22.2222,
+                null,
+                false,
+                false,
+                false,
+                false,
+                tagList,
+                false,
+                List.of("신부측, 신랑측, 신부아버지측"),
+                false,
+                null
+        );
+
+        eventCommandService.updateEvent(
+                createdEvent.getId(),
+                updateRequest
+        );
+
+        assertThat(createdEvent.getEventName()).isEqualTo("testEvent3");
+        boolean allExist = tagList.stream().allMatch(
+                value -> createdEvent.getTags().stream().anyMatch(tag -> tag.getValue().equals(value))
+        );
+        assertThat(allExist).isTrue();
+    }
 }
