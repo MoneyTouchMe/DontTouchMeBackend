@@ -1,5 +1,6 @@
 package com.example.donttouchme.event.repository;
 
+import com.example.donttouchme.event.controller.dto.EventListDto;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.domain.QEvent;
 import com.querydsl.core.types.Projections;
@@ -19,11 +20,11 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     }
 
     @Override
-    public List<FindEventListResponse> paginationNoOffset(Long memberId, Long lastEventId, int pageSize) {
+    public FindEventListResponse paginationNoOffset(Long memberId, Long lastEventId, int pageSize) {
         QEvent event = QEvent.event;
 
-        return queryFactory
-                .select(Projections.constructor(FindEventListResponse.class,
+        List<EventListDto> events = queryFactory
+                .select(Projections.constructor(EventListDto.class,
                         event.id.as("eventId"),
                         event.eventName,
                         event.eventDate,
@@ -39,6 +40,11 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .orderBy(event.id.desc()) //내림차순
                 .limit(pageSize) //페이지 사이즈만큼 제한
                 .fetch();
+
+        //이전 페이지의 마지막 ID 추출
+        Long newLastEventId = events.isEmpty() ? null : events.get(events.size() - 1).eventId();
+
+        return new FindEventListResponse(events, newLastEventId);
     }
 
     private BooleanExpression ltEventId(Long lastEventId) {

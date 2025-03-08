@@ -57,9 +57,9 @@ class EventQueryServiceTest extends IntegrationTestSupport {
         );
 
         //when
-        List<FindEventListResponse> eventList = eventQueryService.findEventList(request);
+        FindEventListResponse eventList = eventQueryService.findEventList(request);
 
         //then
-        Assertions.assertThat(eventList.size()).isEqualTo(3);
+        Assertions.assertThat(eventList.events().size()).isEqualTo(3);
     }
 }

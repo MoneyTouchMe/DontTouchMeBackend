@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class EventController implements EventControllerSwagger {
     }
 
     @GetMapping("/list")
-    public List<FindEventListResponse> findEventList(
+    public FindEventListResponse findEventList(
             @RequestBody @Validated final FindEventListRequest request
     ) {
         return eventQueryService.findEventList(request);

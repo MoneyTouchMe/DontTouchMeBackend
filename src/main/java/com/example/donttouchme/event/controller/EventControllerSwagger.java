@@ -12,8 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 @Tag(name = "Event 관련 API", description = "Event 관련 API")
 public interface EventControllerSwagger {
 
@@ -52,7 +50,7 @@ public interface EventControllerSwagger {
             summary = "이벤트 목록 조회 API",
             description = "No Offset 방식으로 이벤트 목록을 조회합니다."
     )
-    public List<FindEventListResponse> findEventList(
+    public FindEventListResponse findEventList(
             @RequestBody @Validated final FindEventListRequest request
     );
 }
