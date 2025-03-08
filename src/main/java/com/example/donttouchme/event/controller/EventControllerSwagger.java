@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.controller;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,15 @@ public interface EventControllerSwagger {
     )
     public ResponseEntity<Void> deleteEvent(
             @PathVariable final Long eventId
+    );
+
+    @Operation(
+            summary = "이벤트 수정 API",
+            description = "이벤트 정보를 수정합니다."
+    )
+    public ResponseEntity<Void> updateEvent(
+            @PathVariable final Long eventId,
+            @Validated @RequestBody UpdateEventRequest request
     );
 
 }

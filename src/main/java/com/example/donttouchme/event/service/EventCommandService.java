@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.service;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.Tag;
 import com.example.donttouchme.event.domain.Target;
@@ -86,10 +87,67 @@ public class EventCommandService {
         return eventRepository.save(event);
     }
 
-    public void deleteEvent(Long eventId) { //논리 삭제
+    //논리 삭제
+    public void deleteEvent(Long eventId) {
         Event findEvent = eventRepository.findById(eventId).orElseThrow(
                 () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다. eventId: " + eventId)
         );
         eventRepository.delete(findEvent);
+    }
+
+    public void updateEvent(Long eventId, UpdateEventRequest request) {
+        Event findEvent = eventRepository.findById(eventId).orElseThrow(
+                () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다. eventId: " + eventId)
+        );
+
+        Location location = new Location(request.latitude(), request.longitude(), request.address());
+        boolean tagIsNull = Objects.isNull(request.tags());
+        boolean targetIsNull = Objects.isNull(request.targets());
+
+        EventInfo eventInfo = new EventInfo(
+                request.isType(),
+                request.isHistory(),
+                request.isPrice(),
+                request.isName(),
+                !tagIsNull, //tag 값이 없으면 토글 OFF로 처리
+                request.isImage(),
+                !targetIsNull, //side 값이 없으면 토글 OFF로 처리
+                request.isSend()
+        );
+
+        findEvent.updateEvent(
+                request.thumbnailUrl(),
+                request.eventName(),
+                request.eventType(),
+                request.eventDate(),
+                location,
+                eventInfo,
+                request.participants()
+        );
+
+
+        if (!tagIsNull) {
+            List<Tag> tags = new ArrayList<>(findEvent.getTags());
+            for (String tag : request.tags()) {
+                Tag createdTag = Tag.builder()
+                        .value(tag)
+                        .event(findEvent)
+                        .build();
+                tags.add(createdTag);
+            }
+            findEvent.setTags(tags);
+        }
+
+        if (!targetIsNull) {
+            List<Target> targets = new ArrayList<>(findEvent.getTargets());
+            for (String target : request.targets()) {
+                Target createdTarget = Target.builder()
+                        .value(target)
+                        .event(findEvent)
+                        .build();
+                targets.add(createdTarget);
+            }
+            findEvent.setTargets(targets);
+        }
     }
 }
