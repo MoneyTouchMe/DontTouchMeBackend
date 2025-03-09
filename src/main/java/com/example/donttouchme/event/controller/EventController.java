@@ -1,9 +1,12 @@
 package com.example.donttouchme.event.controller;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.service.EventCommandService;
+import com.example.donttouchme.event.service.EventQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventController implements EventControllerSwagger {
     private final EventCommandService eventCommandService;
+    private final EventQueryService eventQueryService;
 
     @PostMapping("/")
     public ResponseEntity<Long> createEvent(
@@ -38,5 +42,12 @@ public class EventController implements EventControllerSwagger {
     ) {
         eventCommandService.updateEvent(eventId, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/list")
+    public FindEventListResponse findEventList(
+            @RequestBody @Validated final FindEventListRequest request
+    ) {
+        return eventQueryService.findEventList(request);
     }
 }

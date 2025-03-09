@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.service;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.Tag;

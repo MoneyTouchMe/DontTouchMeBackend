@@ -1,7 +1,9 @@
 package com.example.donttouchme.event.controller;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,4 +46,11 @@ public interface EventControllerSwagger {
             @Validated @RequestBody UpdateEventRequest request
     );
 
+    @Operation(
+            summary = "이벤트 목록 조회 API",
+            description = "No Offset 방식으로 이벤트 목록을 조회합니다."
+    )
+    public FindEventListResponse findEventList(
+            @RequestBody @Validated final FindEventListRequest request
+    );
 }
