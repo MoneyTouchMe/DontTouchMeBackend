@@ -2,12 +2,12 @@ package com.example.donttouchme.event.service;
 
 import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
+import com.example.donttouchme.event.controller.dto.FindEventResponse;
+import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,7 +16,23 @@ public class EventQueryService {
     private final EventRepository eventRepository;
 
     //no offset으로 페이징 구현
-    public FindEventListResponse findEventList(FindEventListRequest request) {
+    public FindEventListResponse findEventList(final FindEventListRequest request) {
         return eventRepository.paginationNoOffset(request.memberId(), request.lastEventId(), request.pageSize());
+    }
+
+    public FindEventResponse findEvent(final Long eventId) {
+        Event event = eventRepository.findById(eventId).orElseThrow(
+                () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다.")
+        );
+
+        return new FindEventResponse(
+                event.getThumbnailUrl(),
+                event.getEventName(),
+                event.getEventType(),
+                event.getEventDate(),
+                event.getLocation().getAddress(),
+                event.getParticipants(),
+                event.getEventInfo().toCellValues()
+        );
     }
 }
