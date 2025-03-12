@@ -3,6 +3,7 @@ package com.example.donttouchme.event.controller.dto;
 import com.example.donttouchme.event.domain.value.SendType;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,16 +17,16 @@ public record UpdateEventRequest(
         @NotBlank(message = "이벤트 유형은 필수입니다.")
         String eventType,
 
-        @NotBlank(message = "이벤트 일정은 필수입니다.")
+        @NotNull(message = "이벤트 일정은 필수입니다.")
         LocalDate eventDate,
 
         @NotBlank(message = "이벤트 장소는 필수입니다.")
         String address,
 
-        @NotBlank(message = "이벤트 장소 위도 정보는 필수입니다.")
+        @NotNull(message = "이벤트 장소 위도 정보는 필수입니다.")
         double latitude,
 
-        @NotBlank(message = "이벤트 장소 경도 정보는 필수입니다.")
+        @NotNull(message = "이벤트 장소 경도 정보는 필수입니다.")
         double longitude,
 
         Integer participants,
