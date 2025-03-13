@@ -18,7 +18,7 @@ public record MemberSignUpRequest(
         String password,
 
         @NotBlank(message = "contact는 필수 입니다.")
-        @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10,13}$", message = "유효한 연락처를 입력하세요.")
+        @Pattern(regexp = "^010-\\d{4}-\\d{4}$", message = "유효한 연락처를 입력하세요. (예: 010-1234-5678)")
         String contact
 
 ) {
