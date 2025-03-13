@@ -16,6 +16,12 @@ public record FindEventResponse(
 
         Integer participants,
 
-        List<String> eventInfoItems //입출금 항목 (토글 중 ON으로 된 항목)
+        List<String> eventInfoItems, //입출금 항목 (토글 중 ON으로 된 항목)
+
+        List<String> tags,
+
+        List<String> targets,
+
+        String amountUnit
 ) {
 }
