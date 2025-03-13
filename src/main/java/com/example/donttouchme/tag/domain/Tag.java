@@ -1,6 +1,8 @@
-package com.example.donttouchme.event.domain;
+package com.example.donttouchme.tag.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.eventdetail.domain.TagEventDetail;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

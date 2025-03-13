@@ -2,11 +2,14 @@ package com.example.donttouchme.excel.service;
 
 import com.example.donttouchme.event.domain.*;
 import com.example.donttouchme.event.domain.value.EventInfo;
-import com.example.donttouchme.event.repository.EventDetailRepository;
+import com.example.donttouchme.eventdetail.domain.TagEventDetail;
+import com.example.donttouchme.eventdetail.repository.EventDetailRepository;
 import com.example.donttouchme.event.repository.EventRepository;
-import com.example.donttouchme.event.repository.TagRepository;
+import com.example.donttouchme.tag.repository.TagRepository;
 import com.example.donttouchme.event.repository.TargetRepository;
+import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.excel.controller.dto.ImportExcelResponse;
+import com.example.donttouchme.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

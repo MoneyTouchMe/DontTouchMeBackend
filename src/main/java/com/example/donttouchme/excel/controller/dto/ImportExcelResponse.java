@@ -1,6 +1,6 @@
 package com.example.donttouchme.excel.controller.dto;
 
-import com.example.donttouchme.event.domain.EventDetail;
+import com.example.donttouchme.eventdetail.domain.EventDetail;
 
 import java.util.List;
 

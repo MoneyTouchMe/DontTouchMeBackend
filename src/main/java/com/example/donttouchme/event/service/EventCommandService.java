@@ -4,7 +4,7 @@ import com.example.donttouchme.event.controller.dto.CreateEventRequest;
 
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
-import com.example.donttouchme.event.domain.Tag;
+import com.example.donttouchme.tag.domain.Tag;
 import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
