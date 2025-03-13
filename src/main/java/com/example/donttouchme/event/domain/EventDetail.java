@@ -25,7 +25,7 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private Long id; //고유번호
 
     @Column
-    private String type; //입출금 분류 ex(입금, 출금, NULL)
+    private String type; //입출금 분류 ex(입금, 출금)
 
     @Column
     private String history; //입출금 내역명

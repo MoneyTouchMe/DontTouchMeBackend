@@ -18,7 +18,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -60,6 +59,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -97,6 +97,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -135,6 +136,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -172,13 +174,14 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
                 false,
-                Arrays.asList("결혼식, 서울"),
+                List.of("결혼식, 서울"),
                 false,
-                Arrays.asList("신부측, 신랑측, 신부아버지측"),
+                List.of("신부측, 신랑측, 신부아버지측"),
                 false,
                 null
         );
@@ -226,6 +229,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -250,6 +254,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
