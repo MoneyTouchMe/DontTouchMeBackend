@@ -4,10 +4,15 @@ import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.controller.dto.FindEventResponse;
 import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.domain.Tag;
+import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +30,16 @@ public class EventQueryService {
                 () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다.")
         );
 
+        List<String> tags = new ArrayList<>();
+        for (Tag tag : event.getTags()) {
+            tags.add(tag.getValue());
+        }
+
+        List<String> targets = new ArrayList<>();
+        for (Target target : event.getTargets()) {
+            targets.add(target.getValue());
+        }
+
         return new FindEventResponse(
                 event.getThumbnailUrl(),
                 event.getEventName(),
@@ -32,7 +47,10 @@ public class EventQueryService {
                 event.getEventDate(),
                 event.getLocation().getAddress(),
                 event.getParticipants(),
-                event.getEventInfo().toCellValues()
+                event.getEventInfo().toCellValues(),
+                tags,
+                targets,
+                event.getAmountUnit()
         );
     }
 }
