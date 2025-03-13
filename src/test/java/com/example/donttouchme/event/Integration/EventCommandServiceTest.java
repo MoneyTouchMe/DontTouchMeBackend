@@ -9,7 +9,6 @@ import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +34,6 @@ class EventCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
     MemberRepository memberRepository;
-
-    @AfterEach
-    void clear() {
-        memberRepository.deleteAll();
-        eventRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("Tag, Side가 없는 경우의 Event 생성 성공")
@@ -84,7 +77,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("Target만 없는 경우의 Event 생성 성공")
     void createEventWithoutTagsSuccess() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
@@ -123,7 +116,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("Tag만 없는 경우의 Event 생성 성공")
     void createEventWithoutTargetSuccess() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
@@ -200,7 +193,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @Rollback(value = false)
     void deleteEvent() {
         //given
-        Member savedMember = memberRepository.save(createTestMember());
+        Member savedMember = memberRepository.save(createTestMemberForEvent());
         Event savedEvent = eventRepository.save(createTestEvent(savedMember));
         assertThat(eventRepository.existsById(savedEvent.getId())).isTrue();
 
@@ -216,7 +209,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @Rollback(value = false)
     void updateEvent() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(

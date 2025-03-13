@@ -9,7 +9,6 @@ import com.example.donttouchme.event.service.EventQueryService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +28,6 @@ class EventQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     EventRepository eventRepository;
-
-    @BeforeEach
-    void clear() {
-        memberRepository.deleteAll();
-        eventRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("No Offset 방식으로 이벤트 목록 조회")
