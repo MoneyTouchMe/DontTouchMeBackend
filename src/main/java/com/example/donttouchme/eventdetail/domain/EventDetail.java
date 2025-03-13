@@ -3,6 +3,7 @@ package com.example.donttouchme.eventdetail.domain;
 import com.example.donttouchme.common.Entity.BaseEntity;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.SendValue;
+import com.example.donttouchme.event.domain.TagEventDetail;
 import com.example.donttouchme.event.domain.Target;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

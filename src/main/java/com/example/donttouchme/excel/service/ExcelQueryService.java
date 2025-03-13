@@ -2,8 +2,8 @@ package com.example.donttouchme.excel.service;
 
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
-import com.example.donttouchme.tag.domain.Tag;
-import com.example.donttouchme.eventdetail.domain.TagEventDetail;
+import com.example.donttouchme.event.domain.Tag;
+import com.example.donttouchme.event.domain.TagEventDetail;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
