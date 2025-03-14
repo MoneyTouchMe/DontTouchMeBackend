@@ -47,11 +47,11 @@ public class EventDetail extends BaseEntity { //입출금 내역
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_id")
     private Target target;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "send_value_id")
     private SendValue sendValue;
 
@@ -62,12 +62,28 @@ public class EventDetail extends BaseEntity { //입출금 내역
         this.event = event;
     }
 
+    public void setTarget(Target target) {
+        this.target = target;
+    }
+
+    public void setSendValue(SendValue sendValue) {
+        this.sendValue = sendValue;
+        sendValue.setEventDetail(this);
+    }
+
     public void setTagEventDetails(Collection<TagEventDetail> tagEventDetails) {
         for (TagEventDetail tagEventDetail : tagEventDetails) {
             if (!this.tagEventDetails.contains(tagEventDetail)) {
                 this.tagEventDetails.add(tagEventDetail);
                 tagEventDetail.setEventDetail(this);
             }
+        }
+    }
+
+    public void setTagEventDetail(TagEventDetail tagEventDetail) {
+        if (!this.tagEventDetails.contains(tagEventDetail)) {
+            this.tagEventDetails.add(tagEventDetail);
+            tagEventDetail.setEventDetail(this);
         }
     }
 
@@ -81,5 +97,14 @@ public class EventDetail extends BaseEntity { //입출금 내역
         this.event = event;
         this.target = target;
         this.sendValue = sendValue;
+    }
+
+    @Builder(builderMethodName = "builderOnlyField", buildMethodName = "builderOnlyField")
+    public EventDetail(String type, String history, String price, String name, String image) {
+        this.type = type;
+        this.history = history;
+        this.price = price;
+        this.name = name;
+        this.image = image;
     }
 }

@@ -49,6 +49,14 @@ public class Tag extends BaseEntity { //태그
         }
     }
 
+    public void setTagEventDetail(TagEventDetail tagEventDetail) {
+        if (!this.tagEventDetails.contains(tagEventDetail)) {
+            this.tagEventDetails.add(tagEventDetail);
+            tagEventDetail.setTag(this);
+        }
+    }
+
+
     @Builder
     public Tag(String value, Event event) {
         this.value = value;
