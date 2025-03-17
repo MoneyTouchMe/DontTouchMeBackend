@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class EventDetailController implements EventDetailControllerSwagger {
     private final EventDetailCommandService eventDetailCommandService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Long> createEventDetail(
             @RequestBody @Validated final CreateEventDetailRequest request
     ) {
