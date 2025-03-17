@@ -59,10 +59,10 @@ public class Event extends BaseEntity {
     private final List<EventDetail> eventDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final Set<Tag> tags = new HashSet<>();
+    private final List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final Set<Target> targets = new HashSet<>();
+    private final List<Target> targets = new ArrayList<>();
 
     public void updateEvent(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, String amountUnit) {
         this.thumbnailUrl = thumbnailUrl;
@@ -77,25 +77,26 @@ public class Event extends BaseEntity {
 
     public void setMember(Member member) {
         this.member = member;
+        member.setEvents(this);
     }
 
-    public void setEventDetails(Collection<EventDetail> eventDetails) { //양방향 관계 설정
-        for (EventDetail eventDetail : eventDetails) {
-            if (!this.eventDetails.contains(eventDetail)) {
-                this.eventDetails.add(eventDetail);
-                eventDetail.setEvent(this);
-            }
+    public void setEventDetail(EventDetail eventDetail) { //양방향 관계 설정
+        if (!this.eventDetails.contains(eventDetail)) {
+            this.eventDetails.add(eventDetail);
         }
     }
 
-    public void setTags(Collection<Tag> tags) { //양방향 관계 설정
-        this.tags.addAll(tags);
-        tags.forEach(tag -> tag.setEvent(this));
+
+    public void setTags(Tag tag) { //양방향 관계 설정
+        if (!this.tags.contains(tag)) {
+            this.tags.add(tag);
+        }
     }
 
-    public void setTargets(Collection<Target> targets) { //양방향 관계 설정
-        this.targets.addAll(targets);
-        targets.forEach(target -> target.setEvent(this));
+    public void setTargets(Target target) { //양방향 관계 설정
+        if (!this.targets.contains(target)) {
+            this.targets.add(target);
+        }
     }
 
     @Builder
@@ -109,8 +110,11 @@ public class Event extends BaseEntity {
         this.member = member;
     }
 
-    @Builder(builderMethodName = "builderWithoutTagAndTarget", buildMethodName = "builderWithoutTagAndTarget")
-    public Event(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, String amountUnit, Member member) {
+    @Builder(builderMethodName = "builderForTest", buildMethodName = "builderForTest")
+    public Event(String thumbnailUrl, String eventName, String eventType,
+                 LocalDate eventDate, Location location, EventInfo eventInfo,
+                 Integer participants, String amountUnit, Member member
+    ) {
         this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
         this.eventType = eventType;
@@ -119,6 +123,7 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = participants;
         this.amountUnit = amountUnit;
-        this.member = member;
+        setMember(member);
     }
 }
+
