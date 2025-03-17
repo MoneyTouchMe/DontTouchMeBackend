@@ -39,7 +39,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("Tag, Side가 없는 경우의 Event 생성 성공")
     void createEventWithoutTagsAndTargetsSuccess() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
