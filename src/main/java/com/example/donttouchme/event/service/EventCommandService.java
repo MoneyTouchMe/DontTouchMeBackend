@@ -54,6 +54,7 @@ public class EventCommandService {
                 .location(location)
                 .eventInfo(eventInfo)
                 .participants(request.participants())
+                .amountUnit(request.amountUnit())
                 .member(member)
                 .builderWithoutTagAndTarget();
 
@@ -123,7 +124,8 @@ public class EventCommandService {
                 request.eventDate(),
                 location,
                 eventInfo,
-                request.participants()
+                request.participants(),
+                request.amountUnit()
         );
 
 

@@ -4,9 +4,11 @@ package com.example.donttouchme.support;
 import com.example.donttouchme.event.domain.*;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
+import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
+import com.example.donttouchme.event.domain.Tag;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,6 +28,17 @@ public abstract class IntegrationTestSupport {
                 .loginProvider(LoginProvider.original)
                 .contact("010-1234-5678")
                 .password("test")
+                .builderWithPassword();
+    }
+
+    protected Member createTestMemberForEvent() {
+        return Member.builderWithPassword()
+                .name("testMember")
+                .email("testMember@test.com")
+                .role(ROLE.user)
+                .loginProvider(LoginProvider.original)
+                .contact("010-1234-5678")
+                .password("test123131231")
                 .builderWithPassword();
     }
 
@@ -61,8 +74,7 @@ public abstract class IntegrationTestSupport {
 
     protected EventDetail createTestEventDetail(
             Event event,
-            Target target,
-            SendValue sendValue
+            Target target
     ) {
         return EventDetail.builder()
                 .price(String.valueOf(1234))
@@ -71,7 +83,7 @@ public abstract class IntegrationTestSupport {
                 .image("image")
                 .type("type")
                 .target(target)
-                .sendValue(sendValue)
+                .contact("010-1111-2222")
                 .name("name")
                 .build();
     }
@@ -79,12 +91,6 @@ public abstract class IntegrationTestSupport {
     protected Target createTestTarget() {
         return Target.builder()
                 .value("target")
-                .build();
-    }
-
-    protected SendValue createTestSendValue() {
-        return SendValue.builder()
-                .value("sendValue")
                 .build();
     }
 

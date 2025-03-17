@@ -7,5 +7,6 @@ public interface EventRepositoryCustom {
     FindEventListResponse paginationNoOffset(
             final Long memberId,
             final Long lastEventId,
-            final int pageSize);
+            final int pageSize
+    );
 }

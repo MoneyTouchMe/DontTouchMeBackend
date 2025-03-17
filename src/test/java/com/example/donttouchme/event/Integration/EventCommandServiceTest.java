@@ -9,7 +9,6 @@ import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -37,12 +35,6 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @Autowired
     MemberRepository memberRepository;
 
-    @AfterEach
-    void clear() {
-        memberRepository.deleteAll();
-        eventRepository.deleteAll();
-    }
-
     @Test
     @DisplayName("Tag, Side가 없는 경우의 Event 생성 성공")
     void createEventWithoutTagsAndTargetsSuccess() {
@@ -60,6 +52,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -84,7 +77,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("Target만 없는 경우의 Event 생성 성공")
     void createEventWithoutTagsSuccess() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
@@ -97,6 +90,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -122,7 +116,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("Tag만 없는 경우의 Event 생성 성공")
     void createEventWithoutTargetSuccess() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
@@ -135,6 +129,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -172,13 +167,14 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
                 false,
-                Arrays.asList("결혼식, 서울"),
+                List.of("결혼식, 서울"),
                 false,
-                Arrays.asList("신부측, 신랑측, 신부아버지측"),
+                List.of("신부측, 신랑측, 신부아버지측"),
                 false,
                 null
         );
@@ -197,7 +193,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @Rollback(value = false)
     void deleteEvent() {
         //given
-        Member savedMember = memberRepository.save(createTestMember());
+        Member savedMember = memberRepository.save(createTestMemberForEvent());
         Event savedEvent = eventRepository.save(createTestEvent(savedMember));
         assertThat(eventRepository.existsById(savedEvent.getId())).isTrue();
 
@@ -213,7 +209,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
     @Rollback(value = false)
     void updateEvent() {
         //given
-        Member testMember = createTestMember();
+        Member testMember = createTestMemberForEvent();
         Member savedMember = memberRepository.save(testMember);
 
         CreateEventRequest request = new CreateEventRequest(
@@ -226,6 +222,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,
@@ -250,6 +247,7 @@ class EventCommandServiceTest extends IntegrationTestSupport {
                 11.1111,
                 22.2222,
                 null,
+                "만원",
                 false,
                 false,
                 false,

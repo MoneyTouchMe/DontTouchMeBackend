@@ -1,13 +1,15 @@
 package com.example.donttouchme.excel.integration;
 
 import com.example.donttouchme.event.domain.*;
-import com.example.donttouchme.event.repository.EventDetailRepository;
+import com.example.donttouchme.eventdetail.repository.EventDetailRepository;
 import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.event.repository.TagRepository;
+import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.excel.service.ExcelQueryService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport;
+import com.example.donttouchme.event.domain.Tag;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,8 +58,7 @@ class ExcelQueryServiceTest extends IntegrationTestSupport {
         Member member = memberRepository.save(createTestMember());
         Event event = eventRepository.save(createTestEvent(member));
         Target target = createTestTarget();
-        SendValue sendValue = createTestSendValue();
-        EventDetail eventDetail = eventDetailRepository.save(createTestEventDetail(event, target, sendValue));
+        EventDetail eventDetail = eventDetailRepository.save(createTestEventDetail(event, target));
         Tag tag = tagRepository.save(createTestTag(eventDetail));
 
         //then

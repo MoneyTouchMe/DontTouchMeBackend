@@ -31,6 +31,8 @@ public record UpdateEventRequest(
 
         Integer participants,
 
+        String amountUnit,
+
         boolean isType, //입출금 분류 여부
 
         boolean isHistory, //입출금 내역명 여부
