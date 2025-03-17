@@ -51,11 +51,9 @@ public class Member extends BaseEntity {
         this.password = newPassword;
     }
 
-    public void setEvents(List<Event> events) { //양방향 관계 설정
-        this.events.clear();
-        if (events != null) {
-            this.events.addAll(events);
-            events.forEach(event -> event.setMember(this));
+    public void setEvents(Event event) { //양방향 관계 설정
+        if (!this.events.contains(event)) {
+            this.events.add(event);
         }
     }
 

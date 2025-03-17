@@ -10,7 +10,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,21 +37,12 @@ public class Tag extends BaseEntity { //태그
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public void setTagEventDetails(Collection<TagEventDetail> tagEventDetails) {
-        for (TagEventDetail tagEventDetail : tagEventDetails) {
-            if (!this.tagEventDetails.contains(tagEventDetail)) {
-                this.tagEventDetails.add(tagEventDetail);
-                tagEventDetail.setTag(this);
-            }
-        }
+        event.setTags(this);
     }
 
     public void setTagEventDetail(TagEventDetail tagEventDetail) {
         if (!this.tagEventDetails.contains(tagEventDetail)) {
             this.tagEventDetails.add(tagEventDetail);
-            tagEventDetail.setTag(this);
         }
     }
 
@@ -60,7 +50,7 @@ public class Tag extends BaseEntity { //태그
     @Builder
     public Tag(String value, Event event) {
         this.value = value;
-        this.event = event;
+        setEvent(event);
     }
 
     @Override
