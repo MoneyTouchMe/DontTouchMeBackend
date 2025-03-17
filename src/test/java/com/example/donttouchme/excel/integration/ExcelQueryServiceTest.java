@@ -58,8 +58,7 @@ class ExcelQueryServiceTest extends IntegrationTestSupport {
         Member member = memberRepository.save(createTestMember());
         Event event = eventRepository.save(createTestEvent(member));
         Target target = createTestTarget();
-        SendValue sendValue = createTestSendValue();
-        EventDetail eventDetail = eventDetailRepository.save(createTestEventDetail(event, target, sendValue));
+        EventDetail eventDetail = eventDetailRepository.save(createTestEventDetail(event, target));
         Tag tag = tagRepository.save(createTestTag(eventDetail));
 
         //then

@@ -34,6 +34,7 @@ public class EventDetailCommandService {
                 .image(request.imageUrl())
                 .price(request.price())
                 .type(request.type())
+                .contact(request.contact())
                 .builderOnlyField();
 
         //Event 연관관계 연결
@@ -55,12 +56,6 @@ public class EventDetailCommandService {
                 eventDetail.setTagEventDetail(tagEventDetail);
             }
         }
-
-        //SendValue 연관관계 연결
-        SendValue sendValue = new SendValue(request.contact());
-        eventDetail.setSendValue(sendValue);
-
-
         return eventDetailRepository.save(eventDetail);
     }
 }

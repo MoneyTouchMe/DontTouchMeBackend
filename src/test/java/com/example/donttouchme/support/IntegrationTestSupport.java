@@ -74,8 +74,7 @@ public abstract class IntegrationTestSupport {
 
     protected EventDetail createTestEventDetail(
             Event event,
-            Target target,
-            SendValue sendValue
+            Target target
     ) {
         return EventDetail.builder()
                 .price(String.valueOf(1234))
@@ -84,7 +83,7 @@ public abstract class IntegrationTestSupport {
                 .image("image")
                 .type("type")
                 .target(target)
-                .sendValue(sendValue)
+                .contact("010-1111-2222")
                 .name("name")
                 .build();
     }
@@ -92,12 +91,6 @@ public abstract class IntegrationTestSupport {
     protected Target createTestTarget() {
         return Target.builder()
                 .value("target")
-                .build();
-    }
-
-    protected SendValue createTestSendValue() {
-        return SendValue.builder()
-                .value("sendValue")
                 .build();
     }
 
