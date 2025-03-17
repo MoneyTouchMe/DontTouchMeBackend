@@ -63,7 +63,6 @@ public class EventDetailCommandService {
         EventDetail findEventDetail = eventDetailRepository.findById(eventDetailId).orElseThrow(
                 () -> new IllegalArgumentException("입출금 내역 정보를 찾을 수 없습니다. eventDetailId : " + eventDetailId)
         );
-
         eventDetailRepository.delete(findEventDetail);
     }
 }

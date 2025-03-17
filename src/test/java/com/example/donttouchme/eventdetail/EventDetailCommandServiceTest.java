@@ -1,6 +1,7 @@
 package com.example.donttouchme.eventdetail;
 
 import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.domain.Tag;
 import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
@@ -46,6 +47,19 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport {
         Member savedMember = memberRepository.save(testMember);
 
         Event testEvent = createTestEvent(savedMember);
+
+        //target 연관관계 설정
+        Target testTarget = createTestTarget();
+        List<Target> targets = new ArrayList<>();
+        targets.add(testTarget);
+        testEvent.setTargets(targets);
+
+        //Tag 연관관계 설정
+        Tag tag = new Tag("테스트", testEvent);
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag);
+        testEvent.setTags(tags);
+
         Event savedEvent = eventRepository.save(testEvent);
 
         //when
@@ -76,10 +90,19 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport {
         Member savedMember = memberRepository.save(testMember);
 
         Event testEvent = createTestEvent(savedMember);
+
+        //target 연관관계 설정
         Target testTarget = createTestTarget();
         List<Target> targets = new ArrayList<>();
         targets.add(testTarget);
         testEvent.setTargets(targets);
+
+        //Tag 연관관계 설정
+        Tag tag = new Tag("테스트", testEvent);
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag);
+        testEvent.setTags(tags);
+
         Event savedEvent = eventRepository.save(testEvent);
 
         createTestEventDetail(savedEvent, null);
@@ -90,7 +113,7 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport {
                         "회비",
                         "10",
                         "김희범",
-                        List.of("결혼식", "테스트"),
+                        List.of("테스트"),
                         "testImageUrl/12313124/123",
                         "신부측",
                         "010-1111-2222"
