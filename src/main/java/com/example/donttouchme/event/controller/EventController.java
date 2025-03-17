@@ -16,7 +16,7 @@ public class EventController implements EventControllerSwagger {
     private final EventCommandService eventCommandService;
     private final EventQueryService eventQueryService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Long> createEvent(
             @RequestBody @Validated final CreateEventRequest request
     ) {
