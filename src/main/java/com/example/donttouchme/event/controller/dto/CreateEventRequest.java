@@ -1,5 +1,8 @@
 package com.example.donttouchme.event.controller.dto;
 
+import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.domain.value.EventInfo;
+import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.domain.value.SendType;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -55,6 +58,36 @@ public record CreateEventRequest(
         SendType sendType //감사장 타입
 
 ) {
+    public Event toEntity() {
+        return Event.eventBuilder()
+                .thumbnailUrl(thumbnailUrl)
+                .eventName(eventName)
+                .eventType(eventType)
+                .eventDate(eventDate)
+                .location(
+                        Location.builder()
+                                .address(address)
+                                .latitude(latitude)
+                                .longitude(longitude)
+                                .build()
+                )
+                .eventInfo(
+                        EventInfo.builder()
+                                .isType(isType)
+                                .isHistory(isHistory)
+                                .isPrice(isPrice)
+                                .isName(isName)
+                                .isTag(!tags.isEmpty())
+                                .isImage(isImage)
+                                .isSide(!targets.isEmpty())
+                                .isSend(isSend)
+                                .build()
+                )
+                .participants(participants)
+                .amountUnit(amountUnit)
+                .eventBuilder();
+    }
+
     @AssertTrue(message = "감사장 전송 여부가 true일 때 감사장 종류를 지정해야합니다.")
     public boolean isSendTypeValid() {
         if (isSend()) {

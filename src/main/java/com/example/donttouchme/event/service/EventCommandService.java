@@ -9,14 +9,14 @@ import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.repository.EventRepository;
+import com.example.donttouchme.event.repository.TagRepository;
+import com.example.donttouchme.event.repository.TargetRepository;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -25,66 +25,37 @@ import java.util.Objects;
 public class EventCommandService {
     private final EventRepository eventRepository;
     private final MemberRepository memberRepository;
+    private final TagRepository tagRepository;
+    private final TargetRepository targetRepository;
 
     public Event createEvent(final CreateEventRequest request) {
         Member member = memberRepository.findById(request.memberId()).orElseThrow(
                 () -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다. memberId: " + request.memberId())
         );
 
-        Location location = new Location(request.latitude(), request.longitude(), request.address());
         boolean tagIsNull = Objects.isNull(request.tags());
         boolean targetIsNull = Objects.isNull(request.targets());
 
-        EventInfo eventInfo = new EventInfo(
-                request.isType(),
-                request.isHistory(),
-                request.isPrice(),
-                request.isName(),
-                !tagIsNull, //tag 값이 없으면 토글 OFF로 처리
-                request.isImage(),
-                !targetIsNull, //side 값이 없으면 토글 OFF로 처리
-                request.isSend()
-        );
-
-        Event event = Event.builderWithoutTagAndTarget()
-                .thumbnailUrl(request.thumbnailUrl())
-                .eventName(request.eventName())
-                .eventType(request.eventType())
-                .eventDate(request.eventDate())
-                .location(location)
-                .eventInfo(eventInfo)
-                .participants(request.participants())
-                .amountUnit(request.amountUnit())
-                .member(member)
-                .builderWithoutTagAndTarget();
+        Event event = request.toEntity();
+        event.setMember(member);
 
         if (!tagIsNull) {
-            List<Tag> tags = new ArrayList<>(event.getTags());
             for (String tag : request.tags()) {
-                Tag createdTag = Tag.builder()
+                Tag.builder()
                         .value(tag)
                         .event(event)
                         .build();
-                tags.add(createdTag);
             }
-            event.setTags(tags);
         }
 
         if (!targetIsNull) {
-            List<Target> targets = new ArrayList<>(event.getTargets());
             for (String target : request.targets()) {
-                Target createdTarget = Target.builder()
+                Target.builder()
                         .value(target)
                         .event(event)
                         .build();
-                targets.add(createdTarget);
             }
-            event.setTargets(targets);
         }
-
-        List<Event> events = new ArrayList<>(member.getEvents());
-        events.add(event);
-        member.setEvents(events);
 
         return eventRepository.save(event);
     }
@@ -128,29 +99,26 @@ public class EventCommandService {
                 request.amountUnit()
         );
 
-
+        //기존 저장된 Tag를 삭제 후 새로 입력받은 Tag를 생성
+        tagRepository.deleteAll(findEvent.getTags());
         if (!tagIsNull) {
-            List<Tag> tags = new ArrayList<>(findEvent.getTags());
             for (String tag : request.tags()) {
-                Tag createdTag = Tag.builder()
+                Tag.builder()
                         .value(tag)
                         .event(findEvent)
                         .build();
-                tags.add(createdTag);
             }
-            findEvent.setTags(tags);
         }
 
+        //기존 저장된 Target을 삭제 후 새로 입력받은 Target을 생성
+        targetRepository.deleteAll(findEvent.getTargets());
         if (!targetIsNull) {
-            List<Target> targets = new ArrayList<>(findEvent.getTargets());
             for (String target : request.targets()) {
-                Target createdTarget = Target.builder()
+                Target.builder()
                         .value(target)
                         .event(findEvent)
                         .build();
-                targets.add(createdTarget);
             }
-            findEvent.setTargets(targets);
         }
     }
 }
