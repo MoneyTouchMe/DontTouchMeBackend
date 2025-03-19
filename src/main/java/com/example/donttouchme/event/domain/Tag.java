@@ -32,7 +32,7 @@ public class Tag extends BaseEntity { //태그
     private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     public void setEvent(Event event) {

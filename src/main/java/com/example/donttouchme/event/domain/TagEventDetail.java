@@ -32,12 +32,16 @@ public class TagEventDetail extends BaseEntity {
 
     public void setTag(Tag tag) {
         this.tag = tag;
-        tag.setTagEventDetail(this);
+        if (tag != null) {
+            tag.setTagEventDetail(this);
+        }
     }
 
     public void setEventDetail(EventDetail eventDetail) {
         this.eventDetail = eventDetail;
-        eventDetail.setTagEventDetail(this);
+        if (eventDetail != null) {
+            eventDetail.setTagEventDetail(this);
+        }
     }
 
     @Builder

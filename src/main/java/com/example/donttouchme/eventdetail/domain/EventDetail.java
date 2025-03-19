@@ -45,7 +45,7 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private String contact; //연락처
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,7 +62,9 @@ public class EventDetail extends BaseEntity { //입출금 내역
 
     public void setTarget(Target target) {
         this.target = target;
-        target.setEventDetail(this);
+        if (target != null) {
+            target.setEventDetail(this);
+        }
     }
 
 

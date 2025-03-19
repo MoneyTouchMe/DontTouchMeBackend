@@ -29,7 +29,7 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
