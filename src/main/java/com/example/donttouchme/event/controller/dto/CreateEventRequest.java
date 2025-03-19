@@ -4,6 +4,7 @@ import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.domain.value.SendType;
+import com.example.donttouchme.member.domain.Member;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -58,7 +59,7 @@ public record CreateEventRequest(
         SendType sendType //감사장 타입
 
 ) {
-    public Event toEntity() {
+    public Event toEntity(Member member) {
         return Event.eventBuilder()
                 .thumbnailUrl(thumbnailUrl)
                 .eventName(eventName)
@@ -85,6 +86,7 @@ public record CreateEventRequest(
                 )
                 .participants(participants)
                 .amountUnit(amountUnit)
+                .member(member)
                 .eventBuilder();
     }
 

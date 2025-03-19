@@ -113,7 +113,7 @@ public class Event extends BaseEntity {
     @Builder(builderMethodName = "eventBuilder", buildMethodName = "eventBuilder")
     public Event(String thumbnailUrl, String eventName, String eventType,
                  LocalDate eventDate, Location location, EventInfo eventInfo,
-                 Integer participants, String amountUnit
+                 Integer participants, String amountUnit, Member member
     ) {
         this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
@@ -123,6 +123,7 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = participants;
         this.amountUnit = amountUnit;
+        setMember(member);
     }
 }
 

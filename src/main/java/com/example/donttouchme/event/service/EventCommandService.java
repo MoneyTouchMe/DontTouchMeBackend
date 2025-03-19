@@ -36,8 +36,7 @@ public class EventCommandService {
         boolean tagIsNull = Objects.isNull(request.tags());
         boolean targetIsNull = Objects.isNull(request.targets());
 
-        Event event = request.toEntity();
-        event.setMember(member);
+        Event event = request.toEntity(member);
 
         if (!tagIsNull) {
             for (String tag : request.tags()) {
