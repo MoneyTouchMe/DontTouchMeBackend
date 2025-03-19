@@ -1,8 +1,10 @@
 package com.example.donttouchme.event.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
+import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.member.domain.Member;
 import jakarta.persistence.*;
@@ -51,8 +53,11 @@ public class Event extends BaseEntity {
     @Column
     private String amountUnit; //금액 단위
 
+    @Column
+    private SendType sendType; //감사장 타입
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -64,15 +69,16 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<Target> targets = new ArrayList<>();
 
-    public void updateEvent(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, String amountUnit) {
-        this.thumbnailUrl = thumbnailUrl;
-        this.eventName = eventName;
-        this.eventType = eventType;
-        this.eventDate = eventDate;
+    public void updateEvent(UpdateEventRequest request, Location location, EventInfo eventInfo) {
+        this.thumbnailUrl = request.thumbnailUrl();
+        this.eventName = request.eventName();
+        this.eventType = request.eventType();
+        this.eventDate = request.eventDate();
         this.location = location;
         this.eventInfo = eventInfo;
-        this.participants = participants;
-        this.amountUnit = amountUnit;
+        this.participants = request.participants();
+        this.amountUnit = request.amountUnit();
+        this.sendType = SendType.toEnum(request.sendType());
     }
 
     public void setMember(Member member) {
@@ -113,7 +119,7 @@ public class Event extends BaseEntity {
     @Builder(builderMethodName = "eventBuilder", buildMethodName = "eventBuilder")
     public Event(String thumbnailUrl, String eventName, String eventType,
                  LocalDate eventDate, Location location, EventInfo eventInfo,
-                 Integer participants, String amountUnit, Member member
+                 Integer participants, String amountUnit, String sendType, Member member
     ) {
         this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
@@ -123,6 +129,7 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = participants;
         this.amountUnit = amountUnit;
+        this.sendType = SendType.toEnum(sendType);
         setMember(member);
     }
 }
