@@ -3,7 +3,6 @@ package com.example.donttouchme.event.controller.dto;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
-import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.member.domain.Member;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -56,7 +55,7 @@ public record CreateEventRequest(
 
         boolean isSend, //감사장 여부
 
-        SendType sendType //감사장 타입
+        String sendType //감사장 타입
 
 ) {
     public Event toEntity(Member member) {
@@ -87,6 +86,7 @@ public record CreateEventRequest(
                 .participants(participants)
                 .amountUnit(amountUnit)
                 .member(member)
+                .sendType(sendType)
                 .eventBuilder();
     }
 
