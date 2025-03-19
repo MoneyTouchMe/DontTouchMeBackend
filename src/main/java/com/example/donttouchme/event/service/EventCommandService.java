@@ -87,16 +87,7 @@ public class EventCommandService {
                 request.isSend()
         );
 
-        findEvent.updateEvent(
-                request.thumbnailUrl(),
-                request.eventName(),
-                request.eventType(),
-                request.eventDate(),
-                location,
-                eventInfo,
-                request.participants(),
-                request.amountUnit()
-        );
+        findEvent.updateEvent(request, location, eventInfo);
 
         //기존 저장된 Tag를 삭제 후 새로 입력받은 Tag를 생성
         tagRepository.deleteAll(findEvent.getTags());

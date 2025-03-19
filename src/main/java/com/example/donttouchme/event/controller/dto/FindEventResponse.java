@@ -22,6 +22,8 @@ public record FindEventResponse(
 
         String amountUnit,
 
+        String sendType,
+
         List<String> tags,
 
         List<String> targets
@@ -37,6 +39,7 @@ public record FindEventResponse(
                 event.getParticipants(),
                 event.getEventInfo().toCellValues(),
                 event.getAmountUnit(),
+                event.getSendType().toString(),
                 tags,
                 targets
         );
