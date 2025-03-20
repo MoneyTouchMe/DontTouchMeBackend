@@ -9,6 +9,7 @@ import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.domain.value.SendType;
+import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
@@ -68,20 +69,6 @@ public abstract class IntegrationTestSupport2 {
                 .value("test")
                 .event(event)
                 .build();
-    }
-
-    protected Event createTestEvent(Member member) {
-        return Event.eventBuilder()
-                .thumbnailUrl("thumbnailExample/12315123/123")
-                .eventName("testEvent")
-                .eventType("결혼식")
-                .eventDate(LocalDate.now())
-                .location(createTestLocation())
-                .eventInfo(createTestEventInfo())
-                .participants(10)
-                .amountUnit("만원")
-                .member(member)
-                .eventBuilder();
     }
 
     protected EventDetail createTestEventDetail(Event event, Target target) {
@@ -148,6 +135,21 @@ public abstract class IntegrationTestSupport2 {
                 List.of("신랑측", "신부측", "신랑아버지", "신부아버지"),
                 true,
                 SendType.EMAIL.toString()
+        );
+    }
+
+    protected CreateEventDetailRequest createTestEventDetailRequest(Long eventId) {
+        return new CreateEventDetailRequest(
+                eventId,
+                "출금",
+                "회비",
+                "10",
+                "김희범",
+                List.of("태그"),
+                "testImageUrl/12313124/123",
+                "신랑측",
+                SendType.EMAIL.toString(),
+                "test@test.com"
         );
     }
 }
