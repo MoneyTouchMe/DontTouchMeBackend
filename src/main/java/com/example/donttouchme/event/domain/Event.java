@@ -69,7 +69,7 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<Target> targets = new ArrayList<>();
 
-    public void updateEvent(UpdateEventRequest request, Location location, EventInfo eventInfo) {
+    public void update(UpdateEventRequest request, Location location, EventInfo eventInfo) {
         this.thumbnailUrl = request.thumbnailUrl();
         this.eventName = request.eventName();
         this.eventType = request.eventType();
