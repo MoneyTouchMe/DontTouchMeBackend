@@ -79,10 +79,10 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport2 {
 
 
         //when
-        Assertions.assertThat(createdEventDetail.getDeletedAt()).isNull();
+        Assertions.assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isPresent();
         eventDetailCommandService.deleteEventDetail(createdEventDetail.getId());
 
         //then
-        Assertions.assertThat(eventDetailRepository.findById(createdEvent.getId())).isNotPresent();
+        Assertions.assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isNotPresent();
     }
 }

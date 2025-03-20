@@ -62,10 +62,11 @@ class EventCommandServiceTest extends IntegrationTestSupport2 {
         Event createdEvent = eventCommandService.createEvent(request);
 
         //when
+        assertThat(eventRepository.findById(createdEvent.getId())).isPresent();
         eventCommandService.deleteEvent(createdEvent.getId());
 
         //then
-        assertThat(eventRepository.existsById(createdEvent.getId())).isFalse();
+        assertThat(eventRepository.findById(createdEvent.getId())).isNotPresent();
     }
 
     @Test

@@ -78,15 +78,17 @@ public abstract class IntegrationTestSupport {
                 .build();
     }
 
-    protected Target createTestTarget() {
+    protected Target createTestTarget(Event event) {
         return Target.builder()
                 .value("target")
+                .event(event)
                 .build();
     }
 
-    protected Tag createTestTag() {
+    protected Tag createTestTag(Event event) {
         return Tag.builder()
                 .value("Tag")
+                .event(event)
                 .build();
     }
 
