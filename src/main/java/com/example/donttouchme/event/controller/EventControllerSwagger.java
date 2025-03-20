@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Event 관련 API", description = "Event 관련 API")
 public interface EventControllerSwagger {
@@ -48,7 +49,9 @@ public interface EventControllerSwagger {
             description = "No Offset 방식으로 이벤트 목록을 조회합니다."
     )
     public FindEventListResponse findEventList(
-            @RequestBody @Validated final FindEventListRequest request
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long lastEventId,
+            @RequestParam(defaultValue = "20") int pageSIze
     );
 
     @Operation(

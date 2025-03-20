@@ -43,9 +43,13 @@ public class EventController implements EventControllerSwagger {
 
     @GetMapping("/list")
     public FindEventListResponse findEventList(
-            @RequestBody @Validated final FindEventListRequest request
+            @RequestParam Long memberId,
+            @RequestParam(required = false) Long lastEventId,
+            @RequestParam(defaultValue = "20") int pageSIze
     ) {
-        return eventQueryService.findEventList(request);
+
+
+        return eventQueryService.findEventList(new FindEventListRequest(memberId,lastEventId,pageSIze));
     }
 
     @GetMapping("/{eventId}")
