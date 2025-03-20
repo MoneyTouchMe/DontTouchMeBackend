@@ -40,17 +40,6 @@ public class EventQueryService {
             targets.add(target.getValue());
         }
 
-        return new FindEventResponse(
-                event.getThumbnailUrl(),
-                event.getEventName(),
-                event.getEventType(),
-                event.getEventDate(),
-                event.getLocation().getAddress(),
-                event.getParticipants(),
-                event.getEventInfo().toCellValues(),
-                tags,
-                targets,
-                event.getAmountUnit()
-        );
+        return FindEventResponse.from(event, tags, targets);
     }
 }

@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE tagEventDetail SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE tag_event_detail SET deleted_at = NOW() WHERE id = ?")
 public class TagEventDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +32,34 @@ public class TagEventDetail extends BaseEntity {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+        if (tag != null) {
+            tag.setTagEventDetail(this);
+        }
     }
 
     public void setEventDetail(EventDetail eventDetail) {
         this.eventDetail = eventDetail;
+        if (eventDetail != null) {
+            eventDetail.setTagEventDetail(this);
+        }
     }
 
     @Builder
     public TagEventDetail(EventDetail eventDetail, Tag tag) {
-        this.eventDetail = eventDetail;
-        this.tag = tag;
+        setEventDetail(eventDetail);
+        setTag(tag);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        TagEventDetail that = (TagEventDetail) object;
+        return Objects.equals(getEventDetail(), that.getEventDetail()) && Objects.equals(getTag(), that.getTag());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEventDetail(), getTag());
     }
 }

@@ -1,8 +1,10 @@
 package com.example.donttouchme.event.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
+import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.member.domain.Member;
 import jakarta.persistence.*;
@@ -51,51 +53,56 @@ public class Event extends BaseEntity {
     @Column
     private String amountUnit; //금액 단위
 
+    @Column
+    private SendType sendType; //감사장 타입
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private final List<EventDetail> eventDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final Set<Tag> tags = new HashSet<>();
+    private final List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private final Set<Target> targets = new HashSet<>();
+    private final List<Target> targets = new ArrayList<>();
 
-    public void updateEvent(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, String amountUnit) {
-        this.thumbnailUrl = thumbnailUrl;
-        this.eventName = eventName;
-        this.eventType = eventType;
-        this.eventDate = eventDate;
+    public void updateEvent(UpdateEventRequest request, Location location, EventInfo eventInfo) {
+        this.thumbnailUrl = request.thumbnailUrl();
+        this.eventName = request.eventName();
+        this.eventType = request.eventType();
+        this.eventDate = request.eventDate();
         this.location = location;
         this.eventInfo = eventInfo;
-        this.participants = participants;
-        this.amountUnit = amountUnit;
+        this.participants = request.participants();
+        this.amountUnit = request.amountUnit();
+        this.sendType = SendType.toEnum(request.sendType());
     }
 
     public void setMember(Member member) {
         this.member = member;
+        member.setEvents(this);
     }
 
-    public void setEventDetails(Collection<EventDetail> eventDetails) { //양방향 관계 설정
-        for (EventDetail eventDetail : eventDetails) {
-            if (!this.eventDetails.contains(eventDetail)) {
-                this.eventDetails.add(eventDetail);
-                eventDetail.setEvent(this);
-            }
+    public void setEventDetail(EventDetail eventDetail) { //양방향 관계 설정
+        if (!this.eventDetails.contains(eventDetail)) {
+            this.eventDetails.add(eventDetail);
         }
     }
 
-    public void setTags(Collection<Tag> tags) { //양방향 관계 설정
-        this.tags.addAll(tags);
-        tags.forEach(tag -> tag.setEvent(this));
+
+    public void setTags(Tag tag) { //양방향 관계 설정
+        if (!this.tags.contains(tag)) {
+            this.tags.add(tag);
+        }
     }
 
-    public void setTargets(Collection<Target> targets) { //양방향 관계 설정
-        this.targets.addAll(targets);
-        targets.forEach(target -> target.setEvent(this));
+    public void setTargets(Target target) { //양방향 관계 설정
+        if (!this.targets.contains(target)) {
+            this.targets.add(target);
+        }
     }
 
     @Builder
@@ -109,8 +116,11 @@ public class Event extends BaseEntity {
         this.member = member;
     }
 
-    @Builder(builderMethodName = "builderWithoutTagAndTarget", buildMethodName = "builderWithoutTagAndTarget")
-    public Event(String thumbnailUrl, String eventName, String eventType, LocalDate eventDate, Location location, EventInfo eventInfo, Integer participants, String amountUnit, Member member) {
+    @Builder(builderMethodName = "eventBuilder", buildMethodName = "eventBuilder")
+    public Event(String thumbnailUrl, String eventName, String eventType,
+                 LocalDate eventDate, Location location, EventInfo eventInfo,
+                 Integer participants, String amountUnit, String sendType, Member member
+    ) {
         this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
         this.eventType = eventType;
@@ -119,6 +129,8 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = participants;
         this.amountUnit = amountUnit;
-        this.member = member;
+        this.sendType = SendType.toEnum(sendType);
+        setMember(member);
     }
 }
+

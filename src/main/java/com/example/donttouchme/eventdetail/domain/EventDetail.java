@@ -13,14 +13,13 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Getter
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE eventDetail SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE event_detail SET deleted_at = NOW() WHERE id = ?")
 public class EventDetail extends BaseEntity { //입출금 내역
 
     @Id
@@ -46,7 +45,7 @@ public class EventDetail extends BaseEntity { //입출금 내역
     private String contact; //연락처
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,25 +57,20 @@ public class EventDetail extends BaseEntity { //입출금 내역
 
     public void setEvent(Event event) {
         this.event = event;
+        event.setEventDetail(this);
     }
 
     public void setTarget(Target target) {
         this.target = target;
-    }
-
-    public void setTagEventDetails(Collection<TagEventDetail> tagEventDetails) {
-        for (TagEventDetail tagEventDetail : tagEventDetails) {
-            if (!this.tagEventDetails.contains(tagEventDetail)) {
-                this.tagEventDetails.add(tagEventDetail);
-                tagEventDetail.setEventDetail(this);
-            }
+        if (target != null) {
+            target.setEventDetail(this);
         }
     }
+
 
     public void setTagEventDetail(TagEventDetail tagEventDetail) {
         if (!this.tagEventDetails.contains(tagEventDetail)) {
             this.tagEventDetails.add(tagEventDetail);
-            tagEventDetail.setEventDetail(this);
         }
     }
 
@@ -87,9 +81,9 @@ public class EventDetail extends BaseEntity { //입출금 내역
         this.price = price;
         this.name = name;
         this.image = image;
-        this.event = event;
-        this.target = target;
         this.contact = contact;
+        setEvent(event);
+        setTarget(target);
     }
 
     @Builder(builderMethodName = "builderOnlyField", buildMethodName = "builderOnlyField")

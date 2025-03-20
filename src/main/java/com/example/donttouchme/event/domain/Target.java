@@ -12,6 +12,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -28,7 +29,7 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
@@ -36,12 +37,12 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
 
     public void setEvent(Event event) {
         this.event = event;
+        event.setTargets(this);
     }
 
     public void setEventDetail(EventDetail eventDetail) {
         if (!eventDetails.contains(eventDetail)) {
             eventDetails.add(eventDetail);
-            eventDetail.setTarget(this);
         }
     }
 
@@ -53,6 +54,19 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     @Builder
     public Target(String value, Event event) {
         this.value = value;
-        this.event = event;
+        setEvent(event);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Target target = (Target) object;
+        return Objects.equals(getValue(), target.getValue()) && Objects.equals(getEvent(), target.getEvent());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getValue(), getEvent());
     }
 }

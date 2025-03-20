@@ -1,6 +1,5 @@
 package com.example.donttouchme.event.controller.dto;
 
-import com.example.donttouchme.event.domain.value.SendType;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -49,7 +48,7 @@ public record UpdateEventRequest(
 
         boolean isSend, //감사장 여부
 
-        SendType sendType //감사장 타입
+        String sendType //감사장 타입
 
 ) {
     @AssertTrue(message = "감사장 전송 여부가 true일 때 감사장 종류를 지정해야합니다.")
