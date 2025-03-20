@@ -1,6 +1,7 @@
 package com.example.donttouchme.eventdetail.controller;
 
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +26,15 @@ public interface EventDetailControllerSwagger {
     public ResponseEntity<Void> deleteEventDetail(
             @PathVariable final Long eventDetailId
     );
+
+    @Operation(
+            summary = "입출금 내역 수정 API",
+            description = "입출금 내역을 수정합니다."
+    )
+    public ResponseEntity<Void> updateEventDetail(
+            @PathVariable final Long eventDetailId,
+            @Validated @RequestBody final UpdateEventDetailRequest request
+    );
+
+
 }
