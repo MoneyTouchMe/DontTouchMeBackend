@@ -33,7 +33,7 @@ public class EventDetailCommandService {
         //Target 엔티티 찾기
         Target findTarget = null;
         if (request.target() != null) {
-            findTarget = targetRepository.findByValue(request.target()).get();
+            findTarget = targetRepository.findByValueAndEventId(request.target(), request.eventId()).get();
         }
 
         EventDetail eventDetail = request.toEntity(findEvent, findTarget);
@@ -42,7 +42,7 @@ public class EventDetailCommandService {
         //Tag 엔티티 찾아서 TagEventDetails 연관관계 설정
         if (request.tags() != null) {
             for (String tag : request.tags()) {
-                Tag findTag = tagRepository.findByValue(tag).get();
+                Tag findTag = tagRepository.findByValueAndEventId(tag, request.eventId()).get();
                 tagEventDetailRepository.save(new TagEventDetail(eventDetail, findTag));
             }
         }
