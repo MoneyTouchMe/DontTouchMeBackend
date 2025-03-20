@@ -1,16 +1,18 @@
 package com.example.donttouchme.eventdetail;
 
+import com.example.donttouchme.event.controller.dto.CreateEventRequest;
 import com.example.donttouchme.event.domain.Event;
-import com.example.donttouchme.event.domain.Tag;
-import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.repository.EventRepository;
+import com.example.donttouchme.event.service.EventCommandService;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.repository.EventDetailRepository;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
-import com.example.donttouchme.support.IntegrationTestSupport;
+import com.example.donttouchme.support.IntegrationTestSupport2;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +22,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootTest
 @Slf4j
 @Transactional
-public class EventDetailCommandServiceTest extends IntegrationTestSupport {
+public class EventDetailCommandServiceTest extends IntegrationTestSupport2 {
     @Autowired
     EventDetailCommandService eventDetailCommandService;
 
@@ -39,43 +38,26 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport {
     @Autowired
     EventDetailRepository eventDetailRepository;
 
+    @Autowired
+    EventCommandService eventCommandService;
+
+    @PersistenceContext
+    EntityManager em;
+
     @Test
     @DisplayName("EventDetail 생성 성공")
     void createEventDetailSuccess() {
         //given
-        Member testMember = createTestMemberForEvent();
+        Member testMember = createTestMember();
         Member savedMember = memberRepository.save(testMember);
 
-        Event testEvent = createTestEvent(savedMember);
+        Event createdEvent = eventCommandService.createEvent(createTestCreateEventRequest(savedMember.getId()));
 
-        //target 연관관계 설정
-        Target testTarget = createTestTarget();
-        List<Target> targets = new ArrayList<>();
-        targets.add(testTarget);
-        testEvent.setTargets(targets);
-
-        //Tag 연관관계 설정
-        Tag tag = new Tag("테스트", testEvent);
-        List<Tag> tags = new ArrayList<>();
-        tags.add(tag);
-        testEvent.setTags(tags);
-
-        Event savedEvent = eventRepository.save(testEvent);
 
         //when
-        EventDetail createdEventDetail = eventDetailCommandService.createEventDetail(
-                new CreateEventDetailRequest(
-                        savedEvent.getId(),
-                        "출금",
-                        "회비",
-                        "10",
-                        "김희범",
-                        List.of("결혼식", "테스트"),
-                        "testImageUrl/12313124/123",
-                        "신부측",
-                        "010-1111-2222"
-                )
-        );
+        CreateEventDetailRequest request = createTestEventDetailRequest(createdEvent.getId());
+        EventDetail createdEventDetail = eventDetailCommandService.createEventDetail(request);
+
 
         //then
         Assertions.assertThat(createdEventDetail.getPrice()).isEqualTo("10");
@@ -86,45 +68,21 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport {
     @DisplayName("EventDetail 삭제 성공")
     void deleteEventDetailSuccess() {
         //given
-        Member testMember = createTestMemberForEvent();
+        Member testMember = createTestMember();
         Member savedMember = memberRepository.save(testMember);
 
-        Event testEvent = createTestEvent(savedMember);
+        CreateEventRequest eventRequest = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent = eventCommandService.createEvent(eventRequest);
 
-        //target 연관관계 설정
-        Target testTarget = createTestTarget();
-        List<Target> targets = new ArrayList<>();
-        targets.add(testTarget);
-        testEvent.setTargets(targets);
+        CreateEventDetailRequest eventDetailRequest = createTestEventDetailRequest(createdEvent.getId());
+        EventDetail createdEventDetail = eventDetailCommandService.createEventDetail(eventDetailRequest);
 
-        //Tag 연관관계 설정
-        Tag tag = new Tag("테스트", testEvent);
-        List<Tag> tags = new ArrayList<>();
-        tags.add(tag);
-        testEvent.setTags(tags);
-
-        Event savedEvent = eventRepository.save(testEvent);
-
-        createTestEventDetail(savedEvent, null);
-        EventDetail savedEventDetail = eventDetailCommandService.createEventDetail(
-                new CreateEventDetailRequest(
-                        savedEvent.getId(),
-                        "출금",
-                        "회비",
-                        "10",
-                        "김희범",
-                        List.of("테스트"),
-                        "testImageUrl/12313124/123",
-                        "신부측",
-                        "010-1111-2222"
-                )
-        );
 
         //when
-        Assertions.assertThat(savedEventDetail.getDeletedAt()).isNull();
-        eventDetailCommandService.deleteEventDetail(savedEventDetail.getId());
+        Assertions.assertThat(createdEventDetail.getDeletedAt()).isNull();
+        eventDetailCommandService.deleteEventDetail(createdEventDetail.getId());
 
         //then
-        Assertions.assertThat(eventDetailRepository.findById(savedEventDetail.getId())).isNotPresent();
+        Assertions.assertThat(eventDetailRepository.findById(createdEvent.getId())).isNotPresent();
     }
 }

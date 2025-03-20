@@ -56,15 +56,16 @@ class EventCommandServiceTest extends IntegrationTestSupport2 {
     @Rollback(value = false)
     void deleteEvent() {
         //given
-        Member savedMember = memberRepository.save(createTestMember());
-        Event savedEvent = eventRepository.save(createTestEvent(savedMember));
-        assertThat(eventRepository.existsById(savedEvent.getId())).isTrue();
+        Member testMember = createTestMember();
+        Member savedMember = memberRepository.save(testMember);
+        CreateEventRequest request = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent = eventCommandService.createEvent(request);
 
         //when
-        eventCommandService.deleteEvent(savedEvent.getId());
+        eventCommandService.deleteEvent(createdEvent.getId());
 
         //then
-        assertThat(eventRepository.existsById(savedEvent.getId())).isFalse();
+        assertThat(eventRepository.existsById(createdEvent.getId())).isFalse();
     }
 
     @Test

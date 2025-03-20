@@ -1,10 +1,12 @@
 package com.example.donttouchme.event.Integration;
 
+import com.example.donttouchme.event.controller.dto.CreateEventRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.controller.dto.FindEventResponse;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.repository.EventRepository;
+import com.example.donttouchme.event.service.EventCommandService;
 import com.example.donttouchme.event.service.EventQueryService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
@@ -29,6 +31,9 @@ class EventQueryServiceTest extends IntegrationTestSupport2 {
     @Autowired
     EventRepository eventRepository;
 
+    @Autowired
+    EventCommandService eventCommandService;
+
     @Test
     @DisplayName("No Offset 방식으로 이벤트 목록 조회")
     void findEventListSuccess() {
@@ -36,23 +41,24 @@ class EventQueryServiceTest extends IntegrationTestSupport2 {
         Member testMember = createTestMember();
         Member savedMember = memberRepository.save(testMember);
 
-        Event testEvent = createTestEvent(savedMember);
-        eventRepository.save(testEvent);
+        CreateEventRequest request = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent1 = eventCommandService.createEvent(request);
 
-        Event testEvent2 = createTestEvent(savedMember);
-        eventRepository.save(testEvent2);
+        CreateEventRequest request2 = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent2 = eventCommandService.createEvent(request2);
 
-        Event testEvent3 = createTestEvent(savedMember);
-        eventRepository.save(testEvent3);
+        CreateEventRequest request3 = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent3 = eventCommandService.createEvent(request3);
 
-        FindEventListRequest request = new FindEventListRequest(
+
+        FindEventListRequest listRequest = new FindEventListRequest(
                 savedMember.getId(),
                 null,
                 3
         );
 
         //when
-        FindEventListResponse eventList = eventQueryService.findEventList(request);
+        FindEventListResponse eventList = eventQueryService.findEventList(listRequest);
 
         //then
         assertThat(eventList.events().size()).isEqualTo(3);
@@ -65,14 +71,14 @@ class EventQueryServiceTest extends IntegrationTestSupport2 {
         Member testMember = createTestMember();
         Member savedMember = memberRepository.save(testMember);
 
-        Event testEvent = createTestEvent(savedMember);
-        Event savedEvent = eventRepository.save(testEvent);
+        CreateEventRequest request = createTestCreateEventRequest(savedMember.getId());
+        Event createdEvent = eventCommandService.createEvent(request);
 
         //when
-        FindEventResponse event = eventQueryService.findEvent(savedEvent.getId());
+        FindEventResponse event = eventQueryService.findEvent(createdEvent.getId());
 
         //then
-        assertThat(event.eventName()).isEqualTo("test");
+        assertThat(event.eventName()).isEqualTo("testEvent");
         assertThat(event.eventInfoItems()).containsExactly(
                 "입출금 분류", "입출금 내역명", "금액", "이름", "태그", "입금대상", "감사장"
         );
