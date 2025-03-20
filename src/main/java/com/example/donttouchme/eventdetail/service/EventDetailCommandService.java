@@ -9,6 +9,7 @@ import com.example.donttouchme.event.repository.TagEventDetailRepository;
 import com.example.donttouchme.event.repository.TagRepository;
 import com.example.donttouchme.event.repository.TargetRepository;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.repository.EventDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,4 +57,27 @@ public class EventDetailCommandService {
         );
         eventDetailRepository.delete(findEventDetail);
     }
+
+    public void updateEventDetail(final Long eventDetailId, final UpdateEventDetailRequest request) {
+        EventDetail findEventDetail = eventDetailRepository.findById(eventDetailId).orElseThrow(
+                () -> new IllegalArgumentException("입출금 내역 정보를 찾을 수 없습니다. eventDetailId : " + eventDetailId)
+        );
+
+        //Target 엔티티 찾기
+        Target findTarget = null;
+        if (request.target() != null) {
+            findTarget = targetRepository.findByValueAndEventId(request.target(), findEventDetail.getEvent().getId()).get();
+        }
+
+        findEventDetail.update(request, findTarget);
+
+        //Tag 엔티티 찾아서 TagEventDetails 연관관계 설정
+        if (request.tags() != null) {
+            for (String tag : request.tags()) {
+                Tag findTag = tagRepository.findByValueAndEventId(tag, findEventDetail.getEvent().getId()).get();
+                tagEventDetailRepository.save(new TagEventDetail(findEventDetail, findTag));
+            }
+        }
+    }
+
 }
