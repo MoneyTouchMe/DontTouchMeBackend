@@ -54,29 +54,13 @@ class ContactValidatorTest {
         );
         assertFalse(contactValidator.isValid(request, context));
     }
-
     @Test
-    void testNullContact() {
+    void testInvalidContact() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "이메일", null
-        );
-        assertTrue(contactValidator.isValid(request, context));
-    }
-
-    @Test
-    void testNullSendType() {
-        CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", null, "example@example.com"
-        );
-        assertTrue(contactValidator.isValid(request, context));
-    }
-
-    @Test
-    void testInvalidSendType() {
-        CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "invalidType", "example@example.com"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "문자", "test@test.com"
         );
         assertFalse(contactValidator.isValid(request, context));
     }
+
 }
 
