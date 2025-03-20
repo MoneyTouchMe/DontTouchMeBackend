@@ -10,6 +10,7 @@ import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.domain.value.LoginProvider;
@@ -150,6 +151,20 @@ public abstract class IntegrationTestSupport2 {
                 "신랑측",
                 SendType.EMAIL.toString(),
                 "test@test.com"
+        );
+    }
+
+    protected UpdateEventDetailRequest createTestUpdateEventDetailRequest() {
+        return new UpdateEventDetailRequest(
+                "입금",
+                "회비update",
+                "100",
+                "김희범",
+                List.of("태그"),
+                "testImageUrl/12313124/123test",
+                "신부측",
+                SendType.EMAIL.toString(),
+                "test2@test.com"
         );
     }
 }
