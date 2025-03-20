@@ -40,7 +40,7 @@ public interface EventControllerSwagger {
     )
     public ResponseEntity<Void> updateEvent(
             @PathVariable final Long eventId,
-            @Validated @RequestBody UpdateEventRequest request
+            @Validated @RequestBody final UpdateEventRequest request
     );
 
     @Operation(

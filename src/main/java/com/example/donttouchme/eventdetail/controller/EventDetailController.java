@@ -1,5 +1,6 @@
 package com.example.donttouchme.eventdetail.controller;
 
+import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
@@ -27,6 +28,15 @@ public class EventDetailController implements EventDetailControllerSwagger {
             @PathVariable final Long eventDetailId
     ) {
         eventDetailCommandService.deleteEventDetail(eventDetailId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{eventDetailId}")
+    public ResponseEntity<Void> updateEventDetail(
+            @PathVariable final Long eventDetailId,
+            final UpdateEventDetailRequest request
+    ) {
+        eventDetailCommandService.updateEventDetail(eventDetailId, request);
         return ResponseEntity.noContent().build();
     }
 }

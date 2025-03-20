@@ -4,6 +4,7 @@ import com.example.donttouchme.common.Entity.BaseEntity;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.TagEventDetail;
 import com.example.donttouchme.event.domain.Target;
+import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,6 +55,16 @@ public class EventDetail extends BaseEntity { //입출금 내역
 
     @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
     private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
+
+    public void update(UpdateEventDetailRequest request, Target target) {
+        this.type = request.type();
+        this.history = request.history();
+        this.price = request.price();
+        this.name = request.name();
+        this.image = request.imageUrl();
+        this.contact = request.contact();
+        setTarget(target);
+    }
 
     public void setEvent(Event event) {
         this.event = event;

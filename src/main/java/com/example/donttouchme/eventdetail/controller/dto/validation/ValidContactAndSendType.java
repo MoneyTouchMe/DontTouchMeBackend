@@ -1,4 +1,4 @@
-package com.example.donttouchme.eventdetail.controller.dto;
+package com.example.donttouchme.eventdetail.controller.dto.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
