@@ -1,6 +1,7 @@
 package com.example.donttouchme.event.controller.dto;
 
 import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.event.domain.value.SendType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +23,7 @@ public record FindEventResponse(
 
         String amountUnit,
 
-        String sendType,
+        SendType sendType,
 
         List<String> tags,
 
@@ -39,7 +40,7 @@ public record FindEventResponse(
                 event.getParticipants(),
                 event.getEventInfo().toCellValues(),
                 event.getAmountUnit(),
-                event.getSendType().toString(),
+                event.getSendType(),
                 tags,
                 targets
         );

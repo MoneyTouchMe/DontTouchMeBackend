@@ -54,6 +54,7 @@ public class Event extends BaseEntity {
     private String amountUnit; //금액 단위
 
     @Column
+    @Enumerated(EnumType.STRING)
     private SendType sendType; //감사장 타입
 
     @ManyToOne(fetch = FetchType.LAZY)
