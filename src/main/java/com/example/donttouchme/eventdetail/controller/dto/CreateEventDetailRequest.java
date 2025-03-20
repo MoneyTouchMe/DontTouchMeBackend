@@ -2,6 +2,8 @@ package com.example.donttouchme.eventdetail.controller.dto;
 
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.Target;
+import com.example.donttouchme.eventdetail.controller.dto.validation.ContactValidatable;
+import com.example.donttouchme.eventdetail.controller.dto.validation.ValidContactAndSendType;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +35,7 @@ public record CreateEventDetailRequest(
         String sendType,
 
         String contact
-) {
+) implements ContactValidatable {
     public EventDetail toEntity(Event event, Target target) {
         return EventDetail.builder()
                 .type(type)
@@ -45,5 +47,15 @@ public record CreateEventDetailRequest(
                 .event(event)
                 .target(target)
                 .build();
+    }
+
+    @Override
+    public String contact() {
+        return contact;
+    }
+
+    @Override
+    public String sendType() {
+        return sendType;
     }
 }

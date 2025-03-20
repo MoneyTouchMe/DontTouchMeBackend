@@ -1,6 +1,6 @@
 package com.example.donttouchme.eventdetail;
 
-import com.example.donttouchme.eventdetail.controller.dto.ContactValidator;
+import com.example.donttouchme.eventdetail.controller.dto.validation.ContactValidator;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
