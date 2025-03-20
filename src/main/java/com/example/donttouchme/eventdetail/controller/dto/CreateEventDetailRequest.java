@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+@ValidContactAndSendType
 public record CreateEventDetailRequest(
         @NotNull(message = "이벤트 고유번호는 필수입니다.")
         Long eventId,
