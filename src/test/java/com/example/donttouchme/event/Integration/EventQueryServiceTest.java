@@ -8,18 +8,18 @@ import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.event.service.EventQueryService;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
-import com.example.donttouchme.support.IntegrationTestSupport;
+import com.example.donttouchme.support.IntegrationTestSupport2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class EventQueryServiceTest extends IntegrationTestSupport {
+class EventQueryServiceTest extends IntegrationTestSupport2 {
     @Autowired
     EventQueryService eventQueryService;
 

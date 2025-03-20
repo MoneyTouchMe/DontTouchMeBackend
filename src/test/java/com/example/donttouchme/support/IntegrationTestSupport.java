@@ -31,16 +31,6 @@ public abstract class IntegrationTestSupport {
                 .builderWithPassword();
     }
 
-    protected Member createTestMemberForEvent() {
-        return Member.builderWithPassword()
-                .name("testMember")
-                .email("testMember@test.com")
-                .role(ROLE.user)
-                .loginProvider(LoginProvider.original)
-                .contact("010-1234-5678")
-                .password("test123131231")
-                .builderWithPassword();
-    }
 
     protected Event createTestEvent(Member member) {
         return Event.builder()
@@ -94,7 +84,7 @@ public abstract class IntegrationTestSupport {
                 .build();
     }
 
-    protected Tag createTestTag(EventDetail eventDetail) {
+    protected Tag createTestTag() {
         return Tag.builder()
                 .value("Tag")
                 .build();
