@@ -1,6 +1,5 @@
 package com.example.donttouchme.event.service;
 
-import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.controller.dto.FindEventResponse;
 import com.example.donttouchme.event.domain.Event;
@@ -21,8 +20,10 @@ public class EventQueryService {
     private final EventRepository eventRepository;
 
     //no offset으로 페이징 구현
-    public FindEventListResponse findEventList(final FindEventListRequest request) {
-        return eventRepository.paginationNoOffset(request.memberId(), request.lastEventId(), request.pageSize());
+    public FindEventListResponse findEventList(
+            final Long memberId, final Long lastEventId, final int pageSize
+    ) {
+        return eventRepository.paginationNoOffset(memberId, lastEventId, pageSize);
     }
 
     public FindEventResponse findEvent(final Long eventId) {
