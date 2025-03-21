@@ -112,7 +112,7 @@ public abstract class IntegrationTestSupport2 {
                 true,
                 List.of("신랑측", "신부측", "신랑아버지", "신부아버지"),
                 true,
-                SendType.EMAIL.toString()
+                SendType.EMAIL
         );
     }
 
@@ -135,7 +135,7 @@ public abstract class IntegrationTestSupport2 {
                 true,
                 List.of("신랑측", "신부측", "신랑아버지", "신부아버지"),
                 true,
-                SendType.EMAIL.toString()
+                SendType.EMAIL
         );
     }
 
@@ -149,7 +149,7 @@ public abstract class IntegrationTestSupport2 {
                 List.of("태그"),
                 "testImageUrl/12313124/123",
                 "신랑측",
-                SendType.EMAIL.toString(),
+                SendType.EMAIL,
                 "test@test.com"
         );
     }
@@ -163,7 +163,7 @@ public abstract class IntegrationTestSupport2 {
                 List.of("태그"),
                 "testImageUrl/12313124/123test",
                 "신부측",
-                SendType.EMAIL.toString(),
+                SendType.EMAIL,
                 "test2@test.com"
         );
     }
