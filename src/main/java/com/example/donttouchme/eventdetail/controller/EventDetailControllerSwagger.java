@@ -1,6 +1,7 @@
 package com.example.donttouchme.eventdetail.controller;
 
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
 import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "EventDetail 관련 API", description = "입출금 내역 관련 API")
 public interface EventDetailControllerSwagger {
@@ -34,6 +36,16 @@ public interface EventDetailControllerSwagger {
     public ResponseEntity<Void> updateEventDetail(
             @PathVariable final Long eventDetailId,
             @Validated @RequestBody final UpdateEventDetailRequest request
+    );
+
+    @Operation(
+            summary = "입출금 내역 목록 조회 API",
+            description = "입출금 내역 목록을 조회합니다."
+    )
+    public FindEventDetailListResponse findEventDetailList(
+            @RequestParam final Long eventId,
+            @RequestParam(required = false) final Long lastEventDetailId,
+            @RequestParam(defaultValue = "20") final int pageSize
     );
 
 
