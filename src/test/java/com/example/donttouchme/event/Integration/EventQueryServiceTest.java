@@ -1,7 +1,6 @@
 package com.example.donttouchme.event.Integration;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
-import com.example.donttouchme.event.controller.dto.FindEventListRequest;
 import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.controller.dto.FindEventResponse;
 import com.example.donttouchme.event.domain.Event;
@@ -50,15 +49,8 @@ class EventQueryServiceTest extends IntegrationTestSupport2 {
         CreateEventRequest request3 = createTestCreateEventRequest(savedMember.getId());
         Event createdEvent3 = eventCommandService.createEvent(request3);
 
-
-        FindEventListRequest listRequest = new FindEventListRequest(
-                savedMember.getId(),
-                null,
-                3
-        );
-
         //when
-        FindEventListResponse eventList = eventQueryService.findEventList(listRequest);
+        FindEventListResponse eventList = eventQueryService.findEventList(savedMember.getId(), null, 3);
 
         //then
         assertThat(eventList.events().size()).isEqualTo(3);

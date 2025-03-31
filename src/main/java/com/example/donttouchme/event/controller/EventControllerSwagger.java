@@ -51,7 +51,7 @@ public interface EventControllerSwagger {
     public FindEventListResponse findEventList(
             @RequestParam Long memberId,
             @RequestParam(required = false) Long lastEventId,
-            @RequestParam(defaultValue = "20") int pageSIze
+            @RequestParam(defaultValue = "20") int pageSize
     );
 
     @Operation(

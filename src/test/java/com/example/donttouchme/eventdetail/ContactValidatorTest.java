@@ -1,5 +1,6 @@
 package com.example.donttouchme.eventdetail;
 
+import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.controller.dto.validation.ContactValidator;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import jakarta.validation.ConstraintValidatorContext;
@@ -26,7 +27,7 @@ class ContactValidatorTest {
     @Test
     void testValidEmail() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "이메일", "example@example.com"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", SendType.EMAIL, "example@example.com"
         );
         assertTrue(contactValidator.isValid(request, context));
     }
@@ -34,7 +35,7 @@ class ContactValidatorTest {
     @Test
     void testInvalidEmail() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "이메일", "invalid-email"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", SendType.EMAIL, "invalid-email"
         );
         assertFalse(contactValidator.isValid(request, context));
     }
@@ -42,7 +43,7 @@ class ContactValidatorTest {
     @Test
     void testValidPhone() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "문자", "010-1234-5678"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", SendType.PHONE, "010-1234-5678"
         );
         assertTrue(contactValidator.isValid(request, context));
     }
@@ -50,14 +51,15 @@ class ContactValidatorTest {
     @Test
     void testInvalidPhone() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "문자", "12345678"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", SendType.PHONE, "12345678"
         );
         assertFalse(contactValidator.isValid(request, context));
     }
+
     @Test
     void testInvalidContact() {
         CreateEventDetailRequest request = new CreateEventDetailRequest(
-                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", "문자", "test@test.com"
+                1L, "type", "history", "price", "name", List.of(), "imageUrl", "target", SendType.PHONE, "test@test.com"
         );
         assertFalse(contactValidator.isValid(request, context));
     }

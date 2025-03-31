@@ -2,6 +2,7 @@ package com.example.donttouchme.eventdetail.controller.dto;
 
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.Target;
+import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.controller.dto.validation.ContactValidatable;
 import com.example.donttouchme.eventdetail.controller.dto.validation.ValidContactAndSendType;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
@@ -32,7 +33,7 @@ public record CreateEventDetailRequest(
 
         String target,
 
-        String sendType,
+        SendType sendType,
 
         String contact
 ) implements ContactValidatable {
@@ -55,7 +56,7 @@ public record CreateEventDetailRequest(
     }
 
     @Override
-    public String sendType() {
+    public SendType sendType() {
         return sendType;
     }
 }

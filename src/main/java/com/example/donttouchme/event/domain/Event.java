@@ -79,7 +79,7 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = request.participants();
         this.amountUnit = request.amountUnit();
-        this.sendType = SendType.toEnum(request.sendType());
+        this.sendType = request.sendType();
     }
 
     public void setMember(Member member) {
@@ -120,7 +120,7 @@ public class Event extends BaseEntity {
     @Builder(builderMethodName = "eventBuilder", buildMethodName = "eventBuilder")
     public Event(String thumbnailUrl, String eventName, String eventType,
                  LocalDate eventDate, Location location, EventInfo eventInfo,
-                 Integer participants, String amountUnit, String sendType, Member member
+                 Integer participants, String amountUnit, SendType sendType, Member member
     ) {
         this.thumbnailUrl = thumbnailUrl;
         this.eventName = eventName;
@@ -130,7 +130,7 @@ public class Event extends BaseEntity {
         this.eventInfo = eventInfo;
         this.participants = participants;
         this.amountUnit = amountUnit;
-        this.sendType = SendType.toEnum(sendType);
+        this.sendType = sendType;
         setMember(member);
     }
 }

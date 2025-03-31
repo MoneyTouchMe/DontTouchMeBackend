@@ -1,9 +1,11 @@
 package com.example.donttouchme.eventdetail.controller;
 
+import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
 import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
-import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
+import com.example.donttouchme.eventdetail.service.EventDetailQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventDetailController implements EventDetailControllerSwagger {
     private final EventDetailCommandService eventDetailCommandService;
+    private final EventDetailQueryService eventDetailQueryService;
 
     @PostMapping
     public ResponseEntity<Long> createEventDetail(
@@ -38,5 +41,14 @@ public class EventDetailController implements EventDetailControllerSwagger {
     ) {
         eventDetailCommandService.updateEventDetail(eventDetailId, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/list")
+    public FindEventDetailListResponse findEventDetailList(
+            @RequestParam final Long eventId,
+            @RequestParam(required = false) final Long lastEventDetailId,
+            @RequestParam(defaultValue = "20") final int pageSize
+    ) {
+        return eventDetailQueryService.findEventDetailList(eventId, lastEventDetailId, pageSize);
     }
 }

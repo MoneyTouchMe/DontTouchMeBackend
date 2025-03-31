@@ -1,5 +1,6 @@
 package com.example.donttouchme.eventdetail.controller.dto.validation;
 
+import com.example.donttouchme.event.domain.value.SendType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -23,16 +24,16 @@ public class ContactValidator implements ConstraintValidator<ValidContactAndSend
         }
 
         String contact = request.contact();
-        String sendType = request.sendType();
+        SendType sendType = request.sendType();
 
         if (contact == null || sendType == null) {
             return true;
         }
 
         // sendType에 따라 적절한 정규 표현식 적용
-        if ("이메일".equals(sendType)) {
+        if (sendType.equals(SendType.EMAIL)) {
             return EMAIL_PATTERN.matcher(contact).matches();
-        } else if ("문자".equals(sendType)) {
+        } else if (sendType.equals(SendType.PHONE)) {
             return PHONE_NUMBER_PATTERN.matcher(contact).matches();
         }
 
