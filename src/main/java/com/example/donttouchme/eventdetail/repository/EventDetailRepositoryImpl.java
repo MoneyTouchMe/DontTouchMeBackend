@@ -20,7 +20,11 @@ public class EventDetailRepositoryImpl implements EventDetailRepositoryCustom {
     }
 
     @Override
-    public FindEventDetailListResponse paginationNoOffset(Long eventId, Long lastEventDetailId, int pageSize) {
+    public FindEventDetailListResponse paginationNoOffset(
+            final Long eventId,
+            final Long lastEventDetailId,
+            final int pageSize
+    ) {
         QEventDetail eventDetail = QEventDetail.eventDetail;
 
         List<EventDetailListDto> eventDetails = queryFactory

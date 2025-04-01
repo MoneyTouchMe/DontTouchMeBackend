@@ -21,7 +21,9 @@ public class EventDetailQueryService {
 
     //no offset 방식의 페이징 구현
     public FindEventDetailListResponse findEventDetailList(
-            final Long eventId, final Long lastEventDetailId, final int pageSize
+            final Long eventId,
+            final Long lastEventDetailId,
+            final int pageSize
     ) {
         return eventDetailRepository.paginationNoOffset(eventId, lastEventDetailId, pageSize);
     }
@@ -38,6 +40,6 @@ public class EventDetailQueryService {
 
         Target target = eventDetail.getTarget();
 
-        return FindEventDetailResponse.from(eventDetail, tags, target.getValue());
+        return FindEventDetailResponse.from(eventDetail, eventDetail.getEvent(), tags, target.getValue());
     }
 }

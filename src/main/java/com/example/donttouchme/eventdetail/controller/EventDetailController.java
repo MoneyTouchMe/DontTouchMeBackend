@@ -38,7 +38,7 @@ public class EventDetailController implements EventDetailControllerSwagger {
     @PatchMapping("/{eventDetailId}")
     public ResponseEntity<Void> updateEventDetail(
             @PathVariable final Long eventDetailId,
-            final UpdateEventDetailRequest request
+            @RequestBody @Validated final UpdateEventDetailRequest request
     ) {
         eventDetailCommandService.updateEventDetail(eventDetailId, request);
         return ResponseEntity.noContent().build();

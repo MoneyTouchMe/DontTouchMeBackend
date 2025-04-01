@@ -58,7 +58,10 @@ public class EventDetailCommandService {
         eventDetailRepository.delete(findEventDetail);
     }
 
-    public void updateEventDetail(final Long eventDetailId, final UpdateEventDetailRequest request) {
+    public void updateEventDetail(
+            final Long eventDetailId,
+            final UpdateEventDetailRequest request
+    ) {
         EventDetail findEventDetail = eventDetailRepository.findById(eventDetailId).orElseThrow(
                 () -> new IllegalArgumentException("입출금 내역 정보를 찾을 수 없습니다. eventDetailId : " + eventDetailId)
         );

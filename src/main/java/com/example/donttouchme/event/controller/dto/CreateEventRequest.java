@@ -59,7 +59,7 @@ public record CreateEventRequest(
         SendType sendType //감사장 타입
 
 ) {
-    public Event toEntity(Member member) {
+    public Event toEntity(final Member member) {
         return Event.eventBuilder()
                 .thumbnailUrl(thumbnailUrl)
                 .eventName(eventName)

@@ -21,7 +21,9 @@ public class EventQueryService {
 
     //no offset으로 페이징 구현
     public FindEventListResponse findEventList(
-            final Long memberId, final Long lastEventId, final int pageSize
+            final Long memberId,
+            final Long lastEventId,
+            final int pageSize
     ) {
         return eventRepository.paginationNoOffset(memberId, lastEventId, pageSize);
     }
