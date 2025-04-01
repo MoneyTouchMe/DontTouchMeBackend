@@ -2,6 +2,7 @@ package com.example.donttouchme.eventdetail.controller;
 
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
+import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
 import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,5 +49,11 @@ public interface EventDetailControllerSwagger {
             @RequestParam(defaultValue = "20") final int pageSize
     );
 
-
+    @Operation(
+            summary = "입출금 내역 상세 조회 API",
+            description = "입출금 내역 상세 정보를 조회합니다."
+    )
+    public FindEventDetailResponse findEventDetail(
+            @PathVariable final Long eventDetailId
+    );
 }

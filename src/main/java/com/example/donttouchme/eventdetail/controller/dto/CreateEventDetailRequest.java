@@ -37,7 +37,10 @@ public record CreateEventDetailRequest(
 
         String contact
 ) implements ContactValidatable {
-    public EventDetail toEntity(Event event, Target target) {
+    public EventDetail toEntity(
+            final Event event,
+            final Target target
+    ) {
         return EventDetail.builder()
                 .type(type)
                 .history(history)

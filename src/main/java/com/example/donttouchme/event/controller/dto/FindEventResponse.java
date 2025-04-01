@@ -30,7 +30,11 @@ public record FindEventResponse(
         List<String> targets
 
 ) {
-    public static FindEventResponse from(Event event, List<String> tags, List<String> targets) {
+    public static FindEventResponse from(
+            final Event event,
+            final List<String> tags,
+            final List<String> targets
+    ) {
         return new FindEventResponse(
                 event.getThumbnailUrl(),
                 event.getEventName(),

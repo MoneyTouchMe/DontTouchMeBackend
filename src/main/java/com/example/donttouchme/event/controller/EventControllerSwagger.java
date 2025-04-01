@@ -49,8 +49,8 @@ public interface EventControllerSwagger {
             description = "No Offset 방식으로 이벤트 목록을 조회합니다."
     )
     public FindEventListResponse findEventList(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) Long lastEventId,
+            @RequestParam final Long memberId,
+            @RequestParam(required = false) final Long lastEventId,
             @RequestParam(defaultValue = "20") int pageSize
     );
 
