@@ -1,5 +1,6 @@
 package com.example.donttouchme.eventdetail.controller.dto;
 
+import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.value.SendType;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import jakarta.validation.constraints.NotBlank;
@@ -26,9 +27,16 @@ public record FindEventDetailResponse(
 
         SendType sendType,
 
-        String contact
+        String contact,
+
+        String amountUnit
 ) {
-    public static FindEventDetailResponse from(EventDetail eventDetail, List<String> tags, String target) {
+    public static FindEventDetailResponse from(
+            final EventDetail eventDetail,
+            final Event event,
+            final List<String> tags,
+            final String target
+    ) {
         return new FindEventDetailResponse(
                 eventDetail.getType(),
                 eventDetail.getHistory(),
@@ -38,7 +46,8 @@ public record FindEventDetailResponse(
                 eventDetail.getImage(),
                 target,
                 eventDetail.getEvent().getSendType(),
-                eventDetail.getContact()
+                eventDetail.getContact(),
+                event.getAmountUnit()
         );
     }
 }
