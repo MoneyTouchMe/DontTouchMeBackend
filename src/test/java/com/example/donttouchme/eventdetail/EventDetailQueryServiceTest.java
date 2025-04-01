@@ -5,6 +5,7 @@ import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.service.EventCommandService;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
+import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
 import com.example.donttouchme.eventdetail.service.EventDetailQueryService;
@@ -56,5 +57,25 @@ public class EventDetailQueryServiceTest extends IntegrationTestSupport2 {
         //then
         assertThat(eventDetailList.eventDetails().size()).isEqualTo(3);
         assertThat(eventDetailList2.eventDetails().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("입출금 내역 상세 조회")
+    public void findEventDetailSuccess() {
+        //given
+        Member testMember = createTestMember();
+        Member savedMember = memberRepository.save(testMember);
+
+        CreateEventRequest request = createTestCreateEventRequest(savedMember.getId());
+        Event savedEvent = eventCommandService.createEvent(request);
+
+        CreateEventDetailRequest request2 = createTestEventDetailRequest(savedEvent.getId());
+        EventDetail savedEventDetail = eventDetailCommandService.createEventDetail(request2);
+
+        //when
+        FindEventDetailResponse eventDetail = eventDetailQueryService.findEventDetail(savedEventDetail.getId());
+
+        //then
+        assertThat(eventDetail.contact()).isEqualTo("test@test.com");
     }
 }
