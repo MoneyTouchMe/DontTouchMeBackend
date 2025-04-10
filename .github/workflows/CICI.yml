@@ -96,15 +96,10 @@ jobs:
             # Gradle로 빌드
             chmod +x gradlew
             ./gradlew clean bootJar
-            
-            # Gradle 빌드 (필요 시)
-            chmod +x gradlew
-            ./gradlew build
 
             # Docker Compose로 배포
             docker-compose down --remove-orphans
             docker-compose up -d --build
-
       - name: 보안 그룹에서 GitHub Actions IP 제거
         if: always()
         run: |
