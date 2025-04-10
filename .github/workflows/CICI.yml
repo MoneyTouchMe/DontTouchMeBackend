@@ -97,21 +97,13 @@ jobs:
             chmod +x gradlew
             ./gradlew clean bootJar
             
-            # 도커 권한 설정
-            sudo chmod 666 /var/run/docker.sock
-            
-            # 기존 컨테이너 중지 및 제거 (필요 시)
-            docker stop dont_touch_me || true
-            docker rm dont_touch_me || true
-            
-            # 도커 이미지 빌드
-            docker build -t dont_touch_me:latest .
-            
-            # 도커 컨테이너 실행 (8080 포트로 매핑)
-            docker run -d --name dont_touch_me -p 8080:8080 dont_touch_me:latest
-            
-            # 사용하지 않는 이미지 정리
-            sudo docker image prune -f
+            # Gradle 빌드 (필요 시)
+            chmod +x gradlew
+            ./gradlew build
+
+            # Docker Compose로 배포
+            docker-compose down --remove-orphans
+            docker-compose up -d --build
 
       - name: 보안 그룹에서 GitHub Actions IP 제거
         if: always()
