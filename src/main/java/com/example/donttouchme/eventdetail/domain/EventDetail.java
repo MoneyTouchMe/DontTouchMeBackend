@@ -42,7 +42,6 @@ public class EventDetail extends BaseEntity { //입출금 내역
     @Column
     private String image; //첨부한 입출금 이미지 파일 경로
 
-    @Column(nullable = false)
     private String contact; //연락처
 
     @ManyToOne(fetch = FetchType.LAZY)
