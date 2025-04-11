@@ -90,7 +90,7 @@ public class EventCommandService {
         findEvent.update(request, location, eventInfo);
 
         //기존 저장된 Tag를 삭제 후 새로 입력받은 Tag를 생성
-        tagRepository.deleteAll(findEvent.getTags());
+        findEvent.getTags().clear();
         if (!tagIsNull) {
             for (String tag : request.tags()) {
                 Tag.builder()
@@ -101,7 +101,7 @@ public class EventCommandService {
         }
 
         //기존 저장된 Target을 삭제 후 새로 입력받은 Target을 생성
-        targetRepository.deleteAll(findEvent.getTargets());
+        findEvent.getTargets().clear();
         if (!targetIsNull) {
             for (String target : request.targets()) {
                 Target.builder()
