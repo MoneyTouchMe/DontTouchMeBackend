@@ -15,13 +15,14 @@ import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import com.example.donttouchme.support.IntegrationTestSupport2;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j
@@ -61,7 +62,7 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport2 {
 
 
         //then
-        Assertions.assertThat(createdEventDetail.getPrice()).isEqualTo("10");
+        assertThat(createdEventDetail.getPrice()).isEqualTo("10");
     }
 
     @Test
@@ -80,11 +81,11 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport2 {
 
 
         //when
-        Assertions.assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isPresent();
+        assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isPresent();
         eventDetailCommandService.deleteEventDetail(createdEventDetail.getId());
 
         //then
-        Assertions.assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isNotPresent();
+        assertThat(eventDetailRepository.findById(createdEventDetail.getId())).isNotPresent();
     }
 
     @Test
@@ -107,6 +108,25 @@ public class EventDetailCommandServiceTest extends IntegrationTestSupport2 {
         createdEventDetail.update(request, target);
 
         //then
-        Assertions.assertThat(createdEventDetail.getType()).isEqualTo("입금");
+        assertThat(createdEventDetail.getType()).isEqualTo("입금");
+    }
+
+    @Test
+    @DisplayName("중복 Target 값 설정 성공")
+    public void duplicatedTargetSuccess() {
+        //given
+        Member testMember = createTestMember();
+        Member savedMember = memberRepository.save(testMember);
+
+        Event createdEvent = eventCommandService.createEvent(createTestCreateEventRequest(savedMember.getId()));
+
+
+        //when
+        CreateEventDetailRequest request = createTestEventDetailRequest(createdEvent.getId());
+        EventDetail createdEventDetail = eventDetailCommandService.createEventDetail(request);
+        EventDetail createdEventDetail2 = eventDetailCommandService.createEventDetail(request);
+
+        //then
+        assertThat(createdEventDetail.getTarget().getValue()).isEqualTo(createdEventDetail2.getTarget().getValue());
     }
 }
