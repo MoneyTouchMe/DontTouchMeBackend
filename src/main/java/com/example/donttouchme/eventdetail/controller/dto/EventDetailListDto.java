@@ -1,5 +1,7 @@
 package com.example.donttouchme.eventdetail.controller.dto;
 
+import java.util.List;
+
 public record EventDetailListDto(
         Long eventDetailId,
         String type,
@@ -7,6 +9,8 @@ public record EventDetailListDto(
         String price,
         String name,
         String image,
-        String contact
+        String contact,
+        String target,
+        List<String> tags
 ) {
 }
