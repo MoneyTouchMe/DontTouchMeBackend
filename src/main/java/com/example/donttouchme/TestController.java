@@ -1,5 +1,7 @@
 package com.example.donttouchme;
 
+import com.example.donttouchme.common.config.security.AuthMember;
+import com.example.donttouchme.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ public class TestController {
             summary = "TEST",
             description = "TEST"
     )
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("TEST SUCCESS");
+    public ResponseEntity<String> test(@AuthMember final Member member) {
+        return ResponseEntity.ok(member.getName() + " 로그인 성공");
     }
 }
