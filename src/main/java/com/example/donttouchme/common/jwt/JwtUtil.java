@@ -49,7 +49,7 @@ public class JwtUtil {
     public String createAccessToken(final Long MemberId, final String role) {
         return Jwts.builder()
                 .claim("category", "access")
-                .claim("id", MemberId)
+                .claim("id", MemberId.toString())
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessTime))
@@ -60,7 +60,7 @@ public class JwtUtil {
     public String createRefreshToken(Long MemberId, String role){
         return Jwts.builder()
                 .claim("category", "refresh")
-                .claim("id", MemberId)
+                .claim("id", MemberId.toString())
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshTime))
