@@ -20,7 +20,7 @@ public interface SendControllerSwagger {
 
     @Operation(
             summary = "감사장 이메일 전송 API",
-            description = "감사장을 이메일로 전송합니다."
+            description = "감사장을 대상의 이메일로 전송합니다."
     )
     public ResponseEntity<String> sendAppreciationEmail(
             @RequestBody final SendEmailRequest request
