@@ -100,7 +100,8 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/", "/api/v1/member/login/**", "/oauth2/**", "/api/v1/member/sign-up",
                         "/api/v1/member/logout", "/api/v1/jwt/**", "/api/v1//member/check-email-duplicate",
-                        "/swagger-ui/**", "/v3/api-docs/**"
+                        "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/mail/verify", "/api/v1/mail/send-verification",
+                        "/api/v1/member/issue-temp-password"
                 ).permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated());
