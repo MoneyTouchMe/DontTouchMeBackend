@@ -2,7 +2,6 @@ package com.example.donttouchme.send.controller;
 
 import com.example.donttouchme.send.controller.dto.FindRecipientListResponse;
 import com.example.donttouchme.send.controller.dto.SendEmailRequest;
-import com.example.donttouchme.send.controller.dto.SendSMSRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +26,11 @@ public interface SendControllerSwagger {
             @RequestBody final SendEmailRequest request
     );
 
-    @Operation(
+    /*@Operation(
             summary = "감사장 문자 메시지 전송 API",
             description = "감사장을 문자 메시지로 전송합니다."
     )
     public ResponseEntity<String> sendAppreciationSMS(
             @RequestBody final SendSMSRequest request
-    );
+    );*/
 }

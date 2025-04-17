@@ -76,8 +76,8 @@ public class SendQueryService {
         return new EmailSendResult(msg, successCnt, failCnt);
     }
 
-    public String sendAppreciationSMS(final SendSMSRequest request) {
+/*    public String sendAppreciationSMS(final SendSMSRequest request) {
 
         return null;
-    }
+    }*/
 }
