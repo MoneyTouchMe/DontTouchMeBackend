@@ -105,6 +105,6 @@ clean {
     delete file(generated)
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
 }
