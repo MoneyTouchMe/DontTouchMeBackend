@@ -1,12 +1,13 @@
 package com.example.donttouchme.send.controller;
 
+import com.example.donttouchme.send.controller.dto.EmailSendResult;
 import com.example.donttouchme.send.controller.dto.FindRecipientListResponse;
+import com.example.donttouchme.send.controller.dto.SendEmailRequest;
 import com.example.donttouchme.send.service.SendQueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/send")
@@ -18,4 +19,24 @@ public class SendController implements SendControllerSwagger {
     public FindRecipientListResponse findRecipientList(@RequestParam final Long eventId) {
         return sendQueryService.findRecipientList(eventId);
     }
+
+    @PostMapping("/email")
+    public ResponseEntity<String> sendAppreciationEmail(
+            @RequestBody final SendEmailRequest request
+    ) {
+        EmailSendResult result = sendQueryService.sendAppreciationEmail(request);
+        if (result.failCnt() > 0) {
+            return ResponseEntity
+                    .status(HttpStatus.PARTIAL_CONTENT)
+                    .body(result.message());
+        }
+        return ResponseEntity.ok(result.message());
+    }
+
+    /*@PostMapping("/sms")
+    public ResponseEntity<String> sendAppreciationSMS(
+            @RequestBody final SendSMSRequest request
+    ) {
+        return ResponseEntity.ok(sendQueryService.sendAppreciationSMS(request));
+    }*/
 }
