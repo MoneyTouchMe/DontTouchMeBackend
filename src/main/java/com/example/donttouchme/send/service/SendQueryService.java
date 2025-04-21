@@ -4,8 +4,13 @@ import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.send.controller.dto.*;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,22 @@ import java.util.List;
 public class SendQueryService {
     private final EventRepository eventRepository;
     private final JavaMailSender mailSender;
+    private DefaultMessageService messageService;
+    @Value("${solapi.apiKey}")
+    private String apiKey;
+    @Value("${solapi.apiSecret}")
+    private String apiSecret;
+    @Value("${solapi.sender}")
+    private String fromNumber;
+
+    @PostConstruct
+    public void init() {
+        this.messageService = NurigoApp.INSTANCE.initialize(
+                apiKey,
+                apiSecret,
+                "https://api.solapi.com"
+        );
+    }
 
     public FindRecipientListResponse findRecipientList(final Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(
@@ -49,11 +70,8 @@ public class SendQueryService {
             String to = recipient.contact();
             String name = recipient.name();
 
-            String replaceNameC = contentTemplate.replace("{name}", name);
-            String content = replaceNameC.replace("{eventName}", eventName);
-
-            String replaceNameTt = titleTemplate.replace("{name}", name);
-            String title = replaceNameTt.replace("{eventName}", eventName);
+            String content = contentTemplate.replace("{name}", name).replace("{eventName}", eventName);
+            String title = titleTemplate.replace("{name}", name).replace("{eventName}", eventName);
 
             try {
                 SimpleMailMessage email = new SimpleMailMessage();
@@ -76,8 +94,30 @@ public class SendQueryService {
         return new EmailSendResult(msg, successCnt, failCnt);
     }
 
-/*    public String sendAppreciationSMS(final SendSMSRequest request) {
+    public SMSSendResult sendAppreciationSMS(final SendSMSRequest request) {
+        int successCnt = 0, failCnt = 0;
+        String contentTemplate = "{name}님, 안녕하세요! 이번 {eventName}에서 뵐 수 있어 정말 반가웠습니다.\n" +
+                "귀한 시간을 내어주신 덕분에 저희에게 큰 힘이 되었습니다. 앞으로도 자주 연락드리겠습니다. 다시 한 번 감사드립니다!";
 
-        return null;
-    }*/
+        for (RecipientListDto dto : request.recipients()) {
+            String to = dto.contact().replaceAll("-", "");
+            String text = contentTemplate.replace("{name}", dto.name()).replace("{eventName}", request.eventName());
+
+            Message message = new Message();
+            message.setFrom(fromNumber); // Solapi에 등록된 발신번호
+            message.setTo(to);
+            message.setText(text);
+            try {
+                messageService.send(message);
+                successCnt++;
+            } catch (Exception e) {
+                log.error("SMS 전송 중 예외 발생: {}", e.getMessage());
+                failCnt++;
+            }
+        }
+        String msg = String.format("총 %d명 중 %d명 성공, %d명 실패", request.recipients().size(), successCnt, failCnt);
+
+        return new SMSSendResult(msg, successCnt, failCnt);
+    }
 }
+
