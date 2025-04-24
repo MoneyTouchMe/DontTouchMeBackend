@@ -1,8 +1,6 @@
 package com.example.donttouchme.send.controller;
 
-import com.example.donttouchme.send.controller.dto.EmailSendResult;
-import com.example.donttouchme.send.controller.dto.FindRecipientListResponse;
-import com.example.donttouchme.send.controller.dto.SendEmailRequest;
+import com.example.donttouchme.send.controller.dto.*;
 import com.example.donttouchme.send.service.SendQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,10 +31,15 @@ public class SendController implements SendControllerSwagger {
         return ResponseEntity.ok(result.message());
     }
 
-    /*@PostMapping("/sms")
+    @PostMapping("/sms")
     public ResponseEntity<String> sendAppreciationSMS(
             @RequestBody final SendSMSRequest request
     ) {
-        return ResponseEntity.ok(sendQueryService.sendAppreciationSMS(request));
-    }*/
+        SMSSendResult result = sendQueryService.sendAppreciationSMS(request);
+
+        if (result.failCnt() > 0) {
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(result.message());  // 206
+        }
+        return ResponseEntity.ok(result.message());
+    }
 }
