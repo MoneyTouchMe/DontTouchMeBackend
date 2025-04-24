@@ -1,7 +1,6 @@
 package com.example.donttouchme.event.service;
 
 import com.example.donttouchme.event.controller.dto.CreateEventRequest;
-
 import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
 import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.Tag;
@@ -9,8 +8,6 @@ import com.example.donttouchme.event.domain.Target;
 import com.example.donttouchme.event.domain.value.EventInfo;
 import com.example.donttouchme.event.domain.value.Location;
 import com.example.donttouchme.event.repository.EventRepository;
-import com.example.donttouchme.event.repository.TagRepository;
-import com.example.donttouchme.event.repository.TargetRepository;
 import com.example.donttouchme.member.domain.Member;
 import com.example.donttouchme.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +22,6 @@ import java.util.Objects;
 public class EventCommandService {
     private final EventRepository eventRepository;
     private final MemberRepository memberRepository;
-    private final TagRepository tagRepository;
-    private final TargetRepository targetRepository;
 
     public Event createEvent(final CreateEventRequest request) {
         Member member = memberRepository.findById(request.memberId()).orElseThrow(
