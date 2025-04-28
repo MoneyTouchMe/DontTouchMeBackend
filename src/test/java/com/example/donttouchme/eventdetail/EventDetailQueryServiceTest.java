@@ -6,6 +6,7 @@ import com.example.donttouchme.event.service.EventCommandService;
 import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
+import com.example.donttouchme.eventdetail.controller.dto.TotalAmountResponse;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
 import com.example.donttouchme.eventdetail.service.EventDetailQueryService;
@@ -77,5 +78,29 @@ public class EventDetailQueryServiceTest extends IntegrationTestSupport2 {
 
         //then
         assertThat(eventDetail.contact()).isEqualTo("test@test.com");
+    }
+
+    @Test
+    @DisplayName("이벤트별 총 입출금액 조회")
+    public void getTotalAmountByEvent() {
+        //given
+        Member testMember = createTestMember();
+        Member savedMember = memberRepository.save(testMember);
+
+        CreateEventRequest request = createTestCreateEventRequest(savedMember.getId());
+        Event savedEvent = eventCommandService.createEvent(request);
+
+        CreateEventDetailRequest request2 = createTestEventDetailRequest(savedEvent.getId());
+        EventDetail savedEventDetail = eventDetailCommandService.createEventDetail(request2);
+        EventDetail savedEventDetail2 = eventDetailCommandService.createEventDetail(request2);
+        EventDetail savedEventDetail3 = eventDetailCommandService.createEventDetail(request2);
+        EventDetail savedEventDetail4 = eventDetailCommandService.createEventDetail(request2);
+
+        //when
+        TotalAmountResponse totalAmountByEvent = eventDetailQueryService.getTotalAmountByEvent(savedEvent.getId());
+
+        //then
+        assertThat(totalAmountByEvent.totalDeposit()).isEqualTo(0);
+        assertThat(totalAmountByEvent.totalWithdrawal()).isEqualTo(40);
     }
 }

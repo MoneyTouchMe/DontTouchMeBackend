@@ -1,9 +1,6 @@
 package com.example.donttouchme.eventdetail.controller;
 
-import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
-import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
-import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
-import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +51,14 @@ public interface EventDetailControllerSwagger {
             description = "입출금 내역 상세 정보를 조회합니다."
     )
     public FindEventDetailResponse findEventDetail(
+            @PathVariable final Long eventDetailId
+    );
+
+    @Operation(
+            summary = "이벤트별 총 입출금액 조회 API",
+            description = "이벤트별 총 입출금액 조회합니다."
+    )
+    public TotalAmountResponse getTotalAmountByEvent(
             @PathVariable final Long eventDetailId
     );
 }
