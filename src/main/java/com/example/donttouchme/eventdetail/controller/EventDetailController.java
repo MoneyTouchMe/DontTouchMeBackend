@@ -1,9 +1,6 @@
 package com.example.donttouchme.eventdetail.controller;
 
-import com.example.donttouchme.eventdetail.controller.dto.CreateEventDetailRequest;
-import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
-import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
-import com.example.donttouchme.eventdetail.controller.dto.UpdateEventDetailRequest;
+import com.example.donttouchme.eventdetail.controller.dto.*;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.service.EventDetailCommandService;
 import com.example.donttouchme.eventdetail.service.EventDetailQueryService;
@@ -58,5 +55,12 @@ public class EventDetailController implements EventDetailControllerSwagger {
             @PathVariable final Long eventDetailId
     ) {
         return eventDetailQueryService.findEventDetail(eventDetailId);
+    }
+
+    @GetMapping("/amount/{eventId}")
+    public TotalAmountResponse getTotalAmountByEvent(
+            @PathVariable final Long eventId
+    ) {
+        return eventDetailQueryService.getTotalAmountByEvent(eventId);
     }
 }

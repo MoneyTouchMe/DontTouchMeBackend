@@ -1,9 +1,12 @@
 package com.example.donttouchme.eventdetail.service;
 
+import com.example.donttouchme.event.domain.Event;
 import com.example.donttouchme.event.domain.TagEventDetail;
 import com.example.donttouchme.event.domain.Target;
+import com.example.donttouchme.event.repository.EventRepository;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailListResponse;
 import com.example.donttouchme.eventdetail.controller.dto.FindEventDetailResponse;
+import com.example.donttouchme.eventdetail.controller.dto.TotalAmountResponse;
 import com.example.donttouchme.eventdetail.domain.EventDetail;
 import com.example.donttouchme.eventdetail.repository.EventDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventDetailQueryService {
     private final EventDetailRepository eventDetailRepository;
+    private final EventRepository eventRepository;
 
     //no offset 방식의 페이징 구현
     public FindEventDetailListResponse findEventDetailList(
@@ -41,5 +45,22 @@ public class EventDetailQueryService {
         Target target = eventDetail.getTarget();
 
         return FindEventDetailResponse.from(eventDetail, eventDetail.getEvent(), tags, target.getValue());
+    }
+
+    public TotalAmountResponse getTotalAmountByEvent(final Long eventId) {
+        Event event = eventRepository.findById(eventId).orElseThrow(
+                () -> new IllegalArgumentException("이벤트 정보를 찾을 수 없습니다.")
+        );
+
+        long totalDeposit = 0, totalWithdrawal = 0;
+        for (EventDetail eventDetail : event.getEventDetails()) {
+            if (eventDetail.getType().equals("입금")) {
+                totalDeposit += Integer.parseInt(eventDetail.getPrice());
+            } else {
+                totalWithdrawal += Integer.parseInt(eventDetail.getPrice());
+            }
+        }
+
+        return new TotalAmountResponse(totalDeposit, totalWithdrawal);
     }
 }
