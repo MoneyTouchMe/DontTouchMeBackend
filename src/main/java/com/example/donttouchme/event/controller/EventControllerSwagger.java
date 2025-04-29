@@ -1,6 +1,11 @@
 package com.example.donttouchme.event.controller;
 
-import com.example.donttouchme.event.controller.dto.*;
+import com.example.donttouchme.common.config.security.AuthMember;
+import com.example.donttouchme.event.controller.dto.CreateEventRequest;
+import com.example.donttouchme.event.controller.dto.FindEventListResponse;
+import com.example.donttouchme.event.controller.dto.FindEventResponse;
+import com.example.donttouchme.event.controller.dto.UpdateEventRequest;
+import com.example.donttouchme.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +54,7 @@ public interface EventControllerSwagger {
             description = "No Offset 방식으로 이벤트 목록을 조회합니다."
     )
     public FindEventListResponse findEventList(
-            @RequestParam final Long memberId,
+            @AuthMember final Member member,
             @RequestParam(required = false) final Long lastEventId,
             @RequestParam(defaultValue = "20") int pageSize
     );
