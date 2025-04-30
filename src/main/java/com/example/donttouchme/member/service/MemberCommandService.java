@@ -31,8 +31,9 @@ public class MemberCommandService {
                     .name(createMemberDto.name())
                     .loginProvider(createMemberDto.loginProvider())
                     .role(createMemberDto.role())
-                    .builderWithoutPassword()
+                    .build()  // 이렇게 수정
             );
+
         } catch (Exception e) {
             throw new IllegalArgumentException("회원 생성 실패");
         }
@@ -47,7 +48,7 @@ public class MemberCommandService {
                 .role(ROLE.user)
                 .loginProvider(LoginProvider.original)
                 .contact(request.contact())
-                .builderWithPassword();
+                .build();
         log.info("encoded password: {}", bCryptPasswordEncoder.encode(request.password()));
         log.info("password : {}", member.getPassword());
 
