@@ -70,6 +70,7 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
         cookie.setMaxAge(expireTime);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "None");
 
         return cookie;
     }
