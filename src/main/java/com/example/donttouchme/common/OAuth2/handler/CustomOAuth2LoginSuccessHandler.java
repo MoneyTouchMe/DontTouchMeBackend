@@ -57,7 +57,7 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
 
         response.addCookie(createCookie("refresh", refreshToken,refreshExpireTime));
         response.addCookie(createCookie("accessToken", accessToken,accessExpireTime));
-        response.sendRedirect("http://localhost:3000");
+        response.sendRedirect("https://dontouchme.vercel.app");
 
     }
 
