@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
         }
     }
 
-    @Builder(builderMethodName = "builderWithoutPassword", buildMethodName = "builderWithoutPassword")
+    @Builder(builderMethodName = "builderWithoutPassword")
     public Member(String name, String email, ROLE role, LoginProvider loginProvider) {
         this.name = name;
         this.email = email;

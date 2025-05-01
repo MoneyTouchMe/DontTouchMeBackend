@@ -25,18 +25,26 @@ public class MemberCommandService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member createMember(final CreateMemberDto createMemberDto) {
+        log.info("회원 생성 시작: email={}, provider={}", createMemberDto.email(), createMemberDto.loginProvider());
+        
         try {
-            return memberRepository.save(Member.builderWithoutPassword()
+            Member member = Member.builderWithoutPassword()
                     .email(createMemberDto.email())
                     .name(createMemberDto.name())
                     .loginProvider(createMemberDto.loginProvider())
                     .role(createMemberDto.role())
-                    .builderWithoutPassword()
-            );
+                    .build();
+            
+            log.info("Member 객체 생성 완료: {}", member);
+            
+            Member savedMember = memberRepository.save(member);
+            log.info("회원 저장 완료: id={}, email={}", savedMember.getId(), savedMember.getEmail());
+            
+            return savedMember;
         } catch (Exception e) {
-            throw new IllegalArgumentException("회원 생성 실패");
+            log.error("회원 생성 중 오류 발생", e);
+            throw new IllegalArgumentException("회원 생성 실패: " + e.getMessage());
         }
-
     }
 
     public Member signUp(final MemberSignUpRequest request) {
