@@ -55,12 +55,26 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
 
         refreshTokenRepository.save(new RefreshToken(refreshToken, customOAuth2User.getMemberId()));
 
-        response.addCookie(createCookie("refresh", refreshToken,refreshExpireTime));
-        response.addCookie(createCookie("accessToken", accessToken,accessExpireTime));
-        response.sendRedirect("https://dontouchme.vercel.app");
+        // 쿠키 생성 대신 Set-Cookie 헤더를 직접 설정
+        addCookieHeader(response, "refresh", refreshToken, refreshExpireTime);
+        addCookieHeader(response, "accessToken", accessToken, accessExpireTime);
 
+        response.sendRedirect("https://dontouchme.vercel.app");
     }
 
+    // 쿠키 헤더를 직접 추가하는 메소드
+    private void addCookieHeader(
+            HttpServletResponse response,
+            String name,
+            String value,
+            int maxAge
+    ) {
+        String cookieValue = String.format("%s=%s; Max-Age=%d; Path=/; HttpOnly; SameSite=None; Secure",
+                name, value, maxAge);
+        response.addHeader("Set-Cookie", cookieValue);
+    }
+
+    // 원래 createCookie 메소드는 사용하지 않으므로 삭제하거나, 아래와 같이 남겨둘 수 있습니다
     private Cookie createCookie(
             final String type,
             final String value,
@@ -70,8 +84,10 @@ public class CustomOAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSucc
         cookie.setMaxAge(expireTime);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite", "None");
+        cookie.setSecure(true); // HTTPS에서만 쿠키 전송
+        // cookie.setAttribute("SameSite", "None"); - 이 방식은 제대로 작동하지 않음
 
         return cookie;
     }
 }
+
