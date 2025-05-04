@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
     @Column
     private String contact;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Event> events = new ArrayList<>();
 
     public void changePassword(String newPassword) {

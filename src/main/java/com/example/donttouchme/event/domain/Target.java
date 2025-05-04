@@ -32,7 +32,7 @@ public class Target extends BaseEntity { //입금 대상 (태그 형태)
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<EventDetail> eventDetails = new ArrayList<>();
 
     public void setEvent(Event event) {
