@@ -52,7 +52,7 @@ public class EventDetail extends BaseEntity { //입출금 내역
     @JoinColumn(name = "target_id")
     private Target target;
 
-    @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "eventDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
 
     public void update(UpdateEventDetailRequest request, Target target) {

@@ -28,7 +28,7 @@ public class Tag extends BaseEntity { //태그
     private String value; //태그 값
 
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TagEventDetail> tagEventDetails = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
