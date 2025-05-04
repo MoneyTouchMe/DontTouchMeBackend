@@ -43,8 +43,9 @@ public class EventDetailQueryService {
         }
 
         Target target = eventDetail.getTarget();
+        String targetValue = target != null ? target.getValue() : null;
 
-        return FindEventDetailResponse.from(eventDetail, eventDetail.getEvent(), tags, target.getValue());
+        return FindEventDetailResponse.from(eventDetail, eventDetail.getEvent(), tags, targetValue);
     }
 
     public TotalAmountResponse getTotalAmountByEvent(final Long eventId) {
