@@ -69,6 +69,7 @@ public class EventInfo { //이벤트 ON/OFF 토글 항목
         if (isTag) cellValues.add("태그");
         if (isSide) cellValues.add("입금대상");
         if (isSend) cellValues.add("감사장");
+        if (isImage) cellValues.add("사진 첨부");
         return cellValues;
     }
 

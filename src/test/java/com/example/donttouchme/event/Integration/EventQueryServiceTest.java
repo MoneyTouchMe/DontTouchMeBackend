@@ -72,7 +72,7 @@ class EventQueryServiceTest extends IntegrationTestSupport2 {
         //then
         assertThat(event.eventName()).isEqualTo("testEvent");
         assertThat(event.eventInfoItems()).containsExactly(
-                "입출금 분류", "입출금 내역명", "금액", "이름", "태그", "입금대상", "감사장"
+                "입출금 분류", "입출금 내역명", "금액", "이름", "태그", "입금대상", "감사장", "사진 첨부"
         );
     }
 }
