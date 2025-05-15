@@ -1,5 +1,6 @@
 package com.example.donttouchme.member.service;
 
+import com.example.donttouchme.member.controller.dto.ChangeMemberInfoRequest;
 import com.example.donttouchme.member.controller.dto.ChangePasswordRequest;
 import com.example.donttouchme.member.controller.dto.ChangePasswordResponse;
 import com.example.donttouchme.member.controller.dto.MemberSignUpRequest;
@@ -26,7 +27,7 @@ public class MemberCommandService {
 
     public Member createMember(final CreateMemberDto createMemberDto) {
         log.info("회원 생성 시작: email={}, provider={}", createMemberDto.email(), createMemberDto.loginProvider());
-        
+
         try {
             Member member = Member.builderWithoutPassword()
                     .email(createMemberDto.email())
@@ -34,12 +35,12 @@ public class MemberCommandService {
                     .loginProvider(createMemberDto.loginProvider())
                     .role(createMemberDto.role())
                     .build();
-            
+
             log.info("Member 객체 생성 완료: {}", member);
-            
+
             Member savedMember = memberRepository.save(member);
             log.info("회원 저장 완료: id={}, email={}", savedMember.getId(), savedMember.getEmail());
-            
+
             return savedMember;
         } catch (Exception e) {
             log.error("회원 생성 중 오류 발생", e);
@@ -89,5 +90,20 @@ public class MemberCommandService {
 
 
         return ChangePasswordResponse.addMessage("비빌번호 변경 성공");
+    }
+
+    public Member changeMemberInfo(
+            final Member member,
+            final ChangeMemberInfoRequest request
+    ) {
+        member.modifyMember(request, bCryptPasswordEncoder.encode(request.newPassword()));
+
+        try {
+            memberRepository.save(member);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("member 수정 실패");
+        }
+
+        return member;
     }
 }
