@@ -71,7 +71,7 @@ public class MemberController implements MemberControllerSwagger {
     }
 
     @Override
-    @PatchMapping("/withdraw")
+    @GetMapping("/check-password")
     public ResponseEntity<Void> checkCurrentPassword(
             @AuthMember Member member,
             final CheckCurrentPasswordRequest request
@@ -82,4 +82,5 @@ public class MemberController implements MemberControllerSwagger {
         }
         return ResponseEntity.noContent().build();
     }
+
 }
