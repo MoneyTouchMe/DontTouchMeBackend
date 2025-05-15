@@ -2,6 +2,7 @@ package com.example.donttouchme.member.domain;
 
 import com.example.donttouchme.common.Entity.BaseEntity;
 import com.example.donttouchme.event.domain.Event;
+import com.example.donttouchme.member.controller.dto.ChangeMemberInfoRequest;
 import com.example.donttouchme.member.domain.value.LoginProvider;
 import com.example.donttouchme.member.domain.value.ROLE;
 import jakarta.persistence.*;
@@ -46,6 +47,12 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Event> events = new ArrayList<>();
+
+    public void modifyMember(ChangeMemberInfoRequest request, String newPassword) {
+        this.name = request.name();
+        this.password = newPassword;
+        this.contact = request.contact();
+    }
 
     public void changePassword(String newPassword) {
         this.password = newPassword;

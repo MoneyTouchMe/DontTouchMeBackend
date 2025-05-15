@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class MemberController implements MemberControllerSwagger{
+public class MemberController implements MemberControllerSwagger {
 
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
@@ -32,7 +32,7 @@ public class MemberController implements MemberControllerSwagger{
 
     @Override
     @PostMapping("/sign-up")
-    public ResponseEntity<MemberSignUpResponse> signUp (
+    public ResponseEntity<MemberSignUpResponse> signUp(
             @RequestBody @Validated final MemberSignUpRequest request
     ) {
         return ResponseEntity.ok(
@@ -57,5 +57,29 @@ public class MemberController implements MemberControllerSwagger{
             final ChangePasswordRequest request
     ) {
         return ResponseEntity.ok(memberCommandService.changePassword(member, request));
+    }
+
+    @Override
+    @PatchMapping("/me")
+    public ResponseEntity<ChangeMemberInfoResponse> changeMemberInfo(
+            @AuthMember Member member,
+            final ChangeMemberInfoRequest request
+    ) {
+        return ResponseEntity.ok(
+                ChangeMemberInfoResponse.from(memberCommandService.changeMemberInfo(member, request))
+        );
+    }
+
+    @Override
+    @PatchMapping("/withdraw")
+    public ResponseEntity<Void> checkCurrentPassword(
+            @AuthMember Member member,
+            final CheckCurrentPasswordRequest request
+    ) {
+        boolean matched = memberQueryService.checkCurrentPassword(member, request);
+        if (!matched) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        return ResponseEntity.noContent().build();
     }
 }

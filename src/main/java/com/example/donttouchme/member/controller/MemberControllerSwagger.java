@@ -1,5 +1,6 @@
 package com.example.donttouchme.member.controller;
 
+import com.example.donttouchme.common.config.security.AuthMember;
 import com.example.donttouchme.member.controller.dto.*;
 import com.example.donttouchme.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ public interface MemberControllerSwagger {
             summary = "회원가입 API",
             description = "회원가입 API"
     )
-     ResponseEntity<MemberSignUpResponse> signUp(
+    ResponseEntity<MemberSignUpResponse> signUp(
             final MemberSignUpRequest request
     );
 
@@ -41,4 +42,24 @@ public interface MemberControllerSwagger {
             Member member,
             ChangePasswordRequest request
     );
+
+    @Operation(
+            summary = "회원 정보 수정 API",
+            description = "회원 정보를 수정합니다."
+    )
+    ResponseEntity<ChangeMemberInfoResponse> changeMemberInfo(
+            @AuthMember Member member,
+            ChangeMemberInfoRequest request
+    );
+
+    @Operation(
+            summary = "비밀번호 일치 확인 API",
+            description = "비밀번호가 일치하는지 확인합니다."
+    )
+    ResponseEntity<Void> checkCurrentPassword(
+            @AuthMember Member member,
+            CheckCurrentPasswordRequest request
+    );
+
+
 }
