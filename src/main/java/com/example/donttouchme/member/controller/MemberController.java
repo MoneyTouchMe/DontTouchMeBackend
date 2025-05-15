@@ -83,4 +83,11 @@ public class MemberController implements MemberControllerSwagger {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(@AuthMember Member member) {
+        memberCommandService.withdraw(member);
+        return ResponseEntity.noContent().build();
+    }
+
 }
