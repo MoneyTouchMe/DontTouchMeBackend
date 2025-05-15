@@ -106,4 +106,8 @@ public class MemberCommandService {
 
         return member;
     }
+
+    public void withdraw(final Member member) {
+        memberRepository.delete(member);
+    }
 }
