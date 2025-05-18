@@ -96,8 +96,11 @@ public class MemberCommandService {
             final Member member,
             final ChangeMemberInfoRequest request
     ) {
-        member.modifyMember(request, bCryptPasswordEncoder.encode(request.newPassword()));
+        if (member.getEmail().equals("test@test.com")) {
+            throw new IllegalArgumentException("테스트 계정은 수정할 수 없습니다.");
+        }
 
+        member.modifyMember(request, bCryptPasswordEncoder.encode(request.newPassword()));
         try {
             memberRepository.save(member);
         } catch (Exception e) {
@@ -108,6 +111,9 @@ public class MemberCommandService {
     }
 
     public void withdraw(final Member member) {
+        if (member.getEmail().equals("test@test.com")) {
+            throw new IllegalArgumentException("테스트 계정은 탈퇴할 수 없습니다.");
+        }
         memberRepository.delete(member);
     }
 }
