@@ -5,10 +5,13 @@ import com.example.donttouchme.event.controller.dto.FindEventListResponse;
 import com.example.donttouchme.event.domain.QEvent;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -26,6 +29,13 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             final int pageSize
     ) {
         QEvent event = QEvent.event;
+        LocalDate today = LocalDate.now();
+
+        //정렬 우선순위 지정
+        NumberExpression<Integer> orderPriority = new CaseBuilder()
+                .when(event.eventDate.eq(today)).then(0)
+                .when(event.eventDate.after(today)).then(1)
+                .otherwise(2);
 
         List<EventListDto> events = queryFactory
                 .select(Projections.constructor(EventListDto.class,
@@ -41,7 +51,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                         event.member.id.eq(memberId), //memberId로 필터링
                         ltEventId(lastEventId) //No Offset 방식 : lastEventId보다 작은 데이터만 조회
                 )
-                .orderBy(event.id.desc()) //내림차순
+                .orderBy(orderPriority.asc(), event.eventDate.asc())
                 .limit(pageSize) //페이지 사이즈만큼 제한
                 .fetch();
 
