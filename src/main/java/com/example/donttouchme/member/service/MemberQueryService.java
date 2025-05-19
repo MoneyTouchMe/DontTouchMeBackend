@@ -33,4 +33,10 @@ public class MemberQueryService {
     ) {
         return bCryptPasswordEncoder.matches(request.currentPassword(), member.getPassword());
     }
+
+    public Member findMember(final Member member) {
+        return memberRepository.findById(member.getId()).orElseThrow(
+                () -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다")
+        );
+    }
 }

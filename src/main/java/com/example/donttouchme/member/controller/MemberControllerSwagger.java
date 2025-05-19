@@ -61,11 +61,19 @@ public interface MemberControllerSwagger {
             CheckCurrentPasswordRequest request
     );
 
- @Operation(
+    @Operation(
             summary = "회원탈퇴 API",
             description = "회원을 탈퇴 처리합니다."
     )
     ResponseEntity<Void> withdraw(
+            @AuthMember Member member
+    );
+
+    @Operation(
+            summary = "회원 정보 조회 API",
+            description = "회원 정보를 조회합니다."
+    )
+    ResponseEntity<FindMemberResponse> findMember(
             @AuthMember Member member
     );
 }
