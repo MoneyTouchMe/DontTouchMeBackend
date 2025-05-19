@@ -90,4 +90,11 @@ public class MemberController implements MemberControllerSwagger {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    @GetMapping("/me")
+    public ResponseEntity<FindMemberResponse> findMember(@AuthMember Member member) {
+        return ResponseEntity.ok(
+                FindMemberResponse.from(memberQueryService.findMember(member))
+        );
+    }
 }
