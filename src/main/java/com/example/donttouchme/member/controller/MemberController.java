@@ -63,7 +63,7 @@ public class MemberController implements MemberControllerSwagger {
     @PatchMapping("/me")
     public ResponseEntity<ChangeMemberInfoResponse> changeMemberInfo(
             @AuthMember Member member,
-            final ChangeMemberInfoRequest request
+            @RequestBody @Validated final ChangeMemberInfoRequest request
     ) {
         return ResponseEntity.ok(
                 ChangeMemberInfoResponse.from(memberCommandService.changeMemberInfo(member, request))
