@@ -100,7 +100,13 @@ public class MemberCommandService {
             throw new IllegalArgumentException("테스트 계정은 수정할 수 없습니다.");
         }
 
-        member.modifyMember(request, bCryptPasswordEncoder.encode(request.newPassword()));
+        if (request.newPassword() != null && !request.newPassword().isBlank()) {
+            String encodedPassword = bCryptPasswordEncoder.encode(request.newPassword());
+            member.modifyMember(request, encodedPassword);
+        } else {
+            throw new IllegalArgumentException("빈 패스워드로는 변경할 수 없습니다.");
+        }
+
         try {
             memberRepository.save(member);
         } catch (Exception e) {
